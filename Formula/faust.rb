@@ -28,11 +28,6 @@ class Faust < Formula
   end
 
   def install
-    # ENV["LDFLAGS"] = "-L/usr/local/opt/openssl/lib"
-    # ENV["CXXFLAGS"] = "-I/usr/local/opt/openssl/include"
-    # ENV["PKG_CONFIG_PATH"] = "/usr/local/bin/pkg-config"
-    # ENV["PKG_CONFIG_LIBDIR"] += ":/usr/local/opt/openssl/lib/pkgconfig"
-    # ENV["PATH"] += ":#{HOMEBREW_PREFIX}/bin"
     system "make"
     if build.with? "httpd"
       system "make","httpd"
@@ -45,14 +40,11 @@ class Faust < Formula
     end
     system "make", "install", "PREFIX=#{prefix}"
     if build.with? "test"
-      ohai "test"
       system "cp -r tests #{prefix}"
-
     end
   end
   test do
     system "cp -r #{prefix}/tests/architecture-tests #{testpath}"
-    # system "cp test.sh #{bin}/faust-test.sh"
     system "cd #{testpath}/architecture-tests &&./testfailure"
     system "cd #{testpath}/architecture-tests &&./testsuccess osx"
   end
