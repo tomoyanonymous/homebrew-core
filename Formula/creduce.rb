@@ -1,15 +1,27 @@
 class Creduce < Formula
   desc "Reduce a C/C++ program while keeping a property of interest"
   homepage "https://embed.cs.utah.edu/creduce/"
-  url "https://embed.cs.utah.edu/creduce/creduce-2.7.0.tar.gz"
-  sha256 "36dca859c97a988e71b1a08e0cbd5849e4da051d248c5e483494194c4a231a41"
+  revision 2
   head "https://github.com/csmith-project/creduce.git"
+
+  stable do
+    url "https://embed.cs.utah.edu/creduce/creduce-2.7.0.tar.gz"
+    sha256 "36dca859c97a988e71b1a08e0cbd5849e4da051d248c5e483494194c4a231a41"
+
+    # LLVM 5 compat
+    # Fix "error: use of undeclared identifier 'IK_C'" and similar errors
+    # Upstream commit from 27 Apr 2017 "Fix build failure with LLVM trunk"
+    patch do
+      url "https://github.com/csmith-project/creduce/commit/97e2b299.patch?full_index=1"
+      sha256 "89197f11c1c32bc234a4ba2102c65b96cc2141286e74cb838189c074c9a750d2"
+    end
+  end
 
   bottle do
     cellar :any
-    sha256 "4120c4b554d246afc4830bdb600a03b59e066f7ca7785aeb59c2898f0fbf9263" => :sierra
-    sha256 "7d9c698240b32363e90f448e9ca7083d0b8ca7490ca3ae8054d5d9b8fd04db09" => :el_capitan
-    sha256 "6278c6d29696dcdc7abf5e008afb9f1ebd454ced27a82b6e07dffc8a05680889" => :yosemite
+    sha256 "b869d3283c9f0cd1c84e07dad451a5fe7375816a43ea36c0eb1d45b3288f3419" => :high_sierra
+    sha256 "fb3948df94350cfd4fb00bff141641a35187abb2529246619137810a2606afb6" => :sierra
+    sha256 "7b2bb9028a3fbcb118d7826c2d0e3db2445dc2676cf65f6f5e0938b43b9cb546" => :el_capitan
   end
 
   depends_on "astyle"
@@ -79,7 +91,7 @@ class Creduce < Formula
   end
 
   test do
-    (testpath/"test1.c").write <<-EOS.undent
+    (testpath/"test1.c").write <<~EOS
       #include <stdio.h>
 
       int main() {
@@ -89,7 +101,7 @@ class Creduce < Formula
       }
 
     EOS
-    (testpath/"test1.sh").write <<-EOS.undent
+    (testpath/"test1.sh").write <<~EOS
       #!/usr/bin/env bash
 
       clang -Weverything "$(dirname "${BASH_SOURCE[0]}")"/test1.c 2>&1 | \

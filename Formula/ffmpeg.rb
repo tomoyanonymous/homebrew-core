@@ -1,35 +1,20 @@
 class Ffmpeg < Formula
   desc "Play, record, convert, and stream audio and video"
   homepage "https://ffmpeg.org/"
-
-  stable do
-    url "https://ffmpeg.org/releases/ffmpeg-3.3.3.tar.bz2"
-    sha256 "1069ac8fc7f52e566bea28b41b9c437246aeb5096f82fb26fa96dc7d5a10a473"
-
-    depends_on "yasm" => :build
-
-    # Upstream commit from 23 Jun 2017 "Add support for LibOpenJPEG v2.2/git"
-    # See https://github.com/FFmpeg/FFmpeg/commit/078322f33ced4b2db6ac3e5002f98233d6fbf643
-    patch do
-      url "https://raw.githubusercontent.com/Homebrew/formula-patches/dfe0fd6/ffmpeg/openjpeg-2.2.patch"
-      sha256 "77fbc0f61f2e5742f33116e0da3d246882717affeee2f25112a8a8a69dc17815"
-    end
-  end
+  url "https://ffmpeg.org/releases/ffmpeg-3.4.1.tar.bz2"
+  sha256 "f3443e20154a590ab8a9eef7bc951e8731425efc75b44ff4bee31d8a7a574a2c"
+  head "https://github.com/FFmpeg/FFmpeg.git"
 
   bottle do
-    sha256 "1b419e42dd75c6d1faf17bd9bc0598bc6e2f6720f9fec1247ece6b3e2c820f31" => :sierra
-    sha256 "dffc8990189b26ea1848b0c798c7abb0bc2348b3e60d01fdb40e51d079345347" => :el_capitan
-  end
-
-  head do
-    url "https://github.com/FFmpeg/FFmpeg.git"
-
-    depends_on "nasm" => :build
+    sha256 "f43c9bfbe55f3e97dea63db39cbfb18e53d34796ead8be52f0d9796121427214" => :high_sierra
+    sha256 "5069b7263c6cd80702c7d388ad846c8bbea575ee7e7469f1320def2e5da6bc47" => :sierra
+    sha256 "02239274124b1c5b883cfa4da0a1e4e175d14587dd72b181cc91c1f815cadaf5" => :el_capitan
   end
 
   option "with-chromaprint", "Enable the Chromaprint audio fingerprinting library"
   option "with-fdk-aac", "Enable the Fraunhofer FDK AAC library"
   option "with-libass", "Enable ASS/SSA subtitle format"
+  option "with-librsvg", "Enable SVG files as inputs via librsvg"
   option "with-libsoxr", "Enable the soxr resample library"
   option "with-libssh", "Enable SFTP protocol via libssh"
   option "with-tesseract", "Enable the tesseract OCR engine"
@@ -40,7 +25,6 @@ class Ffmpeg < Formula
   option "with-openssl", "Enable SSL support"
   option "with-rtmpdump", "Enable RTMP protocol"
   option "with-rubberband", "Enable rubberband library"
-  option "with-schroedinger", "Enable Dirac video format"
   option "with-sdl2", "Enable FFplay media player"
   option "with-snappy", "Enable Snappy library"
   option "with-tools", "Enable additional FFmpeg tools"
@@ -54,11 +38,13 @@ class Ffmpeg < Formula
   option "without-securetransport", "Disable use of SecureTransport"
   option "without-x264", "Disable H.264 encoder"
   option "without-xvid", "Disable Xvid MPEG-4 video encoder"
+  option "without-gpl", "Disable building GPL licensed parts of FFmpeg"
 
   deprecated_option "with-ffplay" => "with-sdl2"
   deprecated_option "with-sdl" => "with-sdl2"
   deprecated_option "with-libtesseract" => "with-tesseract"
 
+  depends_on "nasm" => :build
   depends_on "pkg-config" => :build
   depends_on "texi2html" => :build
 
@@ -78,6 +64,7 @@ class Ffmpeg < Formula
   depends_on "libcaca" => :optional
   depends_on "libgsm" => :optional
   depends_on "libmodplug" => :optional
+  depends_on "librsvg" => :optional
   depends_on "libsoxr" => :optional
   depends_on "libssh" => :optional
   depends_on "libvidstab" => :optional
@@ -90,7 +77,6 @@ class Ffmpeg < Formula
   depends_on "opus" => :optional
   depends_on "rtmpdump" => :optional
   depends_on "rubberband" => :optional
-  depends_on "schroedinger" => :optional
   depends_on "sdl2" => :optional
   depends_on "snappy" => :optional
   depends_on "speex" => :optional
@@ -109,7 +95,6 @@ class Ffmpeg < Formula
       --prefix=#{prefix}
       --enable-shared
       --enable-pthreads
-      --enable-gpl
       --enable-version3
       --enable-hardcoded-tables
       --enable-avresample
@@ -118,6 +103,7 @@ class Ffmpeg < Formula
       --host-ldflags=#{ENV.ldflags}
     ]
 
+    args << "--enable-gpl" if build.with? "gpl"
     args << "--disable-indev=qtkit" if build.without? "qtkit"
     args << "--disable-securetransport" if build.without? "securetransport"
     args << "--enable-chromaprint" if build.with? "chromaprint"
@@ -137,9 +123,9 @@ class Ffmpeg < Formula
     args << "--enable-libopencore-amrnb" << "--enable-libopencore-amrwb" if build.with? "opencore-amr"
     args << "--enable-libopenh264" if build.with? "openh264"
     args << "--enable-libopus" if build.with? "opus"
+    args << "--enable-librsvg" if build.with? "librsvg"
     args << "--enable-librtmp" if build.with? "rtmpdump"
     args << "--enable-librubberband" if build.with? "rubberband"
-    args << "--enable-libschroedinger" if build.with? "schroedinger"
     args << "--enable-libsnappy" if build.with? "snappy"
     args << "--enable-libsoxr" if build.with? "libsoxr"
     args << "--enable-libspeex" if build.with? "speex"
@@ -158,6 +144,7 @@ class Ffmpeg < Formula
     args << "--enable-libzimg" if build.with? "zimg"
     args << "--enable-libzmq" if build.with? "zeromq"
     args << "--enable-opencl" if MacOS.version > :lion
+    args << "--enable-videotoolbox" if MacOS.version >= :mountain_lion
     args << "--enable-openssl" if build.with? "openssl"
 
     if build.with? "xz"
@@ -176,15 +163,6 @@ class Ffmpeg < Formula
     # the "--enable-nonfree" flag, which produces unredistributable libraries
     args << "--enable-nonfree" if build.with?("fdk-aac") || build.with?("openssl")
 
-    # A bug in a dispatch header on 10.10, included via CoreFoundation,
-    # prevents GCC from building VDA support.
-    # See: https://github.com/Homebrew/homebrew/issues/33741
-    if MacOS.version != :yosemite || ENV.compiler == :clang
-      args << "--enable-vda"
-    else
-      args << "--disable-vda"
-    end
-
     system "./configure", *args
 
     system "make", "install"
@@ -199,6 +177,6 @@ class Ffmpeg < Formula
     # Create an example mp4 file
     mp4out = testpath/"video.mp4"
     system bin/"ffmpeg", "-filter_complex", "testsrc=rate=1:duration=1", mp4out
-    assert mp4out.exist?
+    assert_predicate mp4out, :exist?
   end
 end

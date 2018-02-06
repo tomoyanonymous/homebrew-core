@@ -4,27 +4,28 @@ class Netpbm < Formula
   # Maintainers: Look at https://sourceforge.net/p/netpbm/code/HEAD/tree/
   # for stable versions and matching revisions.
   if MacOS.version >= :sierra
-    url "https://svn.code.sf.net/p/netpbm/code/stable", :revision => 3014
+    url "https://svn.code.sf.net/p/netpbm/code/stable", :revision => 3094
   else
-    url "http://svn.code.sf.net/p/netpbm/code/stable", :revision => 3014
+    url "http://svn.code.sf.net/p/netpbm/code/stable", :revision => 3094
   end
-  version "10.73.13"
-  revision 1
+  version "10.73.17"
   version_scheme 1
 
   head "https://svn.code.sf.net/p/netpbm/code/trunk"
 
   bottle do
     cellar :any
-    sha256 "701a5ed0567ceeed7f5521b59a9ac3a91cf82dce41cafc20f70cde045bbd2c89" => :sierra
-    sha256 "39e9b0a36fbb8cd789851610f4adfd84c62dc18d0a08ccc6dbfec107c24c1456" => :el_capitan
-    sha256 "df2c8b60f6401b21986bd7b9d09004648eb67f690b32dfccb20763300f3d87c2" => :yosemite
+    sha256 "1c99ab33a5dee99e88a0f39873821bc1b8957cd729b98dc93fca3effc0d73402" => :high_sierra
+    sha256 "c4b338e2880e744a9dabdb6956264ea96f15da55596120d3599568698d9f7018" => :sierra
+    sha256 "bbdd407034a3fa7d842477a8fd9f7bea468508842aa5e2a4474e5b54de81cf0f" => :el_capitan
   end
 
   depends_on "libtiff"
   depends_on "jasper"
   depends_on "jpeg"
   depends_on "libpng"
+
+  conflicts_with "jbigkit", :because => "both install `pbm.5` and `pgm.5` files"
 
   def install
     cp "config.mk.in", "config.mk"
@@ -69,6 +70,6 @@ class Netpbm < Formula
     fwrite = Utils.popen_read("#{bin}/pngtopam #{test_fixtures("test.png")} -alphapam")
     (testpath/"test.pam").write fwrite
     system "#{bin}/pamdice", "test.pam", "-outstem", testpath/"testing"
-    assert File.exist?("testing_0_0.")
+    assert_predicate testpath/"testing_0_0.", :exist?
   end
 end

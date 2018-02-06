@@ -1,15 +1,15 @@
 class RedisAT32 < Formula
   desc "Persistent key-value database, with built-in net interface"
   homepage "https://redis.io/"
-  url "http://download.redis.io/releases/redis-3.2.10.tar.gz"
-  sha256 "411c604a716104f7f5a326abfad32de9cea10f15f987bec45cf86f315e9e63a0"
+  url "http://download.redis.io/releases/redis-3.2.11.tar.gz"
+  sha256 "31ae927cab09f90c9ca5954aab7aeecc3bb4da6087d3d12ba0a929ceb54081b5"
   head "https://github.com/antirez/redis.git", :branch => "3.2"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "6e8cac0c17db56cc64eaa4486bcde4eba2996a2ba4c12044950616ff474c0e5b" => :sierra
-    sha256 "686235188b28228b507dd7d9f752845f14b70d37c7ed5e1e6b3d5b33707b3f8d" => :el_capitan
-    sha256 "11ec6661a4c4fc8bb0e696f94d2b63d9f11be765b30e08e41400970d4e1e0ec0" => :yosemite
+    sha256 "c2b89b227eacd40e8f3d0ad2f8b01509a1f182252e1b91b36a5256a40649b70c" => :high_sierra
+    sha256 "78f7a36a2e4ac2bf8d5efdb70e9ac84eb50d9e6ce815d8c4d25e1268ce67aa5a" => :sierra
+    sha256 "a73d084f4aef70d0f7c614317c66cb9ca55614ccb2363f62af59276d431ee3e0" => :el_capitan
   end
 
   keg_only :versioned_formula
@@ -42,7 +42,7 @@ class RedisAT32 < Formula
 
   plist_options :manual => "redis-server #{HOMEBREW_PREFIX}/etc/redis.conf"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">
@@ -75,6 +75,6 @@ class RedisAT32 < Formula
 
   test do
     system bin/"redis-server", "--test-memory", "2"
-    %w[run db/redis log].each { |p| assert (var/p).exist?, "#{var/p} doesn't exist!" }
+    %w[run db/redis log].each { |p| assert_predicate var/p, :exist?, "#{var/p} doesn't exist!" }
   end
 end

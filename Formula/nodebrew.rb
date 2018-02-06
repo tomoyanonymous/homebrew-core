@@ -1,8 +1,8 @@
 class Nodebrew < Formula
   desc "Node.js version manager"
   homepage "https://github.com/hokaccha/nodebrew"
-  url "https://github.com/hokaccha/nodebrew/archive/v0.9.7.tar.gz"
-  sha256 "3aa8b0cf30024d105f1ac6921aadf0440bc95bcae43df9d6ec58fc9de8cd352e"
+  url "https://github.com/hokaccha/nodebrew/archive/v0.9.8.tar.gz"
+  sha256 "040c1b32ddce6d83fda76a50ce9bc635ce0040f76a63617d74234449b8ff078b"
   head "https://github.com/hokaccha/nodebrew.git"
 
   bottle :unneeded
@@ -13,7 +13,7 @@ class Nodebrew < Formula
     zsh_completion.install "completions/zsh/_nodebrew"
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     You need to manually run setup_dirs to create directories required by nodebrew:
       #{opt_bin}/nodebrew setup_dirs
 

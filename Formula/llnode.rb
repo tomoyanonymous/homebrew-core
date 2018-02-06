@@ -1,30 +1,34 @@
 class Llnode < Formula
   desc "LLDB plugin for live/post-mortem debugging of node.js apps"
   homepage "https://github.com/nodejs/llnode"
-  url "https://github.com/nodejs/llnode/archive/v1.6.0.tar.gz"
-  sha256 "38d31b1709f1ceaa718f6eae53785ac21ff9ff4c3cb66034ebac959742d54cb0"
+  url "https://github.com/nodejs/llnode/archive/v1.6.3.tar.gz"
+  sha256 "febf029685afbcd513250ee82dc39889ffd4c8087d9377ef17e16f17a2200bf5"
 
   bottle do
     cellar :any
-    sha256 "ae95123a980ed75cba8256ef5218c62dac4ccabb2ab18321f34df60de5ba1559" => :sierra
-    sha256 "20ce6d9046bdf0fa75a471eb78153eba73eac7d9d89efab8e3ccb17d4dce782e" => :el_capitan
-    sha256 "0a4e74a20205586b11f77a37aab6acb2a2ce68ae02460735c3da9c8979d0ff2b" => :yosemite
+    sha256 "c8468aa60cd92328bdc294c5a69c932f8418dd5e2b6e5f3d597e0904c0e26e1b" => :high_sierra
+    sha256 "e0867b7317b88b570b05faee5d36a4cc7c2e71383e95f8dd4cef7d26286bc75f" => :sierra
+    sha256 "e047f606e4923900a3285acc8a352f847d387e877d5436ddf5cdbf37d256cf27" => :el_capitan
   end
 
+  depends_on "python" => :build if MacOS.version <= :snow_leopard
   depends_on :macos => :yosemite
-  depends_on :python => :build
 
   resource "gyp" do
     url "https://chromium.googlesource.com/external/gyp.git",
-        :revision => "db72e9fcf55ba9d8089f0bc7e447180f8972b5c0"
+        :revision => "324dd166b7c0b39d513026fa52d6280ac6d56770"
   end
 
   resource "lldb" do
-    if MacOS::Xcode.version >= "8.3"
+    if DevelopmentTools.clang_build_version >= 900
+      # lldb release_40 branch tip of tree commit from 12 Jan 2017
+      url "https://github.com/llvm-mirror/lldb.git",
+          :revision => "fcd2aac9f179b968a20cf0231c3386dcef8a6659"
+    elsif DevelopmentTools.clang_build_version >= 802
       # lldb 390
       url "https://github.com/llvm-mirror/lldb.git",
           :revision => "d556e60f02a7404b291d07cac2f27512c73bc743"
-    elsif MacOS::Xcode.version >= "8.0"
+    elsif DevelopmentTools.clang_build_version >= 800
       # lldb 360.1
       url "https://github.com/llvm-mirror/lldb.git",
           :revision => "839b868e2993dcffc7fea898a1167f1cec097a82"
@@ -46,7 +50,7 @@ class Llnode < Formula
     prefix.install "out/Release/llnode.dylib"
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     `brew install llnode` does not link the plugin to LLDB PlugIns dir.
 
     To load this plugin in LLDB, one will need to either
@@ -61,11 +65,11 @@ class Llnode < Formula
   end
 
   test do
-    lldb_out = pipe_output "lldb", <<-EOS.undent
+    lldb_out = pipe_output "lldb", <<~EOS
       plugin load #{opt_prefix}/llnode.dylib
       help v8
       quit
     EOS
-    assert_match /v8 bt/, lldb_out
+    assert_match "v8 bt", lldb_out
   end
 end

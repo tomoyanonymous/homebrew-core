@@ -1,13 +1,13 @@
 class GdkPixbuf < Formula
   desc "Toolkit for image loading and pixel buffer manipulation"
   homepage "https://gtk.org"
-  url "https://download.gnome.org/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.8.tar.xz"
-  sha256 "5d68e5283cdc0bf9bda99c3e6a1d52ad07a03364fa186b6c26cfc86fcd396a19"
+  url "https://download.gnome.org/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.11.tar.xz"
+  sha256 "ae62ab87250413156ed72ef756347b10208c00e76b222d82d9ed361ed9dde2f3"
 
   bottle do
-    sha256 "76afcde6839f2f3e3f658b08cc0acf49151c53c75e5a8194ff6c20b8734fe879" => :sierra
-    sha256 "1d42ff7c35ab50ee708b1a41865dc425f6b374b8ccded7484b59848561d5f380" => :el_capitan
-    sha256 "77d55ab256a99e97eafe2f364ae9c1c75dbbdf739a008573fb1ccbefc7715fec" => :yosemite
+    sha256 "bd9e4d72a827f75ea2a1cd9463be0cf123ba1cda8f2e4d0a3ef0b1a1c46945f6" => :high_sierra
+    sha256 "a6280e13fe29c5c06548e4c8d0ed80755b50432778b6f668495327a289693cf3" => :sierra
+    sha256 "70aa88fda9b08b1cbd7fdd3c21d378ce1a95c1c936d5eba9dbe9efcd75254f04" => :el_capitan
   end
 
   option "with-relocations", "Build with relocation support for bundles"
@@ -19,8 +19,7 @@ class GdkPixbuf < Formula
   depends_on "jpeg"
   depends_on "libtiff"
   depends_on "libpng"
-  depends_on "gobject-introspection"
-  depends_on "shared-mime-info"
+  depends_on "gobject-introspection" => :recommended
 
   # gdk-pixbuf has an internal version number separate from the overall
   # version number that specifies the location of its module and cache
@@ -44,7 +43,6 @@ class GdkPixbuf < Formula
       --disable-maintainer-mode
       --enable-debug=no
       --prefix=#{prefix}
-      --enable-introspection=yes
       --disable-Bsymbolic
       --enable-static
       --without-gdiplus
@@ -52,6 +50,12 @@ class GdkPixbuf < Formula
 
     args << "--enable-relocations" if build.with?("relocations")
     args << "--disable-modules" if build.without?("modules")
+
+    if build.with? "gobject-introspection"
+      args << "--enable-introspection=yes"
+    else
+      args << "--enable-introspection=no"
+    end
 
     included_loaders = ARGV.value("with-included-loaders")
     args << "--with-included-loaders=#{included_loaders}" if included_loaders
@@ -85,7 +89,7 @@ class GdkPixbuf < Formula
 
   def caveats
     if build.with?("relocations") || HOMEBREW_PREFIX.to_s != "/usr/local"
-      <<-EOS.undent
+      <<~EOS
         Programs that require this module need to set the environment variable
           export GDK_PIXBUF_MODULEDIR="#{module_dir}/loaders"
         If you need to manually update the query loader cache, set these variables then run
@@ -95,7 +99,7 @@ class GdkPixbuf < Formula
   end
 
   test do
-    (testpath/"test.c").write <<-EOS.undent
+    (testpath/"test.c").write <<~EOS
       #include <gdk-pixbuf/gdk-pixbuf.h>
 
       int main(int argc, char *argv[]) {

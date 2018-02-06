@@ -1,14 +1,15 @@
 class Yaz < Formula
   desc "Toolkit for Z39.50/SRW/SRU clients/servers"
   homepage "https://www.indexdata.com/yaz"
-  url "http://ftp.indexdata.dk/pub/yaz/yaz-5.23.0.tar.gz"
-  sha256 "ade1c79d792fd6cb7727dd4bc4ea61743ddb49d1d4a04a038cd12c8a3a13e98a"
+  url "http://ftp.indexdata.dk/pub/yaz/yaz-5.23.1.tar.gz"
+  sha256 "4fb3b1ffcec4b9a56b892c47a0a645142e45418ce5ef6a835aeebc723f7d147e"
+  revision 2
 
   bottle do
     cellar :any
-    sha256 "14e1b77ccb7e9913e824db4e37929a87526b3f63ee996318cce062f863a84b87" => :sierra
-    sha256 "3fc96199e65bbfbd9226416f6547f95ab31323e10c82815f8185566c7541c824" => :el_capitan
-    sha256 "67519e3526247c3d841aba030b342c542e00a56e74475027697d573934060f3a" => :yosemite
+    sha256 "f0c08571d5eb5ec506e76b675f96b36f355f5bf2e7f91bcccfa463573449ba79" => :high_sierra
+    sha256 "0578e44aff8a426b3936633ca29e8693860941f4d693c37e8e9491fe9d9cf2fa" => :sierra
+    sha256 "a0c3051306314ba99073719706fd57c40c432a9c83dcbef9b6aaee52bc49f3ef" => :el_capitan
   end
 
   head do
@@ -48,7 +49,7 @@ class Yaz < Formula
       # * xy transformed to z
       # * lowercase
       configurationfile = testpath/"icu-chain.xml"
-      configurationfile.write <<-EOS.undent
+      configurationfile.write <<~EOS
         <?xml version="1.0" encoding="UTF-8"?>
         <icu_chain locale="en">
           <transform rule="[:Control:] Any-Remove"/>
@@ -63,7 +64,7 @@ class Yaz < Formula
       inputfile = testpath/"icu-test.txt"
       inputfile.write "yaz-ICU	xy!"
 
-      expectedresult = <<-EOS.undent
+      expectedresult = <<~EOS
         1 1 'yaz' 'yaz'
         2 1 '' ''
         3 1 'icuz' 'ICUz'

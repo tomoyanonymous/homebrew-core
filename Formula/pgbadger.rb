@@ -8,6 +8,7 @@ class Pgbadger < Formula
 
   bottle do
     cellar :any_skip_relocation
+    sha256 "a481b5c37d9517b2329493447798188e722f354a4d0309dbecc505f1b0e9bbdf" => :high_sierra
     sha256 "d67b1d85810ffbcd8b638b44cbcce14744e6aff9f72f2e3085047897f3cad0d3" => :sierra
     sha256 "d67b1d85810ffbcd8b638b44cbcce14744e6aff9f72f2e3085047897f3cad0d3" => :el_capitan
     sha256 "d67b1d85810ffbcd8b638b44cbcce14744e6aff9f72f2e3085047897f3cad0d3" => :yosemite
@@ -22,7 +23,7 @@ class Pgbadger < Formula
     man1.install "usr/local/share/man/man1/pgbadger.1p"
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     You must configure your PostgreSQL server before using pgBadger.
     Edit postgresql.conf (in #{var}/postgres if you use Homebrew's
     PostgreSQL), set the following parameters, and restart PostgreSQL:
@@ -42,11 +43,11 @@ class Pgbadger < Formula
   end
 
   test do
-    (testpath/"server.log").write <<-EOS.undent
+    (testpath/"server.log").write <<~EOS
       LOG:  autovacuum launcher started
       LOG:  database system is ready to accept connections
     EOS
     system bin/"pgbadger", "-f", "syslog", "server.log"
-    assert File.exist? "out.html"
+    assert_predicate testpath/"out.html", :exist?
   end
 end

@@ -1,14 +1,13 @@
 class Tokei < Formula
-  desc "Program that allows you to count code, quickly."
+  desc "Program that allows you to count code, quickly"
   homepage "https://github.com/Aaronepower/tokei"
-  url "https://github.com/Aaronepower/tokei/archive/v6.0.1.tar.gz"
-  sha256 "f7f455995fa4f14019bb2f3a5203d7b551d8c453e9b7a533de6fa8d707c7fd74"
+  url "https://github.com/Aaronepower/tokei/archive/v7.0.1.tar.gz"
+  sha256 "71c9be9ad04bc66501f5f54e74b5cf5e56fc1392ceead5525b743006145ac3a9"
 
   bottle do
-    cellar :any_skip_relocation
-    sha256 "518e74274170384daa5642110a96e0b141ce03d498be6cac4e49a6e3e239a476" => :sierra
-    sha256 "40b099abde5fb5d96ac89f79c714d73369ab65f86543702719918bf420df45b2" => :el_capitan
-    sha256 "951ef73c9fab5a4ee45a99f6a41b954851d2507cc79f1dde0fd34c71e3d82469" => :yosemite
+    sha256 "9ddc97082885c00d12d61da6bf6bac1889bfcf4d66371f289d47b8854ed618ad" => :high_sierra
+    sha256 "5b63b0f5fe0e2dd347a6104e3af36aae7b2de70b3e65967b9c2a0ba77e536e53" => :sierra
+    sha256 "3e497eeb0db677cd8ab57433701398438deb7a73b4c083f7c73c6a13238ac95b" => :el_capitan
   end
 
   depends_on "rust" => :build
@@ -19,7 +18,7 @@ class Tokei < Formula
   end
 
   test do
-    (testpath/"lib.rs").write <<-EOS.undent
+    (testpath/"lib.rs").write <<~EOS
       #[cfg(test)]
       mod tests {
           #[test]

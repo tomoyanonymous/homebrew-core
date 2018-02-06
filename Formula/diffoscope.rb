@@ -1,20 +1,21 @@
 class Diffoscope < Formula
-  desc "In-depth comparison of files, archives, and directories."
+  desc "In-depth comparison of files, archives, and directories"
   homepage "https://diffoscope.org"
-  url "https://files.pythonhosted.org/packages/48/d6/58af768acee19ae1a5e8799673e7a2cb6649feab5dee1013cae38a343f19/diffoscope-85.tar.gz"
-  sha256 "370070197ec0c313963ba81b225e3e0dfd0d51a494a796df1267cfb5c9762ad6"
+  url "https://files.pythonhosted.org/packages/6c/b7/a5f5f5fb994fa8230769a6e211b9306e0882d0158744c168f7bb694a6f26/diffoscope-90.tar.gz"
+  sha256 "d1507e40bc7a920cbfb9df6f69029e84ad084d9804733af923587c10b7110f42"
+  revision 1
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "38062a4e7ae8ba154da2957d912ff836fea4d6098e76b24063bfe10ece8b77b9" => :sierra
-    sha256 "38062a4e7ae8ba154da2957d912ff836fea4d6098e76b24063bfe10ece8b77b9" => :el_capitan
-    sha256 "38062a4e7ae8ba154da2957d912ff836fea4d6098e76b24063bfe10ece8b77b9" => :yosemite
+    sha256 "eaa874943de6387015a0a3cba97fdebe231a0495ae1071455d1f285f62a22487" => :high_sierra
+    sha256 "eaa874943de6387015a0a3cba97fdebe231a0495ae1071455d1f285f62a22487" => :sierra
+    sha256 "eaa874943de6387015a0a3cba97fdebe231a0495ae1071455d1f285f62a22487" => :el_capitan
   end
 
   depends_on "libmagic"
   depends_on "libarchive"
   depends_on "gnu-tar"
-  depends_on :python3
+  depends_on "python3"
 
   resource "libarchive-c" do
     url "https://files.pythonhosted.org/packages/1f/4a/7421e8db5c7509cf75e34b92a32b69c506f2b6f6392a909c2f87f3e94ad2/libarchive-c-2.7.tar.gz"
@@ -22,11 +23,13 @@ class Diffoscope < Formula
   end
 
   resource "python-magic" do
-    url "https://files.pythonhosted.org/packages/65/0b/c6b31f686420420b5a16b24a722fe980724b28d76f65601c9bc324f08d02/python-magic-0.4.13.tar.gz"
-    sha256 "604eace6f665809bebbb07070508dfa8cabb2d7cb05be9a56706c60f864f1289"
+    url "https://files.pythonhosted.org/packages/84/30/80932401906eaf787f2e9bd86dc458f1d2e75b064b4c187341f29516945c/python-magic-0.4.15.tar.gz"
+    sha256 "f3765c0f582d2dfc72c15f3b5a82aecfae9498bd29ca840d72f37d7bd38bfcd5"
   end
 
   def install
+    ENV.delete("PYTHONPATH") # play nice with libmagic --with-python
+
     pyver = Language::Python.major_minor_version "python3"
     ENV.prepend_create_path "PYTHONPATH", libexec/"vendor/lib/python#{pyver}/site-packages"
 

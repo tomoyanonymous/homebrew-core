@@ -19,6 +19,7 @@ class Mal4s < Formula
   depends_on "automake" => :build
   depends_on "libtool" => :build
   depends_on "glm" => :build
+  depends_on "boost"
   depends_on "glew"
   depends_on "pcre"
   depends_on "sdl2"
@@ -26,12 +27,6 @@ class Mal4s < Formula
   depends_on "sdl2_mixer"
   depends_on "freetype"
   depends_on :x11 => :optional
-
-  if MacOS.version < :mavericks
-    depends_on "boost" => "c++11"
-  else
-    depends_on "boost"
-  end
 
   needs :cxx11
 
@@ -52,7 +47,7 @@ class Mal4s < Formula
         exec bin/"mal4s", "-t", "2", "-o", "out", pkgshare/"sample--newns.mal4s"
       end
       sleep 60
-      assert File.exist?("out"), "Failed to output PPM stream!"
+      assert_predicate testpath/"out", :exist?, "Failed to output PPM stream!"
     ensure
       Process.kill("TERM", pid)
     end

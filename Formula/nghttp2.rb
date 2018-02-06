@@ -1,13 +1,13 @@
 class Nghttp2 < Formula
   desc "HTTP/2 C Library"
   homepage "https://nghttp2.org/"
-  url "https://github.com/nghttp2/nghttp2/releases/download/v1.24.0/nghttp2-1.24.0.tar.xz"
-  sha256 "0d443cd2f45593aa42e93163cb46a03cb4a28703712a8dd8cc9102d454727316"
+  url "https://github.com/nghttp2/nghttp2/releases/download/v1.30.0/nghttp2-1.30.0.tar.xz"
+  sha256 "089afb4c22a53f72384b71ea06194be255a8a73b50b1412589105d0e683c52ac"
 
   bottle do
-    sha256 "a8bd9045a3a955c9f404f503dd180b0d13233568a76e1f1669e7907853465b7e" => :sierra
-    sha256 "f2b810b25eec725f58b9b4724f5dd90f792fc733e35da2b8846e0ae39e6e6a49" => :el_capitan
-    sha256 "9250318468dae2c1ead682e55c5158536c864719bab8c9fda679529fd0f4cb3d" => :yosemite
+    sha256 "d92627da52dc441d9f06f6a79a1c8789765ea98d167a1773d53bf253bcc22dfa" => :high_sierra
+    sha256 "08a359fb5e9abff20a2376a40d42567a8a92a0b34436a83c0f25a6529fa10aaa" => :sierra
+    sha256 "2d9c183cd6a091f91567a783c7d9501c8210194e38e343127989d559bd0ce04d" => :el_capitan
   end
 
   head do
@@ -21,7 +21,7 @@ class Nghttp2 < Formula
   option "with-examples", "Compile and install example programs"
   option "with-python3", "Build python3 bindings"
 
-  depends_on :python3 => :optional
+  depends_on "python3" => :optional
   depends_on "sphinx-doc" => :build
   depends_on "libxml2" if MacOS.version <= :lion
   depends_on "pkg-config" => :build
@@ -32,12 +32,11 @@ class Nghttp2 < Formula
   depends_on "libevent"
   depends_on "jansson"
   depends_on "boost"
-  depends_on "spdylay"
   depends_on "jemalloc" => :recommended
 
   resource "Cython" do
-    url "https://files.pythonhosted.org/packages/b7/67/7e2a817f9e9c773ee3995c1e15204f5d01c8da71882016cac10342ef031b/Cython-0.25.2.tar.gz"
-    sha256 "f141d1f9c27a07b5a93f7dc5339472067e2d7140d1c5a9e20112a5665ca60306"
+    url "https://files.pythonhosted.org/packages/ee/2a/c4d2cdd19c84c32d978d18e9355d1ba9982a383de87d0fcb5928553d37f4/Cython-0.27.3.tar.gz"
+    sha256 "6a00512de1f2e3ce66ba35c5420babaef1fe2d9c43a8faab4080b0dbcc26bc64"
   end
 
   # https://github.com/tatsuhiro-t/nghttp2/issues/125
@@ -54,7 +53,6 @@ class Nghttp2 < Formula
       --enable-app
       --with-boost=#{Formula["boost"].opt_prefix}
       --enable-asio-lib
-      --with-spdylay
       --disable-python-bindings
     ]
 

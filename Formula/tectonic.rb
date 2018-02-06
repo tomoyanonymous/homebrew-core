@@ -1,13 +1,14 @@
 class Tectonic < Formula
   desc "Modernized, complete, self-contained TeX/LaTeX engine"
   homepage "https://tectonic-typesetting.github.io/"
-  url "https://github.com/tectonic-typesetting/tectonic/archive/v0.1.6.tar.gz"
-  sha256 "5c201c979069dfb780040b42d8c516847668bd6d429eabb20f5fb15a3873832c"
+  url "https://github.com/tectonic-typesetting/tectonic/archive/v0.1.7.tar.gz"
+  sha256 "c39acc8a4e2e102245037fd2ea3e77b058d25e29bbab0dcc53a3167c5d3fee2a"
+  revision 2
 
   bottle do
-    sha256 "bfb4b5cc790c8aa94be88b05776ca8944725d0bb0efaffb6b908ac2a57c546bf" => :sierra
-    sha256 "911f1157cd3a5a858f4338f0145be38da0025dfb4a008d138f9307498356decb" => :el_capitan
-    sha256 "e53f3203f455be568b7d8cdb51b2008d87d2b5c8bcee55c4784157288242b479" => :yosemite
+    sha256 "fe69edcce8d1bee8aba0180d4ab4434073c4519b7a5677ba996246b24e8ff0ec" => :high_sierra
+    sha256 "9b0aa550333d388f6d7794a0cbad1e3ea077d1de501739ae9c69849cc239e81e" => :sierra
+    sha256 "34ce8a3d71046e782d43b247fb92a5407348f82959e7f13343365b3f0bab24f3" => :el_capitan
   end
 
   depends_on "pkg-config" => :build
@@ -18,7 +19,6 @@ class Tectonic < Formula
   depends_on "icu4c"
   depends_on "libpng"
   depends_on "openssl"
-  depends_on "zlib" if MacOS.version <= :el_capitan
 
   def install
     ENV.cxx11

@@ -1,16 +1,15 @@
 class Redex < Formula
   desc "Bytecode optimizer for Android apps"
   homepage "http://fbredex.com"
-  url "https://github.com/facebook/redex/archive/v1.1.0.tar.gz"
-  sha256 "af2c81db4e0346e1aeef570e105c60ebfea730d62fd928d996f884abda955990"
-
+  url "https://github.com/facebook/redex/archive/v2017.10.31.tar.gz"
+  sha256 "18a840e4db0fc51f79e17dfd749b2ffcce65a28e7ef9c2b3c255c5ad89f6fd6f"
   head "https://github.com/facebook/redex.git"
 
   bottle do
     cellar :any
-    sha256 "11f80b6cc9ea4967d23972c66bc115a11b9fae6e0420f78c8744215979efc7cb" => :sierra
-    sha256 "c069b63acba15031c739a73a62637dd7ee7a56d341d6b46de06e35dd9971ba36" => :el_capitan
-    sha256 "fac8aa70fd659224fa932d2b469596b68351623333f70704c4d3e9f1b7dcf2df" => :yosemite
+    sha256 "d8772db5f39270a047241f27c7f2aa2d9b7ba6313213e372728640448454ace0" => :high_sierra
+    sha256 "0dac7538726f7fba1cfc702c4b3cbe844f71fd246a97bee629ca298073720ccd" => :sierra
+    sha256 "05fb9c8ff8a2b3b516fd80e326ebc8ba174eae3305e69ffc057b43d874e4983d" => :el_capitan
   end
 
   depends_on "autoconf" => :build

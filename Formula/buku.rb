@@ -1,25 +1,24 @@
 class Buku < Formula
   include Language::Python::Virtualenv
 
-  desc "Command-line bookmark manager"
+  desc "Powerful command-line bookmark manager"
   homepage "https://github.com/jarun/Buku"
-  url "https://github.com/jarun/Buku/archive/v3.2.tar.gz"
-  sha256 "2375fc22e7e417fe23814589257f007cfdc1b1e3f8e47619a7d6e83ff0fb4f09"
-  revision 1
+  url "https://github.com/jarun/Buku/archive/v3.6.tar.gz"
+  sha256 "6126dbf820a18af69b0bd24eb86a04a71d4904ba84dc174b98c1050fae8f9fad"
 
   bottle do
     cellar :any
-    sha256 "0a2ed0bf6f02eb22f4d237861dd2273750c22da36a212d79b20da3f4cce0eef3" => :sierra
-    sha256 "2451c2d50dcfae8ac7af85a4cddf6676adb1ab2b743116b6a8442a2116348db3" => :el_capitan
-    sha256 "99e7f3fba21af3c0a8c5f72a246d21939a1382c2ba385e2aeadd39290f0ec38f" => :yosemite
+    sha256 "e71283396a853d30d0ea6ce6275dfd6309ad23764bd29e504c8e03bbb82f494e" => :high_sierra
+    sha256 "2bcaf5944032ee5d30ae090f5fa694f2ddbcdd1fa45832212cfcb08094913676" => :sierra
+    sha256 "710f3421de05e8ebbfbbb39e2c9efefa03ffdbfa800780e9e27d5f42c5a1f944" => :el_capitan
   end
 
-  depends_on :python3
-  depends_on "openssl@1.1"
+  depends_on "openssl"
+  depends_on "python3"
 
   resource "asn1crypto" do
-    url "https://files.pythonhosted.org/packages/67/14/5d66588868c4304f804ebaff9397255f6ec5559e46724c2496e0f26e68d6/asn1crypto-0.22.0.tar.gz"
-    sha256 "cbbadd640d3165ab24b06ef25d1dca09a3441611ac15f6a6b452474fdf0aed1a"
+    url "https://files.pythonhosted.org/packages/fc/f1/8db7daa71f414ddabfa056c4ef792e1461ff655c2ae2928a2b675bfed6b4/asn1crypto-0.24.0.tar.gz"
+    sha256 "9d5c20441baf0cb60a4ac34cc447c6c189024b6b4c6cd7877034f4965c464e49"
   end
 
   resource "beautifulsoup4" do
@@ -28,13 +27,13 @@ class Buku < Formula
   end
 
   resource "certifi" do
-    url "https://files.pythonhosted.org/packages/20/d0/3f7a84b0c5b89e94abbd073a5f00c7176089f526edb056686751d5064cbd/certifi-2017.7.27.1.tar.gz"
-    sha256 "40523d2efb60523e113b44602298f0960e900388cf3bb6043f645cf57ea9e3f5"
+    url "https://files.pythonhosted.org/packages/23/3f/8be01c50ed24a4bd6b8da799839066ce0288f66f5e11f0367323467f0cbc/certifi-2017.11.5.tar.gz"
+    sha256 "5ec74291ca1136b40f0379e1128ff80e866597e4e2c1e755739a913bbc3613c0"
   end
 
   resource "cffi" do
-    url "https://files.pythonhosted.org/packages/5b/b9/790f8eafcdab455bcd3bd908161f802c9ce5adbf702a83aa7712fcc345b7/cffi-1.10.0.tar.gz"
-    sha256 "b3b02911eb1f6ada203b0763ba924234629b51586f72a21faacc638269f4ced5"
+    url "https://files.pythonhosted.org/packages/c9/70/89b68b6600d479034276fed316e14b9107d50a62f5627da37fafe083fde3/cffi-1.11.2.tar.gz"
+    sha256 "ab87dd91c0c4073758d07334c1e5f712ce8fe48f007b86f8238773963ee700a6"
   end
 
   resource "chardet" do
@@ -43,13 +42,13 @@ class Buku < Formula
   end
 
   resource "cryptography" do
-    url "https://files.pythonhosted.org/packages/9c/1a/0fc8cffb04582f9ffca61b15b0681cf2e8588438e55f61403eb9880bd8e0/cryptography-2.0.3.tar.gz"
-    sha256 "d04bb2425086c3fe86f7bc48915290b13e798497839fbb18ab7f6dffcf98cc3a"
+    url "https://files.pythonhosted.org/packages/78/c5/7188f15a92413096c93053d5304718e1f6ba88b818357d05d19250ebff85/cryptography-2.1.4.tar.gz"
+    sha256 "e4d967371c5b6b2e67855066471d844c5d52d210c36c28d49a8507b96e2c5291"
   end
 
   resource "idna" do
-    url "https://files.pythonhosted.org/packages/d8/82/28a51052215014efc07feac7330ed758702fc0581347098a81699b5281cb/idna-2.5.tar.gz"
-    sha256 "3cb5ce08046c4e3a560fc02f138d0ac63e00f8ce5901a56b32ec8b7994082aab"
+    url "https://files.pythonhosted.org/packages/f4/bd/0467d62790828c23c47fc1dfa1b1f052b24efdf5290f071c7a91d0d82fd3/idna-2.6.tar.gz"
+    sha256 "2c6a5de3089009e3da7c5dde64a141dbc8551d5b7f6cf4ed7c2568d0cc520a8f"
   end
 
   resource "pycparser" do
@@ -58,13 +57,13 @@ class Buku < Formula
   end
 
   resource "requests" do
-    url "https://files.pythonhosted.org/packages/c3/38/d95ddb6cc8558930600be088e174a2152261a1e0708a18bf91b5b8c90b22/requests-2.18.3.tar.gz"
-    sha256 "fb68a7baef4965c12d9cd67c0f5a46e6e28be3d8c7b6910c758fbcc99880b518"
+    url "https://files.pythonhosted.org/packages/b0/e1/eab4fc3752e3d240468a8c0b284607899d2fbfb236a56b7377a329aa8d09/requests-2.18.4.tar.gz"
+    sha256 "9c443e7324ba5b85070c4a818ade28bfabedf16ea10206da1132edaa6dda237e"
   end
 
   resource "six" do
-    url "https://files.pythonhosted.org/packages/b3/b2/238e2590826bfdd113244a40d9d3eb26918bd798fc187e2360a8367068db/six-1.10.0.tar.gz"
-    sha256 "105f8d68616f8248e24bf0e9372ef04d3cc10104f1980f54d57b2ce73a5ad56a"
+    url "https://files.pythonhosted.org/packages/16/d8/bc6316cf98419719bd59c91742194c111b6f2e85abac88e496adefaf7afe/six-1.11.0.tar.gz"
+    sha256 "70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9"
   end
 
   resource "urllib3" do
@@ -91,7 +90,7 @@ class Buku < Formula
     ENV["XDG_DATA_HOME"] = "#{testpath}/.local/share"
 
     # Firefox exported bookmarks file
-    (testpath/"bookmarks.html").write <<-EOS.undent
+    (testpath/"bookmarks.html").write <<~EOS
       <!DOCTYPE NETSCAPE-Bookmark-file-1>
       <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
       <TITLE>Bookmarks</TITLE>
@@ -106,11 +105,11 @@ class Buku < Formula
       </DL>
     EOS
 
-    (testpath/"import").write <<-EOS.undent
+    (testpath/"import").write <<~EOS
       spawn #{bin}/buku --nc --import bookmarks.html
-      expect "Specify unique tag for imports (Enter to skip): "
-      send "\r"
-      expect "Add imported folders names as tags? (y/n): "
+      expect -re "DB file is being created at .*"
+      expect "You should encrypt it."
+      expect "Add parent folder names as tags? (y/n): "
       send "y\r"
       expect {
           -re ".*ERROR.*" { exit 1 }
@@ -124,7 +123,7 @@ class Buku < Formula
     system bin/"buku", "--update"
 
     # Test crypto functionality
-    (testpath/"crypto-test").write <<-EOS.undent
+    (testpath/"crypto-test").write <<~EOS
       # Lock bookmark database
       spawn #{bin}/buku --lock
       expect "Password: "

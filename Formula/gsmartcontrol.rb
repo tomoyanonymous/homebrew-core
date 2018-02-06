@@ -1,13 +1,13 @@
 class Gsmartcontrol < Formula
   desc "Graphical user interface for smartctl"
   homepage "https://gsmartcontrol.sourceforge.io"
-  url "https://downloads.sourceforge.net/project/gsmartcontrol/1.0.2/gsmartcontrol-1.0.2.tar.bz2"
-  sha256 "4f70451c359d95edc974498b860696b698f19b187340dc7207b4b38cbaf5e207"
+  url "https://downloads.sourceforge.net/project/gsmartcontrol/1.1.3/gsmartcontrol-1.1.3.tar.bz2"
+  sha256 "b64f62cffa4430a90b6d06cd52ebadd5bcf39d548df581e67dfb275a673b12a9"
 
   bottle do
-    sha256 "18bedc9f4a86e87ecffb2b849af5987de60d70e1fe7a8acdce8f44f2119ee5d7" => :sierra
-    sha256 "4ada57cbcb5ad1d7dce8393b3c50bbec57a8bebe9e78c716ac3977eee2629b67" => :el_capitan
-    sha256 "03855826f550c4a677c946fa713da68ea4591c31d43e87f3e2278aaf1b55338d" => :yosemite
+    sha256 "c1a64a3ff57b7ed92240bfdc20ad1330107cc28b9d2fc9ddfcf5665d7231cc71" => :high_sierra
+    sha256 "f7f9eb0db8c802cdf829028476c74eec2ec12c0c322eed774cf8890ebe10aca8" => :sierra
+    sha256 "dd26ca185000c056741ad62bf102808258ac4852553e47a42c60375db706a46c" => :el_capitan
   end
 
   depends_on "pkg-config" => :build
@@ -26,6 +26,6 @@ class Gsmartcontrol < Formula
   end
 
   test do
-    system "#{bin}/gsmartcontrol", "--version"
+    system "#{sbin}/gsmartcontrol", "--version"
   end
 end

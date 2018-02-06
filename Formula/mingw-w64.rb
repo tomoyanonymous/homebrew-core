@@ -1,14 +1,14 @@
 class MingwW64 < Formula
   desc "Minimalist GNU for Windows and GCC cross-compilers"
   homepage "https://mingw-w64.org/"
-  url "https://downloads.sourceforge.net/project/mingw-w64/mingw-w64/mingw-w64-release/mingw-w64-v5.0.2.tar.bz2"
-  sha256 "5f46e80ff1a9102a37a3453743dae9df98262cba7c45306549ef7432cfd92cfd"
+  url "https://downloads.sourceforge.net/project/mingw-w64/mingw-w64/mingw-w64-release/mingw-w64-v5.0.3.tar.bz2"
+  sha256 "2a601db99ef579b9be69c775218ad956a24a09d7dabc9ff6c5bd60da9ccc9cb4"
   revision 2
 
   bottle do
-    sha256 "089a548ed9c3e0cd3fcecef5af7b9ad687ba246df5429a6665d550b41f7acfc2" => :sierra
-    sha256 "26ff8d3d34c2ec70511249ac647d266d62f7eab4fac815c0432954d0609f3c56" => :el_capitan
-    sha256 "5fdddf98667694aa44b60ec89ae41f179d853b3266140a4579d621c6d49ed5d0" => :yosemite
+    sha256 "263eedfa805ef8e53ae365f303ddacdeecba759630bc60fd6fa6fa1fba583293" => :high_sierra
+    sha256 "56c84c7ad3d5a2a2858eeb79f33eada75488107c352252f5533f5e805d175d74" => :sierra
+    sha256 "91f92b16c39d0afebef40845c5b6aea9d4ad95165afef8024c2e1cd768d43ad0" => :el_capitan
   end
 
   depends_on "gmp"
@@ -20,22 +20,15 @@ class MingwW64 < Formula
   depends_on "texinfo" => :build
 
   resource "binutils" do
-    url "https://ftp.gnu.org/gnu/binutils/binutils-2.29.tar.gz"
-    mirror "https://ftpmirror.gnu.org/binutils/binutils-2.29.tar.gz"
-    sha256 "172e8c89472cf52712fd23a9f14e9bca6182727fb45b0f8f482652a83d5a11b4"
+    url "https://ftp.gnu.org/gnu/binutils/binutils-2.29.1.tar.gz"
+    mirror "https://ftpmirror.gnu.org/binutils/binutils-2.29.1.tar.gz"
+    sha256 "0d9d2bbf71e17903f26a676e7fba7c200e581c84b8f2f43e72d875d0e638771c"
   end
 
   resource "gcc" do
-    url "https://ftp.gnu.org/gnu/gcc/gcc-7.1.0/gcc-7.1.0.tar.bz2"
-    mirror "https://ftpmirror.gnu.org/gcc/gcc-7.1.0/gcc-7.1.0.tar.bz2"
-    sha256 "8a8136c235f64c6fef69cac0d73a46a1a09bb250776a050aec8f9fc880bebc17"
-  end
-
-  # Patch for mingw-w64 5.0.2 with GCC 7
-  # https://sourceforge.net/p/mingw-w64/mingw-w64/ci/431ac2a912708546cd7271332e9331399e66bc62/
-  patch do
-    url "https://raw.githubusercontent.com/Homebrew/formula-patches/549c05c1f4/mingw-w64/divmoddi4.patch"
-    sha256 "a8323a12b25baec1335e617111effc9236b48ce1162a63c4898bf6be12680c42"
+    url "https://ftp.gnu.org/gnu/gcc/gcc-7.3.0/gcc-7.3.0.tar.xz"
+    mirror "https://ftpmirror.gnu.org/gcc/gcc-7.3.0/gcc-7.3.0.tar.xz"
+    sha256 "832ca6ae04636adbb430e865a1451adf6979ab44ca1c8374f61fba65645ce15c"
   end
 
   def target_archs
@@ -143,17 +136,17 @@ class MingwW64 < Formula
   end
 
   test do
-    (testpath/"hello.c").write <<-EOS.undent
+    (testpath/"hello.c").write <<~EOS
       #include <stdio.h>
       #include <windows.h>
       int main() { puts("Hello world!");
         MessageBox(NULL, TEXT("Hello GUI!"), TEXT("HelloMsg"), 0); return 0; }
     EOS
-    (testpath/"hello.cc").write <<-EOS.undent
+    (testpath/"hello.cc").write <<~EOS
       #include <iostream>
       int main() { std::cout << "Hello, world!" << std::endl; return 0; }
     EOS
-    (testpath/"hello.f90").write <<-EOS.undent
+    (testpath/"hello.f90").write <<~EOS
       program hello ; print *, "Hello, world!" ; end program hello
     EOS
 

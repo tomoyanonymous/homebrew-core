@@ -1,14 +1,14 @@
 class Memcached < Formula
   desc "High performance, distributed memory object caching system"
   homepage "https://memcached.org/"
-  url "https://www.memcached.org/files/memcached-1.5.0.tar.gz"
-  sha256 "c001f812024bb461b5e4d7d0506daab63dff9614eea26f46536c3b7e1e601c32"
+  url "https://www.memcached.org/files/memcached-1.5.4.tar.gz"
+  sha256 "e0c3cfa89fa4c2ffd8aa45df7825c6d1a2423ac89ab1a7c4f42bb9803f7403d4"
 
   bottle do
     cellar :any
-    sha256 "fb390a87a44bd89f281e51c0c7b97c0ecd96563cbf1bbf5e74dd322c97c2cf94" => :sierra
-    sha256 "df17c1f2e4dba8c70e1ba7b0e5f47c6dfe2e5edf240ff036756226089062292a" => :el_capitan
-    sha256 "4f74ff764fa09d840fd2826d4d65521a2168a8f69d4f9150371781f7ba20351f" => :yosemite
+    sha256 "46bac0953561643a2c5f9acd53126918c52bdde812e7150f64995a21b370dbba" => :high_sierra
+    sha256 "7b96b2df47a73f0770c0bc4455979eb94fa77d5445f2a0df9862be974b25f3d0" => :sierra
+    sha256 "30253a4809a8218878b01bc13bb82c5016d1b1e52b78c5a62f7b1cb47f9854b8" => :el_capitan
   end
 
   option "with-sasl", "Enable SASL support -- disables ASCII protocol!"
@@ -32,7 +32,7 @@ class Memcached < Formula
 
   plist_options :manual => "#{HOMEBREW_PREFIX}/opt/memcached/bin/memcached"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">

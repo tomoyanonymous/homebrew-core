@@ -1,46 +1,65 @@
 class Packetbeat < Formula
   desc "Lightweight Shipper for Network Data"
   homepage "https://www.elastic.co/products/beats/packetbeat"
-  url "https://github.com/elastic/beats/archive/v5.5.1.tar.gz"
-  sha256 "b6c85901b1feb0e184dd56d9012ccda10bf62566ddfbe3d9790c771b73db3a46"
-
+  url "https://github.com/elastic/beats/archive/v6.1.3.tar.gz"
+  sha256 "5a21ce1eca7eab2b8214b54a7f4690cd557cd05073119f861025330e1b4006a3"
   head "https://github.com/elastic/beats.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "9266df791737437395b0b2297f41a6ad427189b074a56f758001d6c185de72bf" => :sierra
-    sha256 "cf507b1bffea373663169b2c093c463634ac6f4e7a94a5eb0ba75909f223cfe8" => :el_capitan
-    sha256 "228c4f9693cc9063214914dd794b74a7b2d4537a023194c2b73f48fcd6bcf2de" => :yosemite
+    sha256 "d21b117dffc035cff53cd4d5dbaf5783d111b46f9e479eb1b916346eaa7e86f1" => :high_sierra
+    sha256 "1751eb6e9b53a08d65548f5fd7e7fffc08573546bfbd00a1feed9f54e8380e16" => :sierra
+    sha256 "27d1dec5987ea5920f69103b52bc8245829926dd4e738ff31158b0a26c8cc8c5" => :el_capitan
   end
 
   depends_on "go" => :build
 
+  resource "virtualenv" do
+    url "https://files.pythonhosted.org/packages/d4/0c/9840c08189e030873387a73b90ada981885010dd9aea134d6de30cd24cb8/virtualenv-15.1.0.tar.gz"
+    sha256 "02f8102c2436bb03b3ee6dede1919d1dac8a427541652e5ec95171ec8adbc93a"
+  end
+
   def install
-    gopath = buildpath/"gopath"
-    (gopath/"src/github.com/elastic/beats").install Dir["{*,.git,.gitignore}"]
+    ENV["GOPATH"] = buildpath
+    (buildpath/"src/github.com/elastic/beats").install buildpath.children
 
-    ENV["GOPATH"] = gopath
+    ENV.prepend_create_path "PYTHONPATH", buildpath/"vendor/lib/python2.7/site-packages"
 
-    cd gopath/"src/github.com/elastic/beats/packetbeat" do
+    resource("virtualenv").stage do
+      system "python", *Language::Python.setup_install_args(buildpath/"vendor")
+    end
+
+    ENV.prepend_path "PATH", buildpath/"vendor/bin"
+
+    cd "src/github.com/elastic/beats/packetbeat" do
+      # prevent downloading binary wheels
+      inreplace "../libbeat/scripts/Makefile", "pip install", "pip install --no-binary :all"
       system "make"
-      libexec.install "packetbeat"
+      system "make", "update"
+      (libexec/"bin").install "packetbeat"
+      libexec.install "_meta/kibana"
 
       inreplace "packetbeat.yml", "packetbeat.interfaces.device: any", "packetbeat.interfaces.device: en0"
 
-      (etc/"packetbeat").install("packetbeat.yml", "packetbeat.template.json", "packetbeat.template-es2x.json")
+      (etc/"packetbeat").install Dir["packetbeat*.yml"]
+      (etc/"packetbeat").install "fields.yml"
+      prefix.install_metafiles
     end
 
-    (bin/"packetbeat").write <<-EOS.undent
+    (bin/"packetbeat").write <<~EOS
       #!/bin/sh
-      exec #{libexec}/packetbeat -path.config #{etc}/packetbeat \
-        -path.home #{prefix} -path.logs #{var}/log/packetbeat \
-        -path.data #{var}/packetbeat $@
+      exec #{libexec}/bin/packetbeat \
+        -path.config #{etc}/packetbeat \
+        -path.home #{prefix} \
+        -path.logs #{var}/log/packetbeat \
+        -path.data #{var}/lib/packetbeat \
+        "$@"
     EOS
   end
 
   plist_options :manual => "packetbeat"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN"
     "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -58,6 +77,6 @@ class Packetbeat < Formula
   end
 
   test do
-    system "#{bin}/packetbeat", "--devices"
+    system "#{bin}/packetbeat", "devices"
   end
 end

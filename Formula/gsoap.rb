@@ -1,13 +1,13 @@
 class Gsoap < Formula
   desc "SOAP stub and skeleton compiler for C and C++"
   homepage "https://www.genivia.com/products.html"
-  url "https://downloads.sourceforge.net/project/gsoap2/gsoap-2.8/gsoap_2.8.51.zip"
-  sha256 "3e7bb24a9e492f5cb86daca34054c9787152f1d7b70add36b789d03816d5ffa1"
+  url "https://downloads.sourceforge.net/project/gsoap2/gsoap-2.8/gsoap_2.8.61.zip"
+  sha256 "99d0dc739773a6042a1f496e8e03e01d49d54acca4e6539ed09aac9287c5239c"
 
   bottle do
-    sha256 "49baf72dc4a7d63e77c5bb7a2eb4bdfb4ef04f7638dfa26907fc23f60c183dfc" => :sierra
-    sha256 "9fe476a18533a9eeca977d1e07a13ab53cdd156f9abfa5e5a190eb3bd7fd8c07" => :el_capitan
-    sha256 "85669833c1ae34ee8163ca25ae0409045cc571a967a1a123a5a44b616d9170fe" => :yosemite
+    sha256 "e5356398f8cdbc80fd5d9320f6e89bc6b105df2af5e711983f4bcad7037f2769" => :high_sierra
+    sha256 "ac8a2a8d38b1b7e0bd135e807733dc289cffb221b114e4428effbbea0f4f902b" => :sierra
+    sha256 "ddc0a3ca085fe3ce4397f69c0c0180b83261d9ca4c5123eedabc3bf664728cc7" => :el_capitan
   end
 
   depends_on "openssl"
@@ -25,6 +25,6 @@ class Gsoap < Formula
   test do
     system "#{bin}/wsdl2h", "-o", "calc.h", "https://www.genivia.com/calc.wsdl"
     system "#{bin}/soapcpp2", "calc.h"
-    assert File.exist?("calc.add.req.xml")
+    assert_predicate testpath/"calc.add.req.xml", :exist?
   end
 end

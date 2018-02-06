@@ -1,8 +1,8 @@
 class Scalariform < Formula
   desc "Scala source code formatter"
   homepage "https://github.com/scala-ide/scalariform"
-  url "https://github.com/scala-ide/scalariform/releases/download/0.2.2/scalariform.jar"
-  sha256 "a42eac55f228769ec098c70f165e3de016a763136edd450b380c474ea47c0913"
+  url "https://github.com/scala-ide/scalariform/releases/download/0.2.6/scalariform.jar"
+  sha256 "0cd28ba1a8725527572f75f7b23bca8b9f55c945e01592d5968c1383113bf7a4"
 
   head do
     url "https://github.com/scala-ide/scalariform.git"
@@ -23,13 +23,13 @@ class Scalariform < Formula
   end
 
   test do
-    before_data = <<-EOS.undent
+    before_data = <<~EOS
       def foo() {
       println("Hello World")
       }
     EOS
 
-    after_data = <<-EOS.undent
+    after_data = <<~EOS
       def foo() {
          println("Hello World")
       }

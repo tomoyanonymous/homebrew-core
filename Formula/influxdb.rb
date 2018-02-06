@@ -2,14 +2,14 @@ class Influxdb < Formula
   desc "Time series, events, and metrics database"
   homepage "https://influxdata.com/time-series-platform/influxdb/"
   url "https://github.com/influxdata/influxdb.git",
-      :tag => "v1.3.3",
-      :revision => "e37afaf09bdd91fab4713536c7bdbdc549ee7dc6"
+      :tag => "v1.4.3",
+      :revision => "60d27e6995558f38a39e90b35a92cbac080310a3"
   head "https://github.com/influxdata/influxdb.git"
 
   bottle do
-    sha256 "585f623aec847df03645d5601fbb3c34fe8c0401da69205f510ee80bbd8ea36f" => :sierra
-    sha256 "22f09cb896ce90a0d7ee6af0163455ed9cb579c5fb41c1d71e3af24492b4fb73" => :el_capitan
-    sha256 "e7fce266bd8e96508e9a37eade76479de30769254c11c8021a5cf865edf1a441" => :yosemite
+    sha256 "1b188d586479bed82b8d19480dc0c7035eb49e2a5d81c3f48c59d2895c454178" => :high_sierra
+    sha256 "1589944237250658e7dc04b6c3e33d5cbc238dfa3349d49f5da1a12a73f7bcae" => :sierra
+    sha256 "8be7a9019b1ab932a9829278586045e145210fe7f3b25e21d6af3b9f24dcf7df" => :el_capitan
   end
 
   depends_on "gdm" => :build
@@ -49,7 +49,7 @@ class Influxdb < Formula
 
   plist_options :manual => "influxd -config #{HOMEBREW_PREFIX}/etc/influxdb.conf"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">

@@ -1,15 +1,15 @@
 class Libpng < Formula
   desc "Library for manipulating PNG images"
   homepage "http://www.libpng.org/pub/png/libpng.html"
-  url "https://download.sourceforge.net/libpng/libpng-1.6.31.tar.xz"
-  mirror "ftp://ftp-osl.osuosl.org/pub/libpng/src/libpng16/libpng-1.6.31.tar.xz"
-  sha256 "232a602de04916b2b5ce6f901829caf419519e6a16cc9cd7c1c91187d3ee8b41"
+  url "https://downloads.sourceforge.net/libpng/libpng-1.6.34.tar.xz"
+  mirror "https://sourceforge.mirrorservice.org/l/li/libpng/libpng16/1.6.34/libpng-1.6.34.tar.xz"
+  sha256 "2f1e960d92ce3b3abd03d06dfec9637dfbd22febf107a536b44f7a47c60659f6"
 
   bottle do
     cellar :any
-    sha256 "9d9e460b53e55171611658d7fbbbf95a0adcb85f8a61a1144bcc3e9214cb58d7" => :sierra
-    sha256 "3accfdf2130296f56a07fa901c144f7a05bba62df0b806a78c598eeca5c355e4" => :el_capitan
-    sha256 "73ec98b55afc2a098e20668ed51a77d337bf7268308eb29e438b63a58af93c8f" => :yosemite
+    sha256 "d38a64089526ecc1413acbc22373821fd181442b80ffccfd8322a5724dc09759" => :high_sierra
+    sha256 "d587603b3079fb7ad5cecdd451ee7fdf88f80a8b88f457ed199270d85753208c" => :sierra
+    sha256 "0c17ca28357c801a0fb81667ba69c1ed820d0348ca7728766ea16e3bd9b0ff19" => :el_capitan
   end
 
   head do
@@ -32,7 +32,7 @@ class Libpng < Formula
   end
 
   test do
-    (testpath/"test.c").write <<-EOS.undent
+    (testpath/"test.c").write <<~EOS
       #include <png.h>
 
       int main()

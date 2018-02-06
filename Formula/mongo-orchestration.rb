@@ -1,7 +1,7 @@
 class MongoOrchestration < Formula
   include Language::Python::Virtualenv
 
-  desc "REST API to manage MongoDB configurations on a single host."
+  desc "REST API to manage MongoDB configurations on a single host"
   homepage "https://github.com/10gen/mongo-orchestration"
   url "https://files.pythonhosted.org/packages/6e/86/d36b2332ce7218e178df0547f45067d3a3041a3c456f2e430fcdda241597/mongo-orchestration-0.6.10.tar.gz"
   sha256 "138b3ac82533e9f90548b73582235ad48abcb3a5b6f39a6b1b4cae6f62798e3c"
@@ -9,12 +9,13 @@ class MongoOrchestration < Formula
 
   bottle do
     cellar :any_skip_relocation
+    sha256 "6d949946d2adcfb643c44af429874b237956bd3d991c732862fa41722db043e3" => :high_sierra
     sha256 "da51a365363fc735053559a1d2597a27bb64dac8134107a1f2e07eb50125d1af" => :sierra
     sha256 "05ea25edb9666d4f8899babbce349694a96c10d7abff4cadbdb9cf286269fac6" => :el_capitan
     sha256 "69e5b710ef81077007e50ca8e8817343f133229d76f12162ccf63220bfa0afb1" => :yosemite
   end
 
-  depends_on :python if MacOS.version <= :snow_leopard
+  depends_on "python" if MacOS.version <= :snow_leopard
 
   resource "bottle" do
     url "https://files.pythonhosted.org/packages/bd/99/04dc59ced52a8261ee0f965a8968717a255ea84a36013e527944dbf3468c/bottle-0.12.13.tar.gz"
@@ -42,7 +43,7 @@ class MongoOrchestration < Formula
 
   plist_options :startup => true, :manual => "#{HOMEBREW_PREFIX}/opt/mongo-orchestration/bin/mongo-orchestration -b 127.0.0.1 -p 8889 --no-fork start"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">

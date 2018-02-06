@@ -3,11 +3,12 @@ class Gitg < Formula
   homepage "https://wiki.gnome.org/Apps/Gitg"
   url "https://download.gnome.org/sources/gitg/3.26/gitg-3.26.0.tar.xz"
   sha256 "26730d437d6a30d6e341b9e8da99d2134dce4b96022c195609f45062f82b54d5"
+  revision 2
 
   bottle do
-    sha256 "3ccdef237a8178515299467bf1164fb7520a8f664e4a8b6f40eb44051415c823" => :sierra
-    sha256 "3e60d26504345347fc26068a2d4009bb7929d88077fce81c11c2a533b011ddfb" => :el_capitan
-    sha256 "d96315ef9e638a290ec4546158dc7ae045ad3c99b6a0b93e76652f74276dee84" => :yosemite
+    sha256 "e3b904a30f354615a05d0091707fa8104500281cc1671cd1cbd913b4387c79eb" => :high_sierra
+    sha256 "d8d7542f46d1f5e42c262ba08fe9f72b20383b27cc4f1154266a6613b371327d" => :sierra
+    sha256 "a1b1842e086ccf15f0a9da3f18b49f471908efb4ee6ed3979a317c8ced54a2bd" => :el_capitan
   end
 
   depends_on "pkg-config" => :build
@@ -25,7 +26,7 @@ class Gitg < Formula
   depends_on "libsoup"
   depends_on "gtkspell3"
   depends_on "hicolor-icon-theme"
-  depends_on "gnome-icon-theme"
+  depends_on "adwaita-icon-theme"
 
   def install
     system "./configure", "--disable-debug",
@@ -46,7 +47,7 @@ class Gitg < Formula
     # test executable
     assert_match version.to_s, shell_output("#{bin}/gitg --version")
     # test API
-    (testpath/"test.c").write <<-EOS.undent
+    (testpath/"test.c").write <<~EOS
       #include <libgitg/libgitg.h>
 
       int main(int argc, char *argv[]) {

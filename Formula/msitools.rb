@@ -5,6 +5,7 @@ class Msitools < Formula
   sha256 "3a5b286c9ae3a7b7126a4a95506d12f34ac91e1a564c99e67d9644fee88fc65e"
 
   bottle do
+    sha256 "5e8b16daa36ebf7a12b1e3c740c2cdac418b55fd143e8c9db13e21e6cdefeade" => :high_sierra
     sha256 "9998081784b1b9db641d50425306010fc8614b1f3da28014148d409f636e4779" => :sierra
     sha256 "0afe60bc5926135b385307720c771e687dd0d246ba9d7dc4e8acf5eec51a13a5" => :el_capitan
     sha256 "87c8aebb5180826e9a45e2fd8c03f2b33a2df7f250761ef52a82d0b1a0055d3c" => :yosemite
@@ -33,7 +34,7 @@ class Msitools < Formula
     # wixl: build two installers
     1.upto(2) do |i|
       (testpath/"test#{i}.txt").write "abc"
-      (testpath/"installer#{i}.wxs").write <<-EOS.undent
+      (testpath/"installer#{i}.wxs").write <<~EOS
         <?xml version="1.0"?>
         <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
            <Product Id="*" UpgradeCode="DADAA9FC-54F7-4977-9EA1-8BDF6DC73C7#{i}"
@@ -58,7 +59,7 @@ class Msitools < Formula
         </Wix>
       EOS
       system "#{bin}/wixl", "-o", "installer#{i}.msi", "installer#{i}.wxs"
-      assert File.exist?("installer#{i}.msi")
+      assert_predicate testpath/"installer#{i}.msi", :exist?
     end
 
     # msidiff: diff two installers
@@ -81,7 +82,7 @@ class Msitools < Formula
     # msidump: dump tables from an installer
     mkdir "idt"
     system "#{bin}/msidump", "--directory", "idt", "installer1.msi"
-    assert File.exist?("idt/File.idt")
+    assert_predicate testpath/"idt/File.idt", :exist?
 
     # msibuild: replace a table in an installer
     system "#{bin}/msibuild", "installer1.msi", "-i", "idt/File.idt"

@@ -3,7 +3,7 @@ class RRequirement < Requirement
 
   satisfy { which("r") }
 
-  def message; <<-EOS.undent
+  def message; <<~EOS
     R not found. The R integration module requires R.
     Do one of the following:
     - install R
@@ -16,13 +16,13 @@ end
 class Monetdb < Formula
   desc "Column-store database"
   homepage "https://www.monetdb.org/"
-  url "https://www.monetdb.org/downloads/sources/Jul2017-SP1/MonetDB-11.27.5.tar.xz"
-  sha256 "871ce08f3c4d9113f50a43fb396892b9c52ae891e8bf16431c80416cac0f6bef"
+  url "https://www.monetdb.org/downloads/sources/Jul2017-SP3/MonetDB-11.27.11.tar.xz"
+  sha256 "473b2ea245d8fe006aabe5b2ea3924ade0283f46cfd2edf6fce6aa786c191d0b"
 
   bottle do
-    sha256 "d557a98aba92cf4903da6be105616dcff2e2834fb4a451433b833cda389ee664" => :sierra
-    sha256 "0424e83c65eff82b0cd4b53a4cf2b800badc3d4fec6ae0cdc3c24fbf5fc2552a" => :el_capitan
-    sha256 "cc914fbe74bf59327c268c65cd70fbc7a84b6b734af44e5281bbd5592c2b7924" => :yosemite
+    sha256 "b8c38e0b053c589f448b86f7bcc4ba2b22cc4ee6cc759806104b2a45b7d669e7" => :high_sierra
+    sha256 "a04f389b14877abe7905df45df092d0069318af75a885c7154c1b85b2428a0a2" => :sierra
+    sha256 "67185b1d204514a4cb67692ada2bb2ca1bb00fe25021101e52929fe57333e492" => :el_capitan
   end
 
   head do
@@ -41,7 +41,7 @@ class Monetdb < Formula
   depends_on RRequirement => :optional
 
   depends_on "pkg-config" => :build
-  depends_on :ant => :build
+  depends_on "ant" => :build
   depends_on "libatomic_ops" => [:build, :recommended]
   depends_on "pcre"
   depends_on "readline" # Compilation fails with libedit.

@@ -1,44 +1,33 @@
-require "language/go"
-
 class Pilosa < Formula
   desc "Distributed bitmap index that queries across data sets"
   homepage "https://www.pilosa.com"
-  url "https://github.com/pilosa/pilosa/archive/v0.6.0.tar.gz"
-  sha256 "6121066051ab55f266f2c891edcc66d449aa5786c8622f7f765015806ee6f84f"
+  url "https://github.com/pilosa/pilosa/archive/v0.8.5.tar.gz"
+  sha256 "5090811adda9857285f4e0e4ea2cf8e2dd66730fc8b2d5642d3e30bf4ba4731f"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "856bcbf157d4374c259e20fd5b0afa7cc0faa0d340b2a8fc77a61cf4a7d820ad" => :sierra
-    sha256 "ddca7e8a0ace058776208d9f52332f760521fb5426362f57382e24a2e07cc3ab" => :el_capitan
-    sha256 "66c4f85b6f05e5873787a48a3665c0dcfe361dd2ab60ce3fdec44d9634bcac6d" => :yosemite
+    sha256 "7f6ec17d560337d139123507c2ae67ecba76e21bd2f510be77ca2221465f4a1a" => :high_sierra
+    sha256 "69329b7dc35640530c9f177aee9f21b7bbaf4c98e648b8ad3be9771066e6092e" => :sierra
+    sha256 "cbcf7f0754f0334c9674540e5dc7f79e609ea2cced4d89a0ba72f5fd4c2fe193" => :el_capitan
   end
 
-  depends_on "go" => :build
   depends_on "dep" => :build
-
-  go_resource "github.com/rakyll/statik" do
-    url "https://github.com/rakyll/statik.git",
-        :revision => "25d6cab4d68d2a9b7c5965aa381726dd5dd6d7b8"
-  end
+  depends_on "go" => :build
+  depends_on "go-statik" => :build
 
   def install
     ENV["GOPATH"] = buildpath
-    ENV.prepend_path "PATH", "#{buildpath}/bin"
-
     (buildpath/"src/github.com/pilosa/pilosa").install buildpath.children
-    Language::Go.stage_deps resources, buildpath/"src"
 
-    cd "src/github.com/rakyll/statik" do
-      system "go", "install"
-    end
     cd "src/github.com/pilosa/pilosa" do
-      system "make", "generate-statik", "pilosa", "FLAGS=-o #{bin}/pilosa", "VERSION=#{version}"
+      system "make", "generate-statik", "pilosa", "FLAGS=-o #{bin}/pilosa", "VERSION=v#{version}"
+      prefix.install_metafiles
     end
   end
 
   plist_options :manual => "pilosa server"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">

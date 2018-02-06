@@ -1,14 +1,14 @@
 class Axel < Formula
   desc "Light UNIX download accelerator"
   homepage "https://github.com/eribertomota/axel"
-  url "https://github.com/eribertomota/axel/archive/2.13.1.tar.gz"
-  sha256 "e19253223fc0a6d6142190661f9fcbd5809dc5acc5b7013c98c979673a2f7195"
+  url "https://github.com/axel-download-accelerator/axel/archive/v2.15.tar.gz"
+  sha256 "0e223f18954e4c6c34b882a474c526b9c7d107168220c2f3892598248236a172"
   head "https://github.com/eribertomota/axel.git"
 
   bottle do
-    sha256 "fb06640f70ea6f9dfc3d5935596126f6d3031e25a90afcb246af0665bff0ad54" => :sierra
-    sha256 "11c8764fddbb32606433c89962526093f8190a7c164f8400a019e62b88e32d58" => :el_capitan
-    sha256 "171fa4afa09b33cce375c8bdcd45e929be1aff234ec15e48ba2dcfad314f9a43" => :yosemite
+    sha256 "18d458adef55854c33e4be487ce77eaa294fa9b7c8f09bcd3aff68cea063c2ab" => :high_sierra
+    sha256 "2ed9747656442072e684c56a6354fcbfd1179b01cd0873cc77760a6e64270662" => :sierra
+    sha256 "10257917ed87edf070064ad51dac4a3685415f969a6999a5a55938aab355f584" => :el_capitan
   end
 
   depends_on "autoconf" => :build
@@ -28,6 +28,6 @@ class Axel < Formula
     filename = (testpath/"axel.tar.gz")
     system bin/"axel", "-o", "axel.tar.gz", stable.url
     filename.verify_checksum stable.checksum
-    assert File.exist?("axel.tar.gz")
+    assert_predicate testpath/"axel.tar.gz", :exist?
   end
 end

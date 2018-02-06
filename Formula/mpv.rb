@@ -1,27 +1,30 @@
 class Mpv < Formula
   desc "Media player based on MPlayer and mplayer2"
   homepage "https://mpv.io"
-  url "https://github.com/mpv-player/mpv/archive/v0.26.0.tar.gz"
-  sha256 "daf3ef358d5f260f2269f7caabce27f446c291457ec330077152127133b71b46"
-  revision 1
+  url "https://github.com/mpv-player/mpv/archive/v0.27.0.tar.gz"
+  sha256 "341d8bf18b75c1f78d5b681480b5b7f5c8b87d97a0d4f53a5648ede9c219a49c"
+  revision 5
+
   head "https://github.com/mpv-player/mpv.git"
 
   bottle do
-    sha256 "2014dce521837478b6b5d56e450ff0c90d6502269500d5a32d035f54d16918ca" => :sierra
-    sha256 "5946e9f37aed8ce6a20c2b0c793f933f0a16117d159dac9684c2da813f130375" => :el_capitan
+    sha256 "400407134ecae015f75a45c27ab0bec2087310737f7fd14f3849a21834c415a7" => :high_sierra
+    sha256 "82dc721763626f8acf23e374b28c1a7fe7ade4675286dd34cdd5eebe616da2d1" => :sierra
+    sha256 "67d08c667592b5c6138d3a0e80cc2e3887bea46ddee0f3f5a8411cf08db1f839" => :el_capitan
   end
 
   option "with-bundle", "Enable compilation of the .app bundle."
 
   depends_on "pkg-config" => :build
-  depends_on :python3 => :build
+  depends_on "python3" => :build
 
   depends_on "libass"
   depends_on "ffmpeg"
+  depends_on "lua@5.1"
 
   depends_on "jpeg" => :recommended
   depends_on "little-cms2" => :recommended
-  depends_on "lua" => :recommended
+  depends_on "mujs" => :recommended
   depends_on "youtube-dl" => :recommended
 
   depends_on "jack" => :optional
@@ -35,7 +38,6 @@ class Mpv < Formula
   depends_on "rubberband" => :optional
   depends_on "uchardet" => :optional
   depends_on "vapoursynth" => :optional
-  depends_on "libcdio" => :optional
   depends_on :x11 => :optional
 
   depends_on :macos => :mountain_lion
@@ -51,6 +53,10 @@ class Mpv < Formula
     # that's good enough for building the manpage.
     ENV["LC_ALL"] = "C"
 
+    # Prevents a conflict between python2 and python3 when gobject-introspection
+    # is using the :python requirement
+    ENV.delete("PYTHONPATH") if MacOS.version <= :mavericks
+
     ENV.prepend_create_path "PYTHONPATH", buildpath/"vendor/lib/python2.7/site-packages"
     resource("docutils").stage do
       system "python", *Language::Python.setup_install_args(buildpath/"vendor")
@@ -62,6 +68,7 @@ class Mpv < Formula
       --enable-zsh-comp
       --enable-libmpv-shared
       --enable-html-build
+      --enable-lua
       --confdir=#{etc}/mpv
       --datadir=#{pkgshare}
       --mandir=#{man}
@@ -72,7 +79,7 @@ class Mpv < Formula
     args << "--enable-libbluray" if build.with? "libbluray"
     args << "--enable-dvdnav" if build.with? "libdvdnav"
     args << "--enable-dvdread" if build.with? "libdvdread"
-    args << "--enable-cdda" if build.with? "libcdio"
+    args << "--enable-javascript" if build.with? "mujs"
     args << "--enable-pulse" if build.with? "pulseaudio"
 
     system "./bootstrap.py"

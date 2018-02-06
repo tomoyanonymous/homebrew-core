@@ -1,14 +1,14 @@
 class Postgresql < Formula
   desc "Object-relational database system"
   homepage "https://www.postgresql.org/"
-  url "https://ftp.postgresql.org/pub/source/v9.6.4/postgresql-9.6.4.tar.bz2"
-  sha256 "2b3ab16d82e21cead54c08b95ce3ac480696944a68603b6c11b3205b7376ce13"
+  url "https://ftp.postgresql.org/pub/source/v10.1/postgresql-10.1.tar.bz2"
+  sha256 "3ccb4e25fe7a7ea6308dea103cac202963e6b746697366d72ec2900449a5e713"
   head "https://github.com/postgres/postgres.git"
 
   bottle do
-    sha256 "65d94009b81569728ae82c039f0b70f3cb1d7cdf1a00650009664b4708834913" => :sierra
-    sha256 "5c66cacc2e7b66d23b60b3479391fe9b015f6d5386cc4493b12096f148e2cb3f" => :el_capitan
-    sha256 "2ad945c3b6d51d1eac93202fd024f5b9d721bcf3aaa08a949b5adf607b41fdeb" => :yosemite
+    sha256 "b7db813c239ee1c5406641c6923a174d31ca2b71bc375409376f78e6c1d5383d" => :high_sierra
+    sha256 "03c99f58e2d394ae965053f7441a8bd708454a1059c611914b476a9dee9bb56f" => :sierra
+    sha256 "b3929f1c9b438f035fd2685b4a3bb9a2a7ee9fc72136493f784d390e6ad7bd2d" => :el_capitan
   end
 
   option "without-perl", "Build without Perl support"
@@ -24,8 +24,8 @@ class Postgresql < Formula
   depends_on "openssl"
   depends_on "readline"
 
-  depends_on :python => :optional
-  depends_on :python3 => :optional
+  depends_on "python" => :optional
+  depends_on "python3" => :optional
 
   conflicts_with "postgres-xc",
     :because => "postgresql and postgres-xc install the same binaries."
@@ -98,25 +98,15 @@ class Postgresql < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
-    If builds of PostgreSQL 9 are failing and you have version 8.x installed,
-    you may need to remove the previous version first. See:
-      https://github.com/Homebrew/legacy-homebrew/issues/2510
-
-    To migrate existing data from a previous major version (pre-9.0) of PostgreSQL, see:
-      https://www.postgresql.org/docs/9.6/static/upgrading.html
-
-    To migrate existing data from a previous minor version (9.0-9.5) of PostgreSQL, see:
-      https://www.postgresql.org/docs/9.6/static/pgupgrade.html
-
-      You will need your previous PostgreSQL installation from brew to perform `pg_upgrade`.
-      Do not run `brew cleanup postgresql` until you have performed the migration.
+  def caveats; <<~EOS
+    To migrate existing data from a previous major version of PostgreSQL run:
+      brew postgresql-upgrade-database
     EOS
   end
 
   plist_options :manual => "pg_ctl -D #{HOMEBREW_PREFIX}/var/postgres start"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">
@@ -135,6 +125,8 @@ class Postgresql < Formula
       <true/>
       <key>WorkingDirectory</key>
       <string>#{HOMEBREW_PREFIX}</string>
+      <key>StandardOutPath</key>
+      <string>#{var}/log/postgres.log</string>
       <key>StandardErrorPath</key>
       <string>#{var}/log/postgres.log</string>
     </dict>

@@ -7,6 +7,7 @@ class Bibtex2html < Formula
 
   bottle do
     cellar :any_skip_relocation
+    sha256 "3ee0c743604ab07c0b651fdd1c37d83b844b4d0d453685ec67c38b152bd9b27d" => :high_sierra
     sha256 "6a3e155794791b00aae19b7194da3aa39c8b4a6f5e7a19c78e9ca116dcdd2809" => :sierra
     sha256 "30f1cc89cd5ae6889a67b6aed5131d638c1e3f4e4dc1eabd785d39dd0597f9bd" => :el_capitan
     sha256 "ed271bcd54d5d71ea30c72d661445c4c32ca43fe7d5412c980bf7b6b43aa7bb2" => :yosemite
@@ -16,6 +17,8 @@ class Bibtex2html < Formula
   depends_on "hevea"
 
   def install
+    ENV["OCAMLPARAM"] = "safe-string=0,_" # OCaml 4.06.0 compat
+
     # See: https://trac.macports.org/ticket/26724
     inreplace "Makefile.in" do |s|
       s.remove_make_var! "STRLIB"
@@ -27,7 +30,7 @@ class Bibtex2html < Formula
   end
 
   test do
-    (testpath/"test.bib").write <<-EOS.undent
+    (testpath/"test.bib").write <<~EOS
       @article{Homebrew,
           title   = {Something},
           author  = {Someone},

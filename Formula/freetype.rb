@@ -1,15 +1,15 @@
 class Freetype < Formula
   desc "Software library to render fonts"
   homepage "https://www.freetype.org/"
-  url "https://downloads.sourceforge.net/project/freetype/freetype2/2.8/freetype-2.8.tar.bz2"
-  mirror "https://download.savannah.gnu.org/releases/freetype/freetype-2.8.tar.bz2"
-  sha256 "a3c603ed84c3c2495f9c9331fe6bba3bb0ee65e06ec331e0a0fb52158291b40b"
+  url "https://downloads.sourceforge.net/project/freetype/freetype2/2.9/freetype-2.9.tar.bz2"
+  mirror "https://download.savannah.gnu.org/releases/freetype/freetype-2.9.tar.bz2"
+  sha256 "e6ffba3c8cef93f557d1f767d7bc3dee860ac7a3aaff588a521e081bc36f4c8a"
 
   bottle do
     cellar :any
-    sha256 "f22537dd3f8b5638a712c7a6231f0b57359c4adef0557b6e90b92e11d930640f" => :sierra
-    sha256 "0a83ce9cb40656fd438a5475a09331c4bcc9a0e771af0d6049f002d14f02f576" => :el_capitan
-    sha256 "37d29dac299114d75abfcc1a75c6e10e1ce602072da732298a2a64438a3cedc3" => :yosemite
+    sha256 "2978dbec18cf06827ddc93ee04262bc3f78b14a9ed2e91058b53a8a997f81451" => :high_sierra
+    sha256 "8680a89d47fa9eea998d230ec1f7d39422f87fc3152a0ab3b6b936832d9a154e" => :sierra
+    sha256 "1e66987caa45ffcbe3cd18924f7b1a82c37207a23c89085d27ad3008df5ef914" => :el_capitan
   end
 
   keg_only :provided_pre_mountain_lion

@@ -8,12 +8,13 @@ class Supervisor < Formula
 
   bottle do
     cellar :any_skip_relocation
+    sha256 "f6f7aff7531170eb3fcf54066dfd485a2e0e4fe13323a881fa21193a74db9277" => :high_sierra
     sha256 "ca6e0a9584230313a3e9080600b3dcb60b669a1122619c14096dd65308b5fec4" => :sierra
     sha256 "67c6110abfcc4b9a53a4143bad1fe12259a41c7fee96400e15e231c4cfd21aa3" => :el_capitan
     sha256 "4070b89b70cbdb2c9a68214fb4bc03f8b8363e33c9f7fde8b782f6f057d87e57" => :yosemite
   end
 
-  depends_on :python if MacOS.version <= :snow_leopard
+  depends_on "python" if MacOS.version <= :snow_leopard
 
   resource "meld3" do
     url "https://files.pythonhosted.org/packages/45/a0/317c6422b26c12fe0161e936fc35f36552069ba8e6f7ecbd99bbffe32a5f/meld3-1.0.2.tar.gz"
@@ -37,7 +38,7 @@ class Supervisor < Formula
   plist_options :manual => "supervisord -c #{HOMEBREW_PREFIX}/etc/supervisord.ini"
 
   def plist
-    <<-EOS.undent
+    <<~EOS
       <?xml version="1.0" encoding="UTF-8"?>
       <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
       <plist version="1.0">
@@ -67,7 +68,7 @@ class Supervisor < Formula
   end
 
   test do
-    (testpath/"sd.ini").write <<-EOS.undent
+    (testpath/"sd.ini").write <<~EOS
       [unix_http_server]
       file=supervisor.sock
 

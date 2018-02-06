@@ -8,16 +8,17 @@ class Eralchemy < Formula
 
   bottle do
     cellar :any
+    sha256 "fec3c64abf16687569a65989cabf5b679b304bed6e3d4500e7473018eb48b463" => :high_sierra
     sha256 "d6f58baabdf8db3224ff90ded790a18d805571e31d4a82c323d6b2b7a5af654c" => :sierra
     sha256 "35b67ce15da8c1189760249239518bcf56332674bf7def6113adcd57b68eb503" => :el_capitan
     sha256 "2b1556bf861cbc976d5eaa6f7cf4282bebf34b9f387dbaa29a7d7e1527a9d344" => :yosemite
   end
 
-  depends_on :python if MacOS.version <= :snow_leopard
+  depends_on "python" if MacOS.version <= :snow_leopard
   depends_on "pkg-config" => :build
   depends_on "graphviz"
   depends_on "openssl"
-  depends_on :postgresql => :optional
+  depends_on "postgresql" => :optional
 
   resource "pygraphviz" do
     url "https://files.pythonhosted.org/packages/98/bb/a32e33f7665b921c926209305dde66fe41003a4ad934b10efb7c1211a419/pygraphviz-1.3.1.tar.gz"
@@ -57,7 +58,7 @@ class Eralchemy < Formula
     system "#{bin}/eralchemy", "-v"
     resource("er_example").stage do
       system "#{bin}/eralchemy", "-i", "newsmeme.er", "-o", "test_eralchemy.pdf"
-      assert File.exist?("test_eralchemy.pdf")
+      assert_predicate Pathname.pwd/"test_eralchemy.pdf", :exist?
     end
   end
 end

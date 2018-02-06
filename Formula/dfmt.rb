@@ -2,15 +2,22 @@ class Dfmt < Formula
   desc "Formatter for D source code"
   homepage "https://github.com/dlang-community/dfmt"
   url "https://github.com/dlang-community/dfmt.git",
-      :tag => "v0.5.0",
-      :revision => "fef85e388a41add75020675ab33ed7e55c3efe85"
+      :tag => "v0.5.3",
+      :revision => "6e598c197df780c8cd3496c3a663f602a2bd1e58"
 
   head "https://github.com/dlang-community/dfmt.git", :shallow => false
 
   bottle do
-    sha256 "08ce677f6ae697ea33e29d4ecff0e419cbe71b065b8a24cb13bc65a4c5834b40" => :sierra
-    sha256 "745cc85d47967fd74ad25a08dd763f028440a2c5811730c2b2c6643d7f5236b6" => :el_capitan
-    sha256 "66fe1b25802b529a08f7a46e0b043fdf06e64c9fe1a48dbc04293954187b65a1" => :yosemite
+    sha256 "84f5df7c1349c5d386e58a9889c57f0c66e1ced4dedc3e4129b0334ea87990d8" => :high_sierra
+    sha256 "2a3fbc12a391de3c297f379d51f7daa400457c6fc03f715d9a347292adb352c4" => :sierra
+    sha256 "c1414f980bc31c286eac2144c61cc8f2ad8ef971f3076a323045e2dc0732c4c4" => :el_capitan
+  end
+
+  devel do
+    url "https://github.com/dlang-community/dfmt.git",
+      :tag => "v0.6.0-alpha.1",
+      :revision => "02a735cb0c10d711c5f08fc26572f98bc5fdf0ff"
+    version "0.6.0-alpha.1"
   end
 
   depends_on "dmd" => :build
@@ -21,17 +28,17 @@ class Dfmt < Formula
   end
 
   test do
-    (testpath/"test.d").write <<-EOS.undent
-    import std.stdio; void main() { writeln("Hello, world without explicit compilations!"); }
+    (testpath/"test.d").write <<~EOS
+      import std.stdio; void main() { writeln("Hello, world without explicit compilations!"); }
     EOS
 
-    expected = <<-EOS.undent
-    import std.stdio;
+    expected = <<~EOS
+      import std.stdio;
 
-    void main()
-    {
-        writeln("Hello, world without explicit compilations!");
-    }
+      void main()
+      {
+          writeln("Hello, world without explicit compilations!");
+      }
     EOS
 
     system "#{bin}/dfmt", "-i", "test.d"

@@ -1,8 +1,8 @@
 class Sonarqube < Formula
   desc "Manage code quality"
   homepage "https://www.sonarqube.org/"
-  url "https://sonarsource.bintray.com/Distribution/sonarqube/sonarqube-6.5.zip"
-  sha256 "1f66bbed4e4b2d974211d980cb52bb9cc2f3b1277eeee33bd98fd0a94f61caa4"
+  url "https://sonarsource.bintray.com/Distribution/sonarqube/sonarqube-6.7.1.zip"
+  sha256 "74cc70ef75d83fa260c7be86863416f45e092f77a2582ab51529d84f9a696fc7"
 
   bottle :unneeded
 
@@ -19,7 +19,7 @@ class Sonarqube < Formula
 
   plist_options :manual => "sonar console"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">

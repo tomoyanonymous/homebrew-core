@@ -1,20 +1,20 @@
 class Cockatrice < Formula
-  desc "Virtual tabletop for multiplayer card games"
-  homepage "https://github.com/Cockatrice/Cockatrice"
+  desc "Cross-platform virtual tabletop for multiplayer card games"
+  homepage "https://cockatrice.github.io/"
   url "https://github.com/Cockatrice/Cockatrice.git",
-      :tag => "2017-05-05-Release-2.3.17",
-      :revision => "c96f234b6d398cde949a1226fe17014dcc538c93"
-  version "2.3.17"
+      :tag => "2017-11-19-Release-2.4.0",
+      :revision => "4d641eb0e723bf4f83343a3b3c6650a1008793f8"
+  version "2.4.0"
   version_scheme 1
   head "https://github.com/Cockatrice/Cockatrice.git"
 
   bottle do
-    sha256 "c17637f762fa2ec3de8d1a2d335de3fa44b1cae79360df091c95cd28e20836c3" => :sierra
-    sha256 "e656fab639c53bada209f91158540218d818c8311e8b097c0e610135efc3b0a1" => :el_capitan
-    sha256 "dece3b5e2276e51e614be6c05f649cf972b4796c50cce08b3dda92b01495caa0" => :yosemite
+    sha256 "b758e61b7b75441e4e32b4eb09d95c5756d95f2e1960e9fa5fc7caf2fe7874b5" => :high_sierra
+    sha256 "a677a4a67620fe47c14f25a0349ea76b086870ada0cab93aecaf78aff1dea919" => :sierra
+    sha256 "bc12c371557059da0a1c277ed49208f495deb817275ca4b82a38e7713a90c99e" => :el_capitan
   end
 
-  depends_on :macos => :mavericks
+  depends_on :macos => :el_capitan
   depends_on "cmake" => :build
   depends_on "protobuf"
   depends_on "qt"
@@ -30,11 +30,10 @@ class Cockatrice < Formula
       system "make", "install"
       prefix.install Dir["release/*.app"]
     end
-    doc.install Dir["doc/usermanual/*"]
   end
 
   test do
-    (prefix/"cockatrice.app/Contents/MacOS/cockatrice").executable?
-    (prefix/"oracle.app/Contents/MacOS/oracle").executable?
+    assert_predicate prefix/"cockatrice.app/Contents/MacOS/cockatrice", :executable?
+    assert_predicate prefix/"oracle.app/Contents/MacOS/oracle", :executable?
   end
 end

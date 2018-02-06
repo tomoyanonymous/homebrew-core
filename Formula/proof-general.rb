@@ -3,18 +3,18 @@ class ProofGeneral < Formula
   homepage "https://proofgeneral.github.io"
   url "https://github.com/ProofGeneral/PG/archive/v4.4.tar.gz"
   sha256 "1ba236d81768a87afa0287f49d4b2223097bc61d180468cbd997d46ab6132e7e"
-  revision 1
+  revision 2
   head "https://github.com/ProofGeneral/PG.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "3873ed2362ff17d7cc51fc5910bddb57f1fd23a294fe5747c4bc7b143c0b71d2" => :sierra
-    sha256 "2ceb9862d81f46f6ba815b58a1683ce8af5a95b6db0f4c1bfde488156c56ce62" => :el_capitan
-    sha256 "2ceb9862d81f46f6ba815b58a1683ce8af5a95b6db0f4c1bfde488156c56ce62" => :yosemite
+    sha256 "d6b5966b38f6b574805811d721af5d17afa4c8a7d944189703821aa564c0649b" => :high_sierra
+    sha256 "07982ffb7dacb8390875c82f4f7e9cbf440d51271b38c3d771e01baa8684edc0" => :sierra
+    sha256 "07982ffb7dacb8390875c82f4f7e9cbf440d51271b38c3d771e01baa8684edc0" => :el_capitan
   end
 
   depends_on "texi2html" => :build
-  depends_on :emacs => "22.3"
+  depends_on "emacs"
 
   def install
     ENV.deparallelize # Otherwise lisp compilation can result in 0-byte files
@@ -37,7 +37,7 @@ class ProofGeneral < Formula
     doc.install "doc/ProofGeneral", "doc/PG-adapting"
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     HTML documentation is available in: #{HOMEBREW_PREFIX}/share/doc/proof-general
     EOS
   end

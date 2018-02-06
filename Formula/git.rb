@@ -1,50 +1,58 @@
 class Git < Formula
   desc "Distributed revision control system"
   homepage "https://git-scm.com"
-  url "https://www.kernel.org/pub/software/scm/git/git-2.14.1.tar.xz"
-  sha256 "6f724c6d0e9e13114ab35db6f67e1b2c1934b641e89366e6a0e37618231f2cc6"
+  url "https://www.kernel.org/pub/software/scm/git/git-2.16.1.tar.xz"
+  sha256 "cfad4337f2fdbfc1e2c8abce5e17e1dd4e1718a34ac2cbe3238fbe2426f2ea19"
   head "https://github.com/git/git.git", :shallow => false
 
   bottle do
-    sha256 "33de4e36d4d60f7d7281b3ed9d6f1e2e9e4e495da9dd1547c92e70ae330edbeb" => :sierra
-    sha256 "2ee548b022f7e1bb210fa8388328bcca806cc2b0c9c263835957dd3a92fad5d2" => :el_capitan
-    sha256 "96054f0692deece5e4cd78adcf97a04886de3e3681558358647af9f6cf80373d" => :yosemite
+    sha256 "4c39bb3f3c99eb9400004d6fb3b10a82f8a1bb3ee4d89d9569a9104ae7fa1952" => :high_sierra
+    sha256 "6b2d4930aabf8502bfe3fc654599deb8ee189a8ba3812a2ce04ee419365b9611" => :sierra
+    sha256 "ca8a82bdb3cc9b4b9745ac358f6582b8974460168adec476dc1f3d688ad25297" => :el_capitan
   end
 
   option "with-blk-sha1", "Compile with the block-optimized SHA1 implementation"
   option "without-completions", "Disable bash/zsh completions from 'contrib' directory"
-  option "with-openssl", "Build with Homebrew's OpenSSL instead of using CommonCrypto"
-  option "with-curl", "Use Homebrew's version of cURL library"
   option "with-subversion", "Use Homebrew's version of SVN"
   option "with-persistent-https", "Build git-remote-persistent-https from 'contrib' directory"
 
-  deprecated_option "with-brewed-openssl" => "with-openssl"
-  deprecated_option "with-brewed-curl" => "with-curl"
   deprecated_option "with-brewed-svn" => "with-subversion"
   deprecated_option "with-pcre" => "with-pcre2"
 
   depends_on "pcre2" => :optional
   depends_on "gettext" => :optional
-  depends_on "openssl" => :optional
-  depends_on "curl" => :optional
   depends_on "go" => :build if build.with? "persistent-https"
+
+  if MacOS.version < :yosemite
+    depends_on "openssl"
+    depends_on "curl"
+  else
+    deprecated_option "with-brewed-openssl" => "with-openssl"
+    deprecated_option "with-brewed-curl" => "with-curl"
+
+    option "with-openssl", "Build with Homebrew's OpenSSL instead of using CommonCrypto"
+    option "with-curl", "Use Homebrew's version of cURL library"
+
+    depends_on "openssl" => :optional
+    depends_on "curl" => :optional
+  end
 
   if build.with? "subversion"
     depends_on "subversion"
-    depends_on :perl => ["5.6", :recommended]
+    depends_on "perl" => :recommended
   else
-    option "with-perl", "Build against a custom Perl rather than system default"
-    depends_on :perl => ["5.6", :optional]
+    option "with-perl", "Build against Homebrew's Perl rather than system default"
+    depends_on "perl" => :optional
   end
 
   resource "html" do
-    url "https://www.kernel.org/pub/software/scm/git/git-htmldocs-2.14.1.tar.xz"
-    sha256 "9c1970c7f87f37c8b3044e01e0500d84d8bc4eb4dfa5ca881c32c351f20769fb"
+    url "https://www.kernel.org/pub/software/scm/git/git-htmldocs-2.16.1.tar.xz"
+    sha256 "c30d033feb9048de876986b3ea87964eb68f73392ce23e18a64280d60dbe997e"
   end
 
   resource "man" do
-    url "https://www.kernel.org/pub/software/scm/git/git-manpages-2.14.1.tar.xz"
-    sha256 "7ebce1e0e862af1367e24f14765c7b67f08b63fb01b80949f55479c562d414f2"
+    url "https://www.kernel.org/pub/software/scm/git/git-manpages-2.16.1.tar.xz"
+    sha256 "97e61ddbf00f46cc5e8ae0f5fe282836a45db3ec30bb2739d928a036cf8ab7fa"
   end
 
   def install
@@ -96,7 +104,7 @@ class Git < Formula
       LDFLAGS=#{ENV.ldflags}
     ]
 
-    if build.with? "openssl"
+    if build.with?("openssl") || MacOS.version < :yosemite
       openssl_prefix = Formula["openssl"].opt_prefix
       args += %W[NO_APPLE_COMMON_CRYPTO=1 OPENSSLDIR=#{openssl_prefix}]
     else
@@ -105,12 +113,14 @@ class Git < Formula
 
     system "make", "install", *args
 
+    git_core = libexec/"git-core"
+
     # Install the macOS keychain credential helper
     cd "contrib/credential/osxkeychain" do
       system "make", "CC=#{ENV.cc}",
                      "CFLAGS=#{ENV.cflags}",
                      "LDFLAGS=#{ENV.ldflags}"
-      bin.install "git-credential-osxkeychain"
+      git_core.install "git-credential-osxkeychain"
       system "make", "clean"
     end
 
@@ -122,7 +132,7 @@ class Git < Formula
     # Install the netrc credential helper
     cd "contrib/credential/netrc" do
       system "make", "test"
-      bin.install "git-credential-netrc"
+      git_core.install "git-credential-netrc"
     end
 
     # Install git-subtree
@@ -130,15 +140,15 @@ class Git < Formula
       system "make", "CC=#{ENV.cc}",
                      "CFLAGS=#{ENV.cflags}",
                      "LDFLAGS=#{ENV.ldflags}"
-      bin.install "git-subtree"
+      git_core.install "git-subtree"
     end
 
     if build.with? "persistent-https"
       cd "contrib/persistent-https" do
         system "make"
-        bin.install "git-remote-persistent-http",
-                    "git-remote-persistent-https",
-                    "git-remote-persistent-https--proxy"
+        git_core.install "git-remote-persistent-http",
+                         "git-remote-persistent-https",
+                         "git-remote-persistent-https--proxy"
       end
     end
 
@@ -165,7 +175,9 @@ class Git < Formula
 
     # To avoid this feature hooking into the system OpenSSL, remove it.
     # If you need it, install git --with-openssl.
-    rm "#{libexec}/git-core/git-imap-send" if build.without? "openssl"
+    if MacOS.version >= :yosemite && build.without?("openssl")
+      rm "#{libexec}/git-core/git-imap-send"
+    end
 
     # This is only created when building against system Perl, but it isn't
     # purged by Homebrew's post-install cleaner because that doesn't check
@@ -175,7 +187,7 @@ class Git < Formula
 
     # Set the macOS keychain credential helper by default
     # (as Apple's CLT's git also does this).
-    (buildpath/"gitconfig").write <<-EOS.undent
+    (buildpath/"gitconfig").write <<~EOS
       [credential]
       \thelper = osxkeychain
     EOS

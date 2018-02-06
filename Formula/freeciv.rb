@@ -1,17 +1,18 @@
 class Freeciv < Formula
   desc "Free and Open Source empire-building strategy game"
   homepage "https://freeciv.wikia.com/"
-  url "https://downloads.sourceforge.net/project/freeciv/Freeciv%202.5/2.5.7/freeciv-2.5.7.tar.bz2"
-  sha256 "ffe36736db6a64893681e9eea8b90f7abe05eaebe6b777e82149a98cad6dbed2"
+  url "https://downloads.sourceforge.net/project/freeciv/Freeciv%202.5/2.5.10/freeciv-2.5.10.tar.bz2"
+  sha256 "c8a14156562dce2f0a7b96390c2d5a35314f1124c448782a6a47b0c51cfcb302"
 
   bottle do
-    sha256 "3a4e8955bb518bc8fd7efd9c4ed79bf97cfda25ea9bd6a4befdd8f51d05be172" => :sierra
-    sha256 "cc71adbf22f5964168e3d3eec8a60413021768300b69b289b567c37c98341b23" => :el_capitan
-    sha256 "e136a27f3e77a9c7c6c0babbc54027bc0bcb638c5136ca9294ce993b942356ce" => :yosemite
+    sha256 "70e3d737fcccafb4a4d9edb4b9dd41b9be2301b586b0ef4df243e8dfbe84f228" => :high_sierra
+    sha256 "809f17c1f0b81ec5e29d587e272b11ab45f96d3d6ab5f7a93879cc094194854e" => :sierra
+    sha256 "2ec7479f71e89df80aa4edf89c17cdb72eba7cfbff15d1caa682bf08f08ad9a2" => :el_capitan
   end
 
   head do
-    url "svn://svn.gna.org/svn/freeciv/trunk"
+    url "https://github.com/freeciv/freeciv.git"
+
     depends_on "automake" => :build
     depends_on "autoconf" => :build
     depends_on "gettext" => :build
@@ -73,13 +74,13 @@ class Freeciv < Formula
 
   test do
     system bin/"freeciv-manual"
-    File.exist? testpath/"manual6.html"
+    assert_predicate testpath/"manual6.html", :exist?
 
     server = fork do
       system bin/"freeciv-server", "-l", testpath/"test.log"
     end
     sleep 5
     Process.kill("TERM", server)
-    File.exist? testpath/"test.log"
+    assert_predicate testpath/"test.log", :exist?
   end
 end

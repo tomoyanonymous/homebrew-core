@@ -1,15 +1,15 @@
 class Grafana < Formula
-  desc "Gorgeous metric visualizations and dashboards for timeseries databases."
+  desc "Gorgeous metric visualizations and dashboards for timeseries databases"
   homepage "https://grafana.com"
-  url "https://github.com/grafana/grafana/archive/v4.4.3.tar.gz"
-  sha256 "6b1becb4c8c18243b6a1b15839efa28c3932e677b8b10bd274a3b3cc81cc1d78"
+  url "https://github.com/grafana/grafana/archive/v4.6.3.tar.gz"
+  sha256 "75959d1cd8f66d362b3bb885481dce77693417f51c2e81ab091e3d16650f1a69"
   head "https://github.com/grafana/grafana.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "98117e04b4c7b22f1606c75d4ef35018d81a2b98f87cffa5946628ce04cffc7b" => :sierra
-    sha256 "fccb43a290de958d9df1894e8666af933e09ea5c009ff684662bd52a451b073b" => :el_capitan
-    sha256 "3b1d122b2e6e5cca898df877066645dd4e45bf18e07a2443c82bd412036c78b9" => :yosemite
+    sha256 "b3272aea332d21682b01f5874da634a2d9e551c36b1d9bd1f4874f2b43ed4664" => :high_sierra
+    sha256 "731fe63695b57c858d50328f6325b9552a0655928b0806d384df0f6cb0163280" => :sierra
+    sha256 "e7a820ff92fd3fd49642ac1b2711fd688f614c89f3dc43eae144214e07a163fb" => :el_capitan
   end
 
   depends_on "go" => :build
@@ -23,7 +23,8 @@ class Grafana < Formula
 
     cd grafana_path do
       system "go", "run", "build.go", "build"
-      system "yarn", "install"
+
+      system "yarn", "install", "--ignore-engines"
 
       args = ["build"]
       # Avoid PhantomJS error "unrecognized selector sent to instance"
@@ -36,8 +37,8 @@ class Grafana < Formula
       cp("conf/sample.ini", "conf/grafana.ini.example")
       etc.install "conf/sample.ini" => "grafana/grafana.ini"
       etc.install "conf/grafana.ini.example" => "grafana/grafana.ini.example"
-      pkgshare.install "conf", "vendor"
-      pkgshare.install "public_gen" => "public"
+      pkgshare.install "conf", "vendor", "public"
+      prefix.install_metafiles
     end
   end
 
@@ -48,7 +49,7 @@ class Grafana < Formula
 
   plist_options :manual => "grafana-server --config=#{HOMEBREW_PREFIX}/etc/grafana/grafana.ini --homepath #{HOMEBREW_PREFIX}/share/grafana cfg:default.paths.logs=#{HOMEBREW_PREFIX}/var/log/grafana cfg:default.paths.data=#{HOMEBREW_PREFIX}/var/lib/grafana cfg:default.paths.plugins=#{HOMEBREW_PREFIX}/var/lib/grafana/plugins"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">
@@ -107,7 +108,11 @@ class Grafana < Formula
     end
     Dir.chdir(pkgshare)
 
-    res = PTY.spawn(bin/"grafana-server", "cfg:default.paths.logs=#{logdir}", "cfg:default.paths.data=#{datadir}", "cfg:default.paths.plugins=#{plugdir}", "cfg:default.server.http_port=50100")
+    res = PTY.spawn(bin/"grafana-server",
+      "cfg:default.paths.logs=#{logdir}",
+      "cfg:default.paths.data=#{datadir}",
+      "cfg:default.paths.plugins=#{plugdir}",
+      "cfg:default.server.http_port=50100")
     r = res[0]
     w = res[1]
     pid = res[2]

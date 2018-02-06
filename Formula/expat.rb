@@ -1,18 +1,18 @@
 class Expat < Formula
   desc "XML 1.0 parser"
   homepage "https://libexpat.github.io/"
-  url "https://downloads.sourceforge.net/project/expat/expat/2.2.3/expat-2.2.3.tar.bz2"
-  sha256 "b31890fb02f85c002a67491923f89bda5028a880fd6c374f707193ad81aace5f"
+  url "https://downloads.sourceforge.net/project/expat/expat/2.2.5/expat-2.2.5.tar.bz2"
+  sha256 "d9dc32efba7e74f788fcc4f212a43216fc37cf5f23f4c2339664d473353aedf6"
   head "https://github.com/libexpat/libexpat.git"
 
   bottle do
     cellar :any
-    sha256 "2a1d8fe1378599a7ac58b62c0c4136bfd86936d323062ccfc88b53732e1d7f59" => :sierra
-    sha256 "17166d4ca1a534b62c8482f00ffd239906d8393d6b8e8b6280997802e72cc080" => :el_capitan
-    sha256 "f84abb141d73044a91070096d9a3a233c1a2d0af5f62a6a9d7ca0a02d845c6ee" => :yosemite
+    sha256 "0ef65624ae99120f21c4ef319a8a056697db296efd9bbd662529334711c7bc15" => :high_sierra
+    sha256 "653edd989854be055f50853486a4945d68e49cc8f6e944776bf2be67b51ac304" => :sierra
+    sha256 "618683020e64ef1ca99d0c2f388262cf32117d93d7f047bf8251461d8af3f04e" => :el_capitan
   end
 
-  keg_only :provided_by_osx, "macOS includes Expat 1.5"
+  keg_only :provided_by_macos
 
   def install
     system "./configure", "--prefix=#{prefix}",
@@ -21,7 +21,7 @@ class Expat < Formula
   end
 
   test do
-    (testpath/"test.c").write <<-EOS.undent
+    (testpath/"test.c").write <<~EOS
       #include <stdio.h>
       #include "expat.h"
 

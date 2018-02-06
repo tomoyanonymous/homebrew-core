@@ -1,27 +1,33 @@
 class Cockroach < Formula
   desc "Distributed SQL database"
   homepage "https://www.cockroachlabs.com"
-  url "https://binaries.cockroachdb.com/cockroach-v1.0.4.src.tgz"
-  version "1.0.4"
-  sha256 "1d135016ccef6c684b7414b6b26219cad74ebec9dea5421862ac8288025476b6"
+  url "https://binaries.cockroachdb.com/cockroach-v1.1.5.src.tgz"
+  version "1.1.5"
+  sha256 "4da8746971329840531bc9512e9a5ad44a5587d7ee2ad8d2f321124180795444"
   head "https://github.com/cockroachdb/cockroach.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "41f08cdf6b26e62052292fe45c47e2d2ab527208721e4a61edbaa8777b3083f3" => :sierra
-    sha256 "7a9660365fa289413e1d08e0b48f29f15ff2b0e5ef0ab6ac7b9f3abb6e718e10" => :el_capitan
-    sha256 "eac1a5811591bc6afe5f810bdde595818e26e13cc216090a0b39de8f11f19006" => :yosemite
+    sha256 "cf1a1738818db3beb5e7dac8156f05422a79cde0720b738df19869992ba2badd" => :high_sierra
+    sha256 "684ecdf1d22a63b812b18019cca1aa862b01b3d86cabf86d1ad4c1de9cb4f571" => :sierra
+    sha256 "b5d523a6b5e82c9071bacf6ddb9db091e4cf2f0afc1cd0c86439b07dd1134a2b" => :el_capitan
   end
 
+  depends_on "autoconf" => :build
   depends_on "cmake" => :build
   depends_on "go" => :build
   depends_on "xz" => :build
 
   def install
+    # unpin the Go version
+    go_version = Formula["go"].installed_version.to_s.split(".")[0, 2].join(".")
+    inreplace "src/github.com/cockroachdb/cockroach/.go-version",
+              /^GOVERS = go.*/, "GOVERS = go#{go_version.gsub(".", "\\.")}.*"
+
     system "make", "install", "prefix=#{prefix}"
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     For local development only, this formula ships a launchd configuration to
     start a single-node cluster that stores its data under:
       #{var}/cockroach/
@@ -37,7 +43,7 @@ class Cockroach < Formula
 
   plist_options :manual => "cockroach start --insecure"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">
@@ -69,17 +75,17 @@ class Cockroach < Formula
       # Redirect stdout and stderr to a file, or else  `brew test --verbose`
       # will hang forever as it waits for stdout and stderr to close.
       system "#{bin}/cockroach start --insecure --background &> start.out"
-      pipe_output("#{bin}/cockroach sql --insecure", <<-EOS.undent)
+      pipe_output("#{bin}/cockroach sql --insecure", <<~EOS)
         CREATE DATABASE bank;
         CREATE TABLE bank.accounts (id INT PRIMARY KEY, balance DECIMAL);
         INSERT INTO bank.accounts VALUES (1, 1000.50);
       EOS
       output = pipe_output("#{bin}/cockroach sql --insecure --format=csv",
         "SELECT * FROM bank.accounts;")
-      assert_equal <<-EOS.undent, output
-        1 row
+      assert_equal <<~EOS, output
         id,balance
         1,1000.50
+        # 1 row
       EOS
     ensure
       system "#{bin}/cockroach", "quit", "--insecure"

@@ -1,8 +1,8 @@
 class Gradle < Formula
   desc "Build system based on the Groovy language"
   homepage "https://www.gradle.org/"
-  url "https://services.gradle.org/distributions/gradle-4.1-all.zip"
-  sha256 "5c07b3bac2209fbc98fb1fdf6fd831f72429cdf8c503807404eae03d8c8099e5"
+  url "https://services.gradle.org/distributions/gradle-4.5.1-all.zip"
+  sha256 "ede2333b509ab67e4b6f51adb1419870fb34bbead0c8357dd803532b531508eb"
 
   bottle :unneeded
 
@@ -18,7 +18,6 @@ class Gradle < Formula
   end
 
   test do
-    ENV.java_cache
     assert_match version.to_s, shell_output("#{bin}/gradle --version")
   end
 end

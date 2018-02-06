@@ -1,13 +1,13 @@
 class Mkvtoolnix < Formula
   desc "Matroska media files manipulation tools"
   homepage "https://www.bunkus.org/videotools/mkvtoolnix/"
-  url "https://www.bunkus.org/videotools/mkvtoolnix/sources/mkvtoolnix-14.0.0.tar.xz"
-  sha256 "86aa96acb26f7ef9d7afb4d0c1fa1a086b398d563b77372c436044c3c6bba78c"
+  url "https://mkvtoolnix.download/sources/mkvtoolnix-20.0.0.tar.xz"
+  sha256 "6f4b86a16af1f979ce2e83e64223b1bb8635ac8f81863d8ce46014a82c8bf500"
 
   bottle do
-    sha256 "3d971c0acccb9e5a7bc9d46a2ddb2bdcffb9fea8f159f9d6ed566ea5595786b6" => :sierra
-    sha256 "75c32482b63da5277e9a80f2872974dce52fdd6f3103ef5f9221938234a57865" => :el_capitan
-    sha256 "fb802d4f84bb02346d5bb3a2a9a594efbb66ce554a855922b048a7a90e738135" => :yosemite
+    sha256 "36081c1268bfe99a5349f158eb29bfe16d1a8dada1aa31f59218b4b8502d06a1" => :high_sierra
+    sha256 "2cb43d0ef9a83b0b4a3545e67c6e2b052c768ab5611ec9aa507b2ff0c321eb1b" => :sierra
+    sha256 "aab65265f17ee544656e500594f63193cb616066b0d80068615000ea0e310309" => :el_capitan
   end
 
   head do
@@ -24,7 +24,7 @@ class Mkvtoolnix < Formula
   depends_on "docbook-xsl" => :build
   depends_on "pkg-config" => :build
   depends_on "pugixml" => :build
-  depends_on :ruby => ["1.9", :build]
+  depends_on "ruby" => :build if MacOS.version <= :mountain_lion
   depends_on "boost"
   depends_on "libebml"
   depends_on "libmatroska"
@@ -32,8 +32,9 @@ class Mkvtoolnix < Formula
   depends_on "libvorbis"
   depends_on "flac" => :recommended
   depends_on "libmagic" => :recommended
-  depends_on "qt" => :optional
   depends_on "gettext" => :optional
+  depends_on "qt" => :optional
+  depends_on "cmark" if build.with? "qt"
 
   needs :cxx11
 
@@ -84,7 +85,7 @@ class Mkvtoolnix < Formula
   test do
     mkv_path = testpath/"Great.Movie.mkv"
     sub_path = testpath/"subtitles.srt"
-    sub_path.write <<-EOS.undent
+    sub_path.write <<~EOS
       1
       00:00:10,500 --> 00:00:13,000
       Homebrew

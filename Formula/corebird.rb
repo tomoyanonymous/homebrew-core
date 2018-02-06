@@ -1,13 +1,14 @@
 class Corebird < Formula
   desc "Native Gtk+ Twitter Client"
   homepage "https://corebird.baedert.org"
-  url "https://github.com/baedert/corebird/releases/download/1.5.1/corebird-1.5.1.tar.xz"
-  sha256 "e7b641a25e279d8251ca0a9fa2ef11a5dd364e369e1fa54f5545824dc96deda0"
+  url "https://github.com/baedert/corebird/releases/download/1.7.3/corebird-1.7.3.tar.xz"
+  sha256 "cbf42fdf186f5dea47c5d171f6a6dd47a05d0e721a4bfd6e61b53069ea278e27"
+  revision 2
 
   bottle do
-    sha256 "787c77b73b7c34bc0b59ba74699483e65cf9b9a2f62f865fcf06406f23218821" => :sierra
-    sha256 "17fff95b88b23ea7f2dec025b53692e344335ece07ab11982806e458d23c669d" => :el_capitan
-    sha256 "1cfffdf6dba702e9d40933bb5058def94e9f2d0e6886e93488c6e4a47db6e093" => :yosemite
+    sha256 "0bd41e0af11458df0dff89a833d98e9850d868f5070196a6a87bdb121b55c554" => :high_sierra
+    sha256 "b563160b12c8d7537e6850de74a389cc315880e261b7d7b41506e5ae9a7d75ac" => :sierra
+    sha256 "f1b4b7645e96e335b92bb3f4c310b40e6295682e62b8fdc3bc7f19c068ab1656" => :el_capitan
   end
 
   depends_on "pkg-config" => :build

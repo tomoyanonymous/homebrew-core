@@ -1,15 +1,16 @@
 class Btfs < Formula
   desc "BitTorrent filesystem based on FUSE"
   homepage "https://github.com/johang/btfs"
-  url "https://github.com/johang/btfs/archive/v2.15.tar.gz"
-  sha256 "7cb562504cb4a45db64f4524d55d080c84514c3cff46838ad1c1807785edc692"
+  url "https://github.com/johang/btfs/archive/v2.18.tar.gz"
+  sha256 "bb9679045540554232eff303fc4f615d28eb4023461eae3f65f08f2427ec9ef2"
+  revision 1
   head "https://github.com/johang/btfs.git"
 
   bottle do
     cellar :any
-    sha256 "f8cefaa7ac9831c5277f01c0db1b0614d9d7a4f8356cf70cfa99e0fa84af03ca" => :sierra
-    sha256 "30053d94f609415889dfc10a673cef5c3a96d491a5aae6c8a2875c5fc09b55d6" => :el_capitan
-    sha256 "bb8df8924b3aa2b302aadff26cbf9ab9cc2c762ac2f92481458efa82658f32ad" => :yosemite
+    sha256 "8d6304dcbbbd2ca488aa930f12afe2b392452c496cc79337d677a9569c8f2ea6" => :high_sierra
+    sha256 "d196daadfbfe1670faa9ec72a2071e44cfa5484eca8d018a255cf7223bf56105" => :sierra
+    sha256 "53f2962e4a4bad2e1b73eb373cb325655d217e55836ea31ae6f4f56bbdbf4bde" => :el_capitan
   end
 
   depends_on "autoconf" => :build

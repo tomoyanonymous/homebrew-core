@@ -1,24 +1,25 @@
 class GitFtp < Formula
   desc "Git-powered FTP client"
-  homepage "https://git-ftp.github.io/git-ftp"
+  homepage "https://git-ftp.github.io/"
   url "https://github.com/git-ftp/git-ftp/archive/1.4.0.tar.gz"
   sha256 "080e9385a9470d70a5a2a569c6e7db814902ffed873a77bec9d0084bcbc3e054"
+  revision 4
   head "https://github.com/git-ftp/git-ftp.git", :branch => "develop"
 
   bottle do
     cellar :any
-    sha256 "7a4df7d587138c9513a3fe5058e0532ae91e84ddcb5182da214dcb911a5b9a31" => :sierra
-    sha256 "a34ce84325e2d130058fbca3575422a4aceb48540664c2de2296c1d6308c6295" => :el_capitan
-    sha256 "4fd1fc02d184902114cc01a38db5c206f859127a0d624def0456f8034a90495c" => :yosemite
+    sha256 "7ff70e524c733e26ce81bfd48a9ca3649d85185807b47c9326e1079ba7887a4b" => :high_sierra
+    sha256 "72ffe2eda0be67c9417322b50e94272c451fdd338ca9518ad47f6b19afae7219" => :sierra
+    sha256 "a3b41550ed4038f1e6f0ae13d2f2269395ef544a19adeadeec5506104d760474" => :el_capitan
   end
 
   depends_on "pandoc" => :build
   depends_on "libssh2"
 
   resource "curl" do
-    url "https://curl.haxx.se/download/curl-7.54.1.tar.bz2"
-    mirror "http://curl.askapache.com/download/curl-7.54.1.tar.bz2"
-    sha256 "fdfc4df2d001ee0c44ec071186e770046249263c491fcae48df0e1a3ca8f25a0"
+    url "https://curl.haxx.se/download/curl-7.58.0.tar.bz2"
+    mirror "https://curl.askapache.com/download/curl-7.58.0.tar.bz2"
+    sha256 "1cb081f97807c01e3ed747b6e1c9fee7a01cb10048f1cd0b5f56cfe0209de731"
   end
 
   def install

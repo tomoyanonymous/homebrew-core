@@ -4,11 +4,12 @@ class Subversion < Formula
   url "https://www.apache.org/dyn/closer.cgi?path=subversion/subversion-1.9.7.tar.bz2"
   mirror "https://archive.apache.org/dist/subversion/subversion-1.9.7.tar.bz2"
   sha256 "c3b118333ce12e501d509e66bb0a47bcc34d053990acab45559431ac3e491623"
+  revision 2
 
   bottle do
-    sha256 "6a63bc7fd673f61826ccafdc6dd7d05b6da02436e71dc2a995d40800fff02329" => :sierra
-    sha256 "4d9bd04a4605877617e9158e270a011d0367c2c7e0571752cf5c821b15454a2a" => :el_capitan
-    sha256 "d1c71dbd4685cda7b3aaded3ce9ed8a224d14cca8fcb257b7e6e3eb11d706b44" => :yosemite
+    sha256 "2de1e1d3691d8adc101cdb39a62792907f879fe5462c9870f07edef6c3c4160c" => :high_sierra
+    sha256 "ee2be3846eca442aea461878da9f5ef208092836b91bc38bd13fa5572040f5a5" => :sierra
+    sha256 "9445c1341c69187a4a28c5ff8ab341539beff082923729629abcc2699efda095" => :el_capitan
   end
 
   deprecated_option "java" => "with-java"
@@ -26,8 +27,8 @@ class Subversion < Formula
 
   # Always build against Homebrew versions instead of system versions for consistency.
   depends_on "sqlite"
-  depends_on :python => :optional
-  depends_on :perl => ["5.6", :recommended]
+  depends_on "perl" => :recommended
+  depends_on "python" => :optional
 
   # Bindings require swig
   if build.with?("perl") || build.with?("python") || build.with?("ruby")
@@ -170,22 +171,22 @@ class Subversion < Formula
   end
 
   def caveats
-    s = <<-EOS.undent
+    s = <<~EOS
       svntools have been installed to:
         #{opt_libexec}
     EOS
 
     if build.with? "perl"
-      s += <<-EOS.undent
-
+      s += "\n"
+      s += <<~EOS
         The perl bindings are located in various subdirectories of:
           #{opt_lib}/perl5
       EOS
     end
 
     if build.with? "ruby"
-      s += <<-EOS.undent
-
+      s += "\n"
+      s += <<~EOS
         If you wish to use the Ruby bindings you may need to add:
           #{HOMEBREW_PREFIX}/lib/ruby
         to your RUBYLIB.
@@ -193,8 +194,8 @@ class Subversion < Formula
     end
 
     if build.with? "java"
-      s += <<-EOS.undent
-
+      s += "\n"
+      s += <<~EOS
         You may need to link the Java bindings into the Java Extensions folder:
           sudo mkdir -p /Library/Java/Extensions
           sudo ln -s #{HOMEBREW_PREFIX}/lib/libsvnjavahl-1.dylib /Library/Java/Extensions/libsvnjavahl-1.dylib

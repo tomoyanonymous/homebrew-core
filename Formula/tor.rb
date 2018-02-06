@@ -1,14 +1,14 @@
 class Tor < Formula
   desc "Anonymizing overlay network for TCP"
   homepage "https://www.torproject.org/"
-  url "https://tor.eff.org/dist/tor-0.3.0.10.tar.gz"
-  mirror "https://www.torproject.org/dist/tor-0.3.0.10.tar.gz"
-  sha256 "9a8e6e49a1688dae64dca10f84a414ec9a4f393fb2256ae28e0c2e3239185ab1"
+  url "https://www.torproject.org/dist/tor-0.3.2.9.tar.gz"
+  mirror "https://tor.eff.org/dist/tor-0.3.2.9.tar.gz"
+  sha256 "435a7b91aa98d8b1a0ac1f60ca30c0ff3665b18a02e570bab5fe27935829160f"
 
   bottle do
-    sha256 "4d10a4c8e97c210f5d19bb4dabdfcabdd5ed3eb6d50e47be6737d78f2def8fb9" => :sierra
-    sha256 "0afcea73cd4d4edf0b1ca77bddf19c2df6887f15456ff69e57364d1fe7d1dd1b" => :el_capitan
-    sha256 "3c33a099716d9d925302805002563e6436eceb5a64d216abaddfd724a061b087" => :yosemite
+    sha256 "5f19be9003f78463fdb3cae14a48cdd325b28ddb0c3218a804803b4f626129ad" => :high_sierra
+    sha256 "1efbbe91ca229227e4d00ad084d35a673106b1945a15fbfa2227a8c1a1bee43f" => :sierra
+    sha256 "74cf7362c7ff8bae6983d84500f07f031c2169aadc7dd959f6f15e6953d20bbb" => :el_capitan
   end
 
   depends_on "pkg-config" => :build
@@ -34,7 +34,7 @@ class Tor < Formula
 
   plist_options :manual => "tor"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">
@@ -62,8 +62,8 @@ class Tor < Formula
 
   test do
     pipe_output("script -q /dev/null #{bin}/tor-gencert --create-identity-key", "passwd\npasswd\n")
-    assert (testpath/"authority_certificate").exist?
-    assert (testpath/"authority_signing_key").exist?
-    assert (testpath/"authority_identity_key").exist?
+    assert_predicate testpath/"authority_certificate", :exist?
+    assert_predicate testpath/"authority_signing_key", :exist?
+    assert_predicate testpath/"authority_identity_key", :exist?
   end
 end

@@ -2,15 +2,16 @@
 class Macvim < Formula
   desc "GUI for vim, made for macOS"
   homepage "https://github.com/macvim-dev/macvim"
-  url "https://github.com/macvim-dev/macvim/archive/snapshot-136.tar.gz"
-  version "8.0-136"
-  sha256 "8999d085352fad0613c28220b27a497b8d2702ad904c62f4c8c743f23975e260"
+  url "https://github.com/macvim-dev/macvim/archive/snapshot-144.tar.gz"
+  version "8.0-144"
+  sha256 "23e1eaa00e9268eaa9a9061ea6018ad20f288bd6c03c1d8553a745d72527d33f"
+  revision 3
   head "https://github.com/macvim-dev/macvim.git"
 
   bottle do
-    sha256 "3414b695975b3e9dba96e7c652df997ae100fc1718ed1830d93386a06b4fa7bc" => :sierra
-    sha256 "7aeec720b06bc7102b516a995f92182fd52996241fa08cb8b3c9a27dfac3c92f" => :el_capitan
-    sha256 "c333e6ad2562659579c585d4181ccb7f1e058eb4532fb25f9421d566b5f96309" => :yosemite
+    sha256 "51ede471f2c9a9f0e40cdf5f06f8ea6267ec7322abe2434fb8222870c229bdf7" => :high_sierra
+    sha256 "004932faa6338ef23de2da8efaeb70c60d804005a54260d10d742683a345fcdd" => :sierra
+    sha256 "0d992aaa23051d8fc39bae585d7cf81f238016734bb13a01b7ce62a0f65b0d19" => :el_capitan
   end
 
   option "with-override-system-vim", "Override system vim"
@@ -19,19 +20,18 @@ class Macvim < Formula
 
   depends_on :xcode => :build
   depends_on "cscope" => :recommended
+  depends_on "python" => :recommended
   depends_on "lua" => :optional
   depends_on "luajit" => :optional
-
-  if MacOS.version >= :mavericks
-    option "with-custom-python", "Build with a custom Python 2 instead of the Homebrew version."
-  end
-
-  depends_on :python => :recommended
-  depends_on :python3 => :optional
+  depends_on "python3" => :optional
 
   def install
-    # Avoid "fatal error: 'ruby/config.h' file not found"
-    ENV.delete("SDKROOT") if MacOS.version == :yosemite
+    ENV.prepend_path "PATH", Formula["python"].opt_libexec/"bin"
+
+    # Avoid issues finding Ruby headers
+    if MacOS.version == :sierra || MacOS.version == :yosemite
+      ENV.delete("SDKROOT")
+    end
 
     # MacVim doesn't have or require any Python package, so unset PYTHONPATH
     ENV.delete("PYTHONPATH")
@@ -46,6 +46,7 @@ class Macvim < Formula
       --enable-perlinterp
       --enable-rubyinterp
       --enable-tclinterp
+      --enable-terminal
       --with-tlib=ncurses
       --with-compiledby=Homebrew
       --with-local-dir=#{HOMEBREW_PREFIX}
@@ -74,7 +75,7 @@ class Macvim < Formula
       # Needed for <= OS X 10.9.2 with Xcode 5.1
       ENV.prepend "CFLAGS", `python-config --cflags`.chomp.gsub(/-mno-fused-madd /, "")
 
-      framework_script = <<-EOS.undent
+      framework_script = <<~EOS
         import sysconfig
         print sysconfig.get_config_var("PYTHONFRAMEWORKPREFIX")
       EOS
@@ -101,7 +102,7 @@ class Macvim < Formula
 
   def caveats
     if build.with?("python") && build.with?("python3")
-      <<-EOS.undent
+      <<~EOS
         MacVim can no longer be brewed with dynamic support for both Python versions.
         Only Python 3 support has been provided.
       EOS
@@ -115,5 +116,6 @@ class Macvim < Formula
       system_framework_path = `python-config --exec-prefix`.chomp
       assert_match system_framework_path, `mvim --version`
     end
+    assert_match "+ruby", shell_output("#{bin}/mvim --version")
   end
 end

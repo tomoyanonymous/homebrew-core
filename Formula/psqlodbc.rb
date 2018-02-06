@@ -1,14 +1,14 @@
 class Psqlodbc < Formula
   desc "Official PostgreSQL ODBC driver"
   homepage "https://odbc.postgresql.org"
-  url "https://ftp.postgresql.org/pub/odbc/versions/src/psqlodbc-09.06.0410.tar.gz"
-  sha256 "965b74587a2fd09368acff340ed3bdf2e831cee4e78d1caa79d0cc621364a88c"
+  url "https://ftp.postgresql.org/pub/odbc/versions/src/psqlodbc-10.01.0000.tar.gz"
+  sha256 "87ca436f268b92fd525113e78133f65b444c6feec474837c7ec39d128eaecab3"
 
   bottle do
     cellar :any
-    sha256 "ea65d3c1ab051fe19fd431704ac5a1f4602d6e9103f199866d3965982ebbd0f8" => :sierra
-    sha256 "f6f472ae0d6cb4022c3a7900dd7dbae0617e4a8317f542349efc9ee84089e849" => :el_capitan
-    sha256 "851118d307bdefb65b07e789f2770809c9e3f76f93ca570e256bacabe9bb353b" => :yosemite
+    sha256 "b1a48d253a1c945b768d71834ae8774597ad1fd29e4814ba7da889a0ed044b4d" => :high_sierra
+    sha256 "ca7cc3b3e57f4a121d823baf9a8452f321e493765164325bf15a451381245e8a" => :sierra
+    sha256 "3c053b77eac2261f37c449f0b7cc4f620fae54687ae6e4b709b0459844be4c48" => :el_capitan
   end
 
   head do
@@ -19,7 +19,7 @@ class Psqlodbc < Formula
   end
 
   depends_on "openssl"
-  depends_on :postgresql
+  depends_on "postgresql"
   depends_on "unixodbc" => :recommended
   depends_on "libiodbc" => :optional
 

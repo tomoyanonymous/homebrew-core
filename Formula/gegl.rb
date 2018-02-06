@@ -1,16 +1,13 @@
 class Gegl < Formula
   desc "Graph based image processing framework"
   homepage "http://www.gegl.org/"
-  url "https://download.gimp.org/pub/gegl/0.3/gegl-0.3.18.tar.bz2"
-  mirror "https://mirrors.kernel.org/debian/pool/main/g/gegl/gegl_0.3.18.orig.tar.bz2"
-  sha256 "d7858ef26ede136d14e3de188a9e9c0de7707061a9fb96d7d615fab4958491fb"
-  revision 1
+  url "https://download.gimp.org/pub/gegl/0.3/gegl-0.3.28.tar.bz2"
+  sha256 "152f87604a5a191775329dfb63764efa1d5c32403d1438da68e242f96b7d23ff"
 
   bottle do
-    rebuild 1
-    sha256 "2587f67b9dff8185a123a38bfedb88484743542b13d8a172e068cd271468e5f3" => :sierra
-    sha256 "ac5564d4d9e766d29f8ddf6f239514d5810053991687c101b4763fa3059dba79" => :el_capitan
-    sha256 "e67459da4011ebec45e50a93447eff5d505959ca6fd4394347dac27bec6471e7" => :yosemite
+    sha256 "7580d3d2bbe103eaf350960b8a22ce5f63c8c029bab9dd861ca0fbf89376dd6d" => :high_sierra
+    sha256 "135f49765e4f34b06f8dbac9a84a7d35f53846fe009a8389564f0b33ce0d5d4e" => :sierra
+    sha256 "9e5f682bba155c4e95dd04cf42af1a4d7d59081e05007e4fc58ae465bdbab4ee" => :el_capitan
   end
 
   head do
@@ -36,6 +33,8 @@ class Gegl < Formula
   depends_on "pango" => :optional
   depends_on "sdl" => :optional
 
+  conflicts_with "coreutils", :because => "both install `gcut` binaries"
+
   def install
     system "./autogen.sh" if build.head?
     system "./configure", "--disable-debug",
@@ -46,7 +45,7 @@ class Gegl < Formula
   end
 
   test do
-    (testpath/"test.c").write <<-EOS.undent
+    (testpath/"test.c").write <<~EOS
       #include <gegl.h>
       gint main(gint argc, gchar **argv) {
         gegl_init(&argc, &argv);

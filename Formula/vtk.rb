@@ -1,16 +1,14 @@
 class Vtk < Formula
-  desc "Toolkit for 3D computer graphics, image processing, and visualization."
-  homepage "http://www.vtk.org"
-  url "http://www.vtk.org/files/release/8.0/VTK-8.0.0.tar.gz"
-  sha256 "c7e727706fb689fb6fd764d3b47cac8f4dc03204806ff19a10dfd406c6072a27"
-  revision 2
-
+  desc "Toolkit for 3D computer graphics, image processing, and visualization"
+  homepage "https://www.vtk.org/"
+  url "https://www.vtk.org/files/release/8.1/VTK-8.1.0.tar.gz"
+  sha256 "6e269f07b64fb13774f5925161fb4e1f379f4e6a0131c8408c555f6b58ef3cb7"
   head "https://github.com/Kitware/VTK.git"
 
   bottle do
-    sha256 "3edc86912bd3a0946d48b8ee9e3fd6fed124bd4fa770e2f62e82dde9ac995a86" => :sierra
-    sha256 "bfebec35833698c8bebf17f5db258ce3ef4a2c1842384eaaceeb5bc310e81471" => :el_capitan
-    sha256 "0d27575aee63d23f4301eb70f88c7b0d8a1e68a31c187a8f4996eab02a56d319" => :yosemite
+    sha256 "bd0c1cacabb157928251455e38dff513fb9ea68865ddef7c623e91cb20722713" => :high_sierra
+    sha256 "a4eb2f81607d7c9ab1643cbf8b07607cb2b3ac62033c875f3488c642103cdc06" => :sierra
+    sha256 "9e8ab70c3e26b72de63bda9bead81582876c2b2830ff1bf9f2808dc9c2960b7c" => :el_capitan
   end
 
   option "without-python", "Build without python2 support"
@@ -23,8 +21,8 @@ class Vtk < Formula
   depends_on "libpng"
   depends_on "libtiff"
   depends_on "netcdf"
-  depends_on :python => :recommended if MacOS.version <= :snow_leopard
-  depends_on :python3 => :optional
+  depends_on "python" => :recommended if MacOS.version <= :snow_leopard
+  depends_on "python3" => :optional
   depends_on "qt" => :optional
   depends_on "pyqt" if build.with? "qt"
 
@@ -101,7 +99,7 @@ class Vtk < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     Even without the --with-qt option, you can display native VTK render windows
     from python. Alternatively, you can integrate the RenderWindowInteractor
     in PyQt5, Tk or Wx at runtime. Read more:
@@ -110,17 +108,20 @@ class Vtk < Formula
   end
 
   test do
+    vtk_include = Dir[opt_include/"vtk-*"].first
+    major, minor = vtk_include.match(/.*-(.*)$/)[1].split(".")
+
     (testpath/"version.cpp").write <<-EOS
       #include <vtkVersion.h>
       #include <assert.h>
       int main(int, char *[]) {
-        assert (vtkVersion::GetVTKMajorVersion()==8);
-        assert (vtkVersion::GetVTKMinorVersion()==0);
+        assert (vtkVersion::GetVTKMajorVersion()==#{major});
+        assert (vtkVersion::GetVTKMinorVersion()==#{minor});
         return EXIT_SUCCESS;
       }
     EOS
 
-    system ENV.cxx, "version.cpp", "-I#{opt_include}/vtk-8.0"
+    system ENV.cxx, "-std=c++11", "version.cpp", "-I#{vtk_include}"
     system "./a.out"
     system "#{bin}/vtkpython", "-c", "exit()"
   end

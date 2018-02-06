@@ -3,26 +3,25 @@ class Emscripten < Formula
   homepage "https://kripken.github.io/emscripten-site/"
 
   stable do
-    url "https://github.com/kripken/emscripten/archive/1.37.18.tar.gz"
-    sha256 "884639710a18f085a6257ffda33aa6df7ea358378a92e7f02499883b32f548cc"
+    url "https://github.com/kripken/emscripten/archive/1.37.33.tar.gz"
+    sha256 "e4d592e993bcfc2d7be022bedd55264bb133a2745b5cd541407eaaeebd7c3046"
 
-    emscripten_tag = version.to_s
     resource "fastcomp" do
-      url "https://github.com/kripken/emscripten-fastcomp/archive/#{emscripten_tag}.tar.gz"
-      sha256 "cd310b0c75ed79e3b5a426cc6c0470f658a29d45ce5d059cdba8fc2a2b3a7206"
+      url "https://github.com/kripken/emscripten-fastcomp/archive/1.37.33.tar.gz"
+      sha256 "5e2093d2b1ba069ad7a2dbc1195645bc3933a02ecb2d57e2185786e1c2e46d46"
     end
 
     resource "fastcomp-clang" do
-      url "https://github.com/kripken/emscripten-fastcomp-clang/archive/#{emscripten_tag}.tar.gz"
-      sha256 "4653e5e5628a7f6731d7a30e0f462cd38e423741b57c360ab40423b5d44b603b"
+      url "https://github.com/kripken/emscripten-fastcomp-clang/archive/1.37.33.tar.gz"
+      sha256 "70e458f32b807081956d8956589c31a0190729798fb8c7dbf902e11e9417acff"
     end
   end
 
   bottle do
     cellar :any
-    sha256 "121a8c5a1aaa120f877741a36aae6f0b4c11a2eb4a7719c51269e2a2bb9f4cda" => :sierra
-    sha256 "a51f78a145547af0986b8f44dac59336b571d1164a77ff88c0c62b278e866b27" => :el_capitan
-    sha256 "dad6ec22495f2f9cf9464ec10c4791c2d8381a252a85b88575b9820c8aeda27f" => :yosemite
+    sha256 "3d121110b6c32504488f4c5cbab0a737263a470fe7292111dec67c5284d2a42a" => :high_sierra
+    sha256 "c9fcc77f987b762e4457621348502f916788eb89970a19b55e532efdd8f5a3c2" => :sierra
+    sha256 "9359072b0dbc3fb968de3af143ed50c5364a9917c9b7f7803c03896aaedcbb33" => :el_capitan
   end
 
   head do
@@ -39,7 +38,7 @@ class Emscripten < Formula
 
   needs :cxx11
 
-  depends_on :python if MacOS.version <= :snow_leopard
+  depends_on "python" if MacOS.version <= :snow_leopard
   depends_on "cmake" => :build
   depends_on "node"
   depends_on "closure-compiler" => :optional
@@ -86,7 +85,7 @@ class Emscripten < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     Manually set LLVM_ROOT to
       #{opt_libexec}/llvm/bin
     and comment out BINARYEN_ROOT
@@ -95,6 +94,7 @@ class Emscripten < Formula
   end
 
   test do
-    system "#{libexec}/llvm/bin/llvm-config", "--version"
+    system bin/"emcc"
+    assert_predicate testpath/".emscripten", :exist?, "Failed to create sample config"
   end
 end

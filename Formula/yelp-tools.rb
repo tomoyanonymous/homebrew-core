@@ -1,5 +1,5 @@
 class YelpTools < Formula
-  desc "Tools that help create and edit Mallard or DocBook documentation."
+  desc "Tools that help create and edit Mallard or DocBook documentation"
   homepage "https://github.com/GNOME/yelp-tools"
   url "https://download.gnome.org/sources/yelp-tools/3.18/yelp-tools-3.18.0.tar.xz"
   sha256 "c6c1d65f802397267cdc47aafd5398c4b60766e0a7ad2190426af6c0d0716932"
@@ -7,6 +7,7 @@ class YelpTools < Formula
   bottle do
     cellar :any_skip_relocation
     rebuild 2
+    sha256 "362bd3f0673ad7e44f9d37b37f46989512823d218d06aa27e452c47faf589b41" => :high_sierra
     sha256 "b0ea184a43def810986761f163243688d08e1f891ddfdb104793b5dcb7c9155c" => :sierra
     sha256 "b0ea184a43def810986761f163243688d08e1f891ddfdb104793b5dcb7c9155c" => :el_capitan
     sha256 "b0ea184a43def810986761f163243688d08e1f891ddfdb104793b5dcb7c9155c" => :yosemite

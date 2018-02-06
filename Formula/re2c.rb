@@ -1,14 +1,14 @@
 class Re2c < Formula
   desc "Generate C-based recognizers from regular expressions"
   homepage "http://re2c.org"
-  url "https://github.com/skvadrik/re2c/releases/download/1.0.1/re2c-1.0.1.tar.gz"
-  sha256 "605058d18a00e01bfc32aebf83af35ed5b13180b4e9f279c90843afab2c66c7c"
+  url "https://github.com/skvadrik/re2c/releases/download/1.0.3/re2c-1.0.3.tar.gz"
+  sha256 "cf56e0de3f335f6a22d3e8c06b8b450d858a4e7875ea1b01c9233e084b90cb52"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "ee051a3865e43becdbb348397572608bd1d35598e1bc981d8735fb1c60034528" => :sierra
-    sha256 "8c5417b16cb78d0b8060132799727850ac0201095e7917d4e627f2ae67098d0d" => :el_capitan
-    sha256 "4e2773bf57db0dd1c0442bcbb0899cfc85db5c22096feddb76341650f1042e40" => :yosemite
+    sha256 "b10d4531a882667d808476d4a5cf101407b95f1dd9715f598f16dc7072c73ef4" => :high_sierra
+    sha256 "0961b75960ad7cdc1f7ef7199afaa4d3f1299cc3e61a99f40ea55318d071d676" => :sierra
+    sha256 "7242e7bddb6c7b6642a19b534a084f5c4e78970e3d9ec603be7ff4bf7e4c0981" => :el_capitan
   end
 
   def install
@@ -18,7 +18,7 @@ class Re2c < Formula
   end
 
   test do
-    (testpath/"test.c").write <<-EOS.undent
+    (testpath/"test.c").write <<~EOS
       unsigned int stou (const char * s)
       {
       #   define YYCTYPE char

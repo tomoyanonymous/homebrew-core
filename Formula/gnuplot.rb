@@ -1,18 +1,18 @@
 class Gnuplot < Formula
   desc "Command-driven, interactive function plotting"
-  homepage "http://www.gnuplot.info"
-  url "https://downloads.sourceforge.net/project/gnuplot/gnuplot/5.0.6/gnuplot-5.0.6.tar.gz"
-  sha256 "5bbe4713e555c2e103b7d4ffd45fca69551fff09cf5c3f9cb17428aaacc9b460"
-  revision 3
+  homepage "http://www.gnuplot.info/"
+  url "https://downloads.sourceforge.net/project/gnuplot/gnuplot/5.2.2/gnuplot-5.2.2.tar.gz"
+  sha256 "a416d22f02bdf3873ef82c5eb7f8e94146795811ef808e12b035ada88ef7b1a1"
+  revision 1
 
   bottle do
-    sha256 "8fbf7bc14cbca96ac3bcd5e24b3583cb62e36e0fa64ed42c73dc5f7b6d9e9a0b" => :sierra
-    sha256 "dca01f4f6ea524f23123b28f378d47b213bd5f73d4e652d3c5553f81d6547e16" => :el_capitan
-    sha256 "1dae7c1f47b6a1dff23083bffa7f33ecc3ce25a6f050a7c8c2348c2431886353" => :yosemite
+    sha256 "1523a40b075f76d80ac32274a4b896ba5d11075e5cd0601fbdb8c524f9f8d8cb" => :high_sierra
+    sha256 "bd4e2e49fec4afa21df5c5d9c976818eb8928376a2d482c493c6d2098c034e16" => :sierra
+    sha256 "2c2689aee797c5539bfee0fefef7e11cdbe3c8c063ca4057a8a2261087d380cf" => :el_capitan
   end
 
   head do
-    url ":pserver:anonymous:@gnuplot.cvs.sourceforge.net:/cvsroot/gnuplot", :using => :cvs
+    url "https://git.code.sf.net/p/gnuplot/gnuplot-main.git"
 
     depends_on "autoconf" => :build
     depends_on "automake" => :build
@@ -25,7 +25,6 @@ class Gnuplot < Formula
   option "with-aquaterm", "Build with AquaTerm support"
 
   deprecated_option "with-x" => "with-x11"
-  deprecated_option "pdf" => "with-pdflib-lite"
   deprecated_option "wx" => "with-wxmac"
   deprecated_option "qt" => "with-qt"
   deprecated_option "with-qt5" => "with-qt"
@@ -37,7 +36,6 @@ class Gnuplot < Formula
   depends_on "readline"
   depends_on "lua" => :recommended
   depends_on "pango" if build.with?("cairo") || build.with?("wxmac")
-  depends_on "pdflib-lite" => :optional
   depends_on "qt" => :optional
   depends_on "wxmac" => :optional
   depends_on :x11 => :optional
@@ -77,10 +75,6 @@ class Gnuplot < Formula
       --without-tutorial
     ]
 
-    if build.with? "pdflib-lite"
-      args << "--with-pdf=#{Formula["pdflib-lite"].opt_prefix}"
-    end
-
     if build.without? "wxmac"
       args << "--disable-wxwidgets"
       args << "--without-cairo" if build.without? "cairo"
@@ -105,7 +99,7 @@ class Gnuplot < Formula
 
   def caveats
     if build.with? "aquaterm"
-      <<-EOS.undent
+      <<~EOS
         AquaTerm support will only be built into Gnuplot if the standard AquaTerm
         package from SourceForge has already been installed onto your system.
         If you subsequently remove AquaTerm, you will need to uninstall and then
@@ -115,11 +109,11 @@ class Gnuplot < Formula
   end
 
   test do
-    system "#{bin}/gnuplot", "-e", <<-EOS.undent
+    system "#{bin}/gnuplot", "-e", <<~EOS
       set terminal dumb;
       set output "#{testpath}/graph.txt";
       plot sin(x);
     EOS
-    File.exist? testpath/"graph.txt"
+    assert_predicate testpath/"graph.txt", :exist?
   end
 end

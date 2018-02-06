@@ -1,23 +1,23 @@
 class Certstrap < Formula
   desc "Tools to bootstrap CAs, certificate requests, and signed certificates"
   homepage "https://github.com/square/certstrap"
-  url "https://github.com/square/certstrap.git",
-      :tag => "v1.1.0",
-      :revision => "25e0caa16bbb614597a4de836537084a16b28ca0"
+  url "https://github.com/square/certstrap/archive/v1.1.1.tar.gz"
+  sha256 "412ba90a4a48d535682f3c7529191cd30cd7a731e57065dcf4242155cec49d5e"
 
   bottle do
-    cellar :any_skip_relocation
-    sha256 "99040a5b6c97739b0bc00ea3fb226bcc00a8e3e332cdb00c4885e4134e8f00de" => :sierra
-    sha256 "f05948c7a18ed76b5cb1151cf3a1e3d3e4df10476116b3c478a279ce2fba4798" => :el_capitan
-    sha256 "1d6ef4097beec1509a779140f2e5d60d772dfbaef52ce066f1967ebbe097eba0" => :yosemite
+    cellar :any
+    sha256 "2151866d10f1ba703fbdc8b11632da00eb3588d4041be018721fcaf6278fec14" => :high_sierra
+    sha256 "58a68f5a88ff0dc4321aeac2aad21fef2edfa85564d6766d3a9149ceebb2cf4b" => :sierra
+    sha256 "dde1e9de937ea5cd7454bc7163a4fddd56ef75209edc7e6036121f57fa47fe23" => :el_capitan
   end
 
   depends_on "go" => :build
-  depends_on "godep" => :build
 
   def install
-    system "./build"
-    bin.install "bin/certstrap"
+    ENV["GOPATH"] = buildpath
+    (buildpath/"src/github.com/square").mkpath
+    ln_s buildpath, "src/github.com/square/certstrap"
+    system "go", "build", "-o", bin/"certstrap"
   end
 
   test do

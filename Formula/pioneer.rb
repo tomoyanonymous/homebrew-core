@@ -1,15 +1,14 @@
 class Pioneer < Formula
   desc "Game of lonely space adventure"
   homepage "https://pioneerspacesim.net/"
-  url "https://github.com/pioneerspacesim/pioneer/archive/20170415.tar.gz"
-  sha256 "dfbcfb63686fa3b7a16a4bac34de81adb02eeaf23593b3e63cca906bf4dbef67"
-  revision 1
+  url "https://github.com/pioneerspacesim/pioneer/archive/20180203.tar.gz"
+  sha256 "19aa89e8ec0221b937b9279e0d4897b3016e0ce80858d03600d3e80cd7daa907"
   head "https://github.com/pioneerspacesim/pioneer.git"
 
   bottle do
-    sha256 "7d0009340d6fed7255d2708e0f65f8890fceece4e308bd0bb9ff70e23febe5e2" => :sierra
-    sha256 "44034738f7049109724ca1bbcc17d4d14c870990166fdb509f9bb461b9053730" => :el_capitan
-    sha256 "a5005f151f46a0e2baf596ca5c14e89d7c36a6fbd814d8cde4a0b5a389232323" => :yosemite
+    sha256 "fe7123f2a61de3bc5a367fbad1f1a61d554c59e3526e7d79e319fefb46d977d3" => :high_sierra
+    sha256 "24482bf17e5d4294e760a121e93949aa8c2bf6930629995f8693d23a549f13ca" => :sierra
+    sha256 "eb188ce5b4aff9025a664e4276f64fba3521b581eb1f13df610b83ae924ddf5d" => :el_capitan
   end
 
   depends_on "autoconf" => :build
@@ -22,7 +21,6 @@ class Pioneer < Formula
   depends_on "libsigc++"
   depends_on "libvorbis"
   depends_on "libpng"
-  depends_on "lua"
 
   needs :cxx11
 
@@ -30,21 +28,11 @@ class Pioneer < Formula
     ENV.cxx11
     ENV["PIONEER_DATA_DIR"] = "#{pkgshare}/data"
 
-    # Upstream issue "assimp 4.0.0 support"
-    # Reported 19 Jul 2017 https://github.com/pioneerspacesim/pioneer/issues/4054
-    inreplace "configure.ac", "aiGetVersionMinor() >= 2",
-                              "aiGetVersionMinor() >= 0"
-
-    # Remove as soon as possible
-    # https://github.com/pioneerspacesim/pioneer/issues/3839
-    ENV["ARFLAGS"] = "cru"
-
     system "./bootstrap"
     system "./configure", "--disable-dependency-tracking",
                           "--disable-silent-rules",
                           "--prefix=#{prefix}",
-                          "--with-version=#{version}",
-                          "--with-external-liblua"
+                          "--with-version=#{version}"
     system "make", "install"
   end
 

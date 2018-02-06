@@ -1,16 +1,14 @@
 class Mpdas < Formula
   desc "C++ client to submit tracks to audioscrobbler"
   homepage "https://www.50hz.ws/mpdas/"
-  url "https://www.50hz.ws/mpdas/mpdas-0.4.3.tar.gz"
-  mirror "https://github.com/hrkfdn/mpdas/archive/0.4.3.tar.gz"
-  sha256 "069e368bde35b2b3bd79439052c863a0f8c3b25ed454b5ab51f84fa6878b674e"
-  revision 2
+  url "https://www.50hz.ws/mpdas/mpdas-0.4.5.tar.gz"
+  sha256 "c9103d7b897e76cd11a669e1c062d74cb73574efc7ba87de3b04304464e8a9ca"
   head "https://github.com/hrkfdn/mpdas.git"
 
   bottle do
-    sha256 "d7d022e04c89320ccd4d23fb573a0c8e88a1f19b7b7b2c17a66004dedd82ee44" => :sierra
-    sha256 "cf32500f4ba5e42ccc6b70ebae7e3d698ebe4e87bea81d96d46e38e98e4e9aed" => :el_capitan
-    sha256 "31e4052c9d045dfcc44abe3ff78deef83a90d170b895374ea021904b7237fccd" => :yosemite
+    sha256 "ae319b22981a8cc5ed9a0e0212f2ecdbd7660bcd32182334865a01ac69c2832f" => :high_sierra
+    sha256 "06fe51aaa95bfd3000f1f9e562709d266ecbf1880d2b96779ff0c9b9d82dea20" => :sierra
+    sha256 "c9261f50d1d71969474203f6431d7902198c3524d828ed6f690733094444a914" => :el_capitan
   end
 
   depends_on "pkg-config" => :build

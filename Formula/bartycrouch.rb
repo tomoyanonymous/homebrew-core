@@ -1,16 +1,16 @@
 class Bartycrouch < Formula
-  desc "Incrementally update your Strings files."
+  desc "Incrementally update your Strings files"
   homepage "https://github.com/Flinesoft/BartyCrouch"
-  url "https://github.com/Flinesoft/BartyCrouch/archive/3.8.1.tar.gz"
-  sha256 "4ff72004ad7f992da1175dbabe1e37cf30f60a31a67899c71f88018d40e83aaa"
+  url "https://github.com/Flinesoft/BartyCrouch/archive/3.10.0.tar.gz"
+  sha256 "86b84d7dbb9c0d48035c3043085b285a6323bed0fb62be1c2e8581ffc1a376af"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "69ce157192d8a7464094978f151bffe5df81e27c9f813c74a0cebed9b5dd924c" => :sierra
-    sha256 "d18ce7fd273cbf95e231983c613b1c4c4bc12b41353b5ad866b8e803e5653bf6" => :el_capitan
+    sha256 "947edaa77499134d90dd8f39546a9334a1f15021ea91fca80da7dfca9323842b" => :high_sierra
+    sha256 "eedcf2daf8f16e0f54c3e335758a377b5f92b061d4765aebdaee61030e56ab49" => :sierra
   end
 
-  depends_on :xcode => ["8.0", :build]
+  depends_on :xcode => ["9.0", :build]
 
   def install
     xcodebuild "-project", "BartyCrouch.xcodeproj",
@@ -23,19 +23,19 @@ class Bartycrouch < Formula
   end
 
   test do
-    (testpath/"Test.swift").write <<-EOS.undent
-    import Foundation
+    (testpath/"Test.swift").write <<~EOS
+      import Foundation
 
-    class Test {
-      func test() {
-          NSLocalizedString("test", comment: "")
+      class Test {
+        func test() {
+            NSLocalizedString("test", comment: "")
+        }
       }
-    }
     EOS
 
-    (testpath/"en.lproj/Localizable.strings").write <<-EOS.undent
-    /* No comment provided by engineer. */
-    "oldKey" = "Some translation";
+    (testpath/"en.lproj/Localizable.strings").write <<~EOS
+      /* No comment provided by engineer. */
+      "oldKey" = "Some translation";
     EOS
 
     system bin/"bartycrouch", "code", "-p", testpath, "-l", testpath, "-a"

@@ -1,8 +1,8 @@
 class Sbt < Formula
   desc "Build tool for Scala projects"
-  homepage "http://www.scala-sbt.org"
-  url "https://github.com/sbt/sbt/releases/download/v1.0.0/sbt-1.0.0.tgz"
-  sha256 "9ae04f4972145f2ac56c4deb868c9a5bb8b8b85c5151885dff3b997712645c5a"
+  homepage "https://www.scala-sbt.org/"
+  url "https://github.com/sbt/sbt/releases/download/v1.1.0/sbt-1.1.0.tgz"
+  sha256 "9d8cb24b297507ed4c49b476d3050da0abe2c39f7e7d97ba6d48c1b17854e2d7"
 
   bottle :unneeded
 
@@ -10,14 +10,14 @@ class Sbt < Formula
 
   def install
     inreplace "bin/sbt" do |s|
-      s.gsub! 'etc_sbt_opts_file="${sbt_home}/conf/sbtopts"', "etc_sbt_opts_file=\"#{etc}/sbtopts\""
+      s.gsub! 'etc_sbt_opts_file="/etc/sbt/sbtopts"', "etc_sbt_opts_file=\"#{etc}/sbtopts\""
       s.gsub! "/etc/sbt/sbtopts", "#{etc}/sbtopts"
     end
 
     libexec.install "bin", "lib"
     etc.install "conf/sbtopts"
 
-    (bin/"sbt").write <<-EOS.undent
+    (bin/"sbt").write <<~EOS
       #!/bin/sh
       if [ -f "$HOME/.sbtconfig" ]; then
         echo "Use of ~/.sbtconfig is deprecated, please migrate global settings to #{etc}/sbtopts" >&2
@@ -27,7 +27,7 @@ class Sbt < Formula
     EOS
   end
 
-  def caveats;  <<-EOS.undent
+  def caveats;  <<~EOS
     You can use $SBT_OPTS to pass additional JVM options to SBT:
        SBT_OPTS="-XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
 
@@ -38,8 +38,7 @@ class Sbt < Formula
   end
 
   test do
-    ENV["_JAVA_OPTIONS"] = "-Dsbt.log.noformat=true"
-    ENV.java_cache
+    ENV.append "_JAVA_OPTIONS", "-Dsbt.log.noformat=true"
     assert_match "[info] #{version}", shell_output("#{bin}/sbt sbtVersion")
   end
 end

@@ -3,21 +3,15 @@ require "language/node"
 class Coffeescript < Formula
   desc "Unfancy JavaScript"
   homepage "http://coffeescript.org"
-  url "https://registry.npmjs.org/coffeescript/-/coffeescript-1.12.7.tgz"
-  sha256 "307640c6bf0d7ac51f6ba41fc329a88487d7d4be4cdadd33200ceaf4e6977992"
-  head "https://github.com/jashkenas/coffeescript.git", :branch => "2"
+  url "https://registry.npmjs.org/coffeescript/-/coffeescript-2.2.0.tgz"
+  sha256 "f03d7bfbfaa26946634b674ed8547038e73dff1176bd7dbd2e7128582d3f0177"
+  head "https://github.com/jashkenas/coffeescript.git"
 
   bottle do
     cellar :any_skip_relocation
-    rebuild 1
-    sha256 "36501a7dc6e14ffca4009848e9aeee3958c1ed2f66cb2a8384a960c5cadeb0ef" => :sierra
-    sha256 "7310cdbb6f272f1eb084a82540f09bf9eff97ebfa4a291b9bd5634b2045492cd" => :el_capitan
-    sha256 "8516cacd1700b329b9610697926199f5200554b720d9f1c6a7b3419fb41ac7e8" => :yosemite
-  end
-
-  devel do
-    url "https://registry.npmjs.org/coffeescript/-/coffeescript-2.0.0-beta4.tgz"
-    sha256 "90171eecc9bba7d5b16e17752e903404edc94867cee58205bc0cf23a5fbeb2fe"
+    sha256 "1fc19896704fe1579ae16ed7c1fffdff6d8b6de05d161629b353ebef54878896" => :high_sierra
+    sha256 "b744b902fe03d7de100c8bf60e028c6065b94644b876d0f70a7a192580f2c3b3" => :sierra
+    sha256 "d03b99d3a6335cb777cb5b3bcfc63378e84f6a687a23cd0e4d133eef9fc94ee6" => :el_capitan
   end
 
   depends_on "node"
@@ -30,7 +24,7 @@ class Coffeescript < Formula
   end
 
   test do
-    (testpath/"test.coffee").write <<-EOS.undent
+    (testpath/"test.coffee").write <<~EOS
       square = (x) -> x * x
       list = [1, 2, 3, 4, 5]
 
@@ -43,6 +37,6 @@ class Coffeescript < Formula
     EOS
 
     system bin/"coffee", "--compile", "test.coffee"
-    assert File.exist?("test.js"), "test.js was not generated"
+    assert_predicate testpath/"test.js", :exist?, "test.js was not generated"
   end
 end

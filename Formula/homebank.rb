@@ -1,20 +1,20 @@
 class Homebank < Formula
   desc "Manage your personal accounts at home"
   homepage "http://homebank.free.fr"
-  url "http://homebank.free.fr/public/homebank-5.1.5.tar.gz"
-  sha256 "5c3fd3478577e91a5d8e6e28fced58b5ad611eecb06e8f335a9585b817a1330f"
+  url "http://homebank.free.fr/public/homebank-5.1.7.tar.gz"
+  sha256 "579e53c00764b78d79e8e388b9202c760a9c9efdaca83b32d948f92e0dfa5fa7"
 
   bottle do
-    sha256 "d31666b5b8a1bcfd960fefe3b5703a07ac343705d2b21a86ace3a1c7bb7b574e" => :sierra
-    sha256 "9d4844e119ff8697ee8be60708930a4e52465f8bac4201c3741c15db34b9dd47" => :el_capitan
-    sha256 "c93d921f4d547201239ee9b81fcf082b7d101d23b35072c95c42f653fae71739" => :yosemite
+    sha256 "cba415fe76d1f4bf9b916d1628dc53aded35b7a9efe09b2242c62f3cd377a9b4" => :high_sierra
+    sha256 "04ab35bf95eda56936ebc23d23b06d83cfb582e2c0dbb6b8c9117640815638ec" => :sierra
+    sha256 "ac847e14ffb2ce44292172b79464a1500991244b81c6d66235408adf2f386173" => :el_capitan
   end
 
   depends_on "pkg-config" => :build
   depends_on "intltool" => :build
   depends_on "gettext"
   depends_on "gtk+3"
-  depends_on "gnome-icon-theme"
+  depends_on "adwaita-icon-theme"
   depends_on "hicolor-icon-theme"
   depends_on "freetype"
   depends_on "fontconfig"

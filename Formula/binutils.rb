@@ -1,14 +1,14 @@
 class Binutils < Formula
   desc "FSF/GNU ld, ar, readelf, etc. for native development"
   homepage "https://www.gnu.org/software/binutils/binutils.html"
-  url "https://ftp.gnu.org/gnu/binutils/binutils-2.29.tar.gz"
-  mirror "https://ftpmirror.gnu.org/binutils/binutils-2.29.tar.gz"
-  sha256 "172e8c89472cf52712fd23a9f14e9bca6182727fb45b0f8f482652a83d5a11b4"
+  url "https://ftp.gnu.org/gnu/binutils/binutils-2.30.tar.gz"
+  mirror "https://ftpmirror.gnu.org/binutils/binutils-2.30.tar.gz"
+  sha256 "8c3850195d1c093d290a716e20ebcaa72eda32abf5e3d8611154b39cff79e9ea"
 
   bottle do
-    sha256 "a86ec8b9b8628f5dd5e237470e0faf5d9e3d3ebbb9fede28d0eb99f4955a44bb" => :sierra
-    sha256 "bff7053d7a7730222d80939bfd56cabcb9e97c80e07cfa5adb82d940aa2ace9e" => :el_capitan
-    sha256 "f220539e4ad8d0139f8dc302675cb9e8fba139e2272646e65eddb8c106cdde2d" => :yosemite
+    sha256 "2eff47fc3b2074c2ad67a288ce07a38daa611dbaa39fc9c27f89f7fb74e80972" => :high_sierra
+    sha256 "0d9b3fc064c9a442bf3373771f200e4c78a269541a41e5be981c069deca30ce4" => :sierra
+    sha256 "525681da15ff697938626ffa15748b9b7ebb46f0b24c5e35c802173065dbc9d7" => :el_capitan
   end
 
   # No --default-names option as it interferes with Homebrew builds.

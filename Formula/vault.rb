@@ -1,5 +1,3 @@
-require "language/go"
-
 # Please don't update this formula until the release is official via
 # mailing list or blog post. There's a history of GitHub tags moving around.
 # https://github.com/hashicorp/vault/issues/1051
@@ -7,30 +5,21 @@ class Vault < Formula
   desc "Secures, stores, and tightly controls access to secrets"
   homepage "https://vaultproject.io/"
   url "https://github.com/hashicorp/vault.git",
-      :tag => "v0.8.0",
-      :revision => "af63d879130d2ee292f09257571d371100a513eb"
+      :tag => "v0.9.3",
+      :revision => "5acd6a21d5a69ab49d0f7c0bf540123a9b2c696d"
   head "https://github.com/hashicorp/vault.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "de6ef4e7bcd1cde4e1e35aad188b23c998b2fbdee58ebbee3d8a2034963a3490" => :sierra
-    sha256 "18b0c5a76b3dc82653617213372a0ab7e037850755516adb8a00dbfd65aaf8e3" => :el_capitan
-    sha256 "981c23477d3a40740425142deb174815b163a6feaadacd41d9d535528511d152" => :yosemite
+    sha256 "c80c574aa0046be96d8f88ac28cf1f942504846fae77bfd28c285285e33bf71a" => :high_sierra
+    sha256 "e41ff20ad5673fa6f08040df2bdc07f5060fda7be7609b47a5a837f4614522cb" => :sierra
+    sha256 "dab4b1bb85d2c754fb0090ca0eebfd8ba3bf2c64d961bd536e75e14d01944df3" => :el_capitan
   end
 
   option "with-dynamic", "Build dynamic binary with CGO_ENABLED=1"
 
   depends_on "go" => :build
-
-  go_resource "github.com/mitchellh/iochan" do
-    url "https://github.com/mitchellh/iochan.git",
-        :revision => "87b45ffd0e9581375c491fef3d32130bb15c5bd7"
-  end
-
-  go_resource "github.com/mitchellh/gox" do
-    url "https://github.com/mitchellh/gox.git",
-        :revision => "c9740af9c6574448fd48eb30a71f964014c7a837"
-  end
+  depends_on "gox" => :build
 
   def install
     ENV["GOPATH"] = buildpath
@@ -38,13 +27,7 @@ class Vault < Formula
     contents = buildpath.children - [buildpath/".brew_home"]
     (buildpath/"src/github.com/hashicorp/vault").install contents
 
-    ENV.prepend_create_path "PATH", buildpath/"bin"
-
-    Language::Go.stage_deps resources, buildpath/"src"
-
-    cd "src/github.com/mitchellh/gox" do
-      system "go", "install"
-    end
+    (buildpath/"bin").mkpath
 
     cd "src/github.com/hashicorp/vault" do
       target = build.with?("dynamic") ? "dev-dynamic" : "dev"

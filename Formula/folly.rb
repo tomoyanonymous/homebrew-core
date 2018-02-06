@@ -1,14 +1,15 @@
 class Folly < Formula
   desc "Collection of reusable C++ library artifacts developed at Facebook"
   homepage "https://github.com/facebook/folly"
-  url "https://github.com/facebook/folly/archive/v2017.08.07.00.tar.gz"
-  sha256 "5c03d9e36a2ee54be255f2842f376e04f3819f7f828adf8da1bcfcc450106d12"
+  url "https://github.com/facebook/folly/archive/v2018.02.05.00.tar.gz"
+  sha256 "5f84afc79202115711a23d46c0f3efa6b2ef6cc31dbe08be9b0543fbe74180f7"
   head "https://github.com/facebook/folly.git"
 
   bottle do
     cellar :any
-    sha256 "e782e8b7a16e583029151cc5e970e980edaf9cd7cc720ca1695f3a94239dd126" => :sierra
-    sha256 "6028ccd1a9b808cc99b1af195cf1bf792be9a09d998e2952cb5012535840d64f" => :el_capitan
+    sha256 "9da9107a491394caa4cfc6a9ceca3dc0e5026a8c4c896e2692a00ec66b296711" => :high_sierra
+    sha256 "1a08070819a6056c052ed7602a0ec98df787a3019ea85912c0e0bacbe696a49e" => :sierra
+    sha256 "64f94a3d692f784ab168f38a1a70bb6a9fcfd9a151eb3f71c559ff304fd70fdf" => :el_capitan
   end
 
   depends_on "autoconf" => :build
@@ -47,7 +48,7 @@ class Folly < Formula
   end
 
   test do
-    (testpath/"test.cc").write <<-EOS.undent
+    (testpath/"test.cc").write <<~EOS
       #include <folly/FBVector.h>
       int main() {
         folly::fbvector<int> numbers({0, 1, 2, 3});

@@ -7,6 +7,7 @@ class Gdal < Formula
 
   bottle do
     rebuild 1
+    sha256 "4d084ada89aa6461c48730686ae157ae0f3447cc7b04aa11ffecb3e19feb81a7" => :high_sierra
     sha256 "69dcd735eb3543c602e65d2b35be1f09dd62724d8673571397f2802a38d5e3de" => :sierra
     sha256 "4d960f47450a62f7b59fa3d83691c8379111f6d00ad7231774d21bdcc45ebcc2" => :el_capitan
     sha256 "4107e0b06a0466f37f5ffe8dfddae8ccc8eafce8c187ccf4382a3986851115bb" => :yosemite
@@ -23,7 +24,7 @@ class Gdal < Formula
   option "with-unsupported", "Allow configure to drag in any library it can find. Invoke this at your own risk."
   option "with-mdb", "Build with Access MDB driver (requires Java 1.6+ JDK/JRE, from Apple or Oracle)."
   option "with-libkml", "Build with Google's libkml driver (requires libkml --HEAD or >= 1.3)"
-  option "with-swig-java", "Build the swig java bindings"
+  option "with-java", "Build the java bindings with swig"
   option "without-python", "Build without python2 support"
 
   deprecated_option "enable-opencl" => "with-opencl"
@@ -31,6 +32,7 @@ class Gdal < Formula
   deprecated_option "enable-unsupported" => "with-unsupported"
   deprecated_option "enable-mdb" => "with-mdb"
   deprecated_option "complete" => "with-complete"
+  deprecated_option "with-swig-java" => "with-java"
 
   depends_on "libpng"
   depends_on "jpeg"
@@ -77,16 +79,21 @@ class Gdal < Formula
     depends_on "json-c"
   end
 
-  depends_on :java => ["1.7+", :optional, :build]
+  # Technically 1.7+ but definitely not Java 9.
+  # "bootstrap class path not set in conjunction with -source 1.4"
+  depends_on :java => ["1.8", :optional]
 
-  if build.with? "swig-java"
+  if build.with? "java"
     depends_on "ant" => :build
     depends_on "swig" => :build
   end
 
-  depends_on :python => :optional if MacOS.version <= :snow_leopard
-  depends_on :python3 => :optional
-  depends_on :fortran => :build if build.with?("python") || build.with?("python3")
+  depends_on "python" => :optional if MacOS.version <= :snow_leopard
+  depends_on "python3" => :optional
+
+  if build.with?("python") || build.with?("python3")
+    depends_on "gcc" => :build # for gfortran
+  end
 
   # Extra linking libraries in configure test of armadillo may throw warning
   # see: https://trac.osgeo.org/gdal/ticket/5455
@@ -128,14 +135,9 @@ class Gdal < Formula
       "--with-grib",
       "--with-pam",
 
-      # Backends supported by macOS.
-      "--with-libiconv-prefix=/usr",
-      "--with-libz=/usr",
-      "--with-png=#{Formula["libpng"].opt_prefix}",
-      "--with-expat=/usr",
-      "--with-curl=/usr/bin/curl-config",
-
       # Default Homebrew backends.
+      "--with-png=#{Formula["libpng"].opt_prefix}",
+      "--with-curl=/usr/bin/curl-config",
       "--with-jpeg=#{HOMEBREW_PREFIX}",
       "--without-jpeg12", # Needs specially configured JPEG and TIFF libraries.
       "--with-gif=#{HOMEBREW_PREFIX}",
@@ -302,16 +304,19 @@ class Gdal < Formula
       end
     end
 
-    if build.with? "swig-java"
+    if build.with? "java"
       cd "swig/java" do
-        inreplace "java.opt", "linux", "darwin"
-        inreplace "java.opt", "#JAVA_HOME = /usr/lib/jvm/java-6-openjdk/", "JAVA_HOME=$(shell echo $$JAVA_HOME)"
+        inreplace "java.opt" do |s|
+          s.gsub! "linux", "darwin"
+          s.gsub! "#JAVA_HOME = /usr/lib/jvm/java-6-openjdk/",
+                  "JAVA_HOME = $(shell #{Language::Java.java_home_cmd("1.8")})"
+        end
         system "make"
         system "make", "install"
 
         # Install the jar that complements the native JNI bindings
         system "ant"
-        lib.install "gdal.jar"
+        (pkgshare/"java").install "gdal.jar"
       end
     end
 
@@ -323,12 +328,11 @@ class Gdal < Formula
 
   def caveats
     if build.with? "mdb"
-      <<-EOS.undent
+      <<~EOS
+        To have a functional MDB driver, install supporting .jar files in:
+          `/Library/Java/Extensions/`
 
-      To have a functional MDB driver, install supporting .jar files in:
-        `/Library/Java/Extensions/`
-
-      See: `http://www.gdal.org/ogr/drv_mdb.html`
+        See: `http://www.gdal.org/ogr/drv_mdb.html`
       EOS
     end
   end

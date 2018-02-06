@@ -1,24 +1,24 @@
 class Scipy < Formula
   desc "Software for mathematics, science, and engineering"
   homepage "https://www.scipy.org"
-  url "https://github.com/scipy/scipy/releases/download/v0.19.1/scipy-0.19.1.tar.xz"
-  sha256 "0dca04c4860afdcb066cab4fd520fcffa8c85e9a7b5aa37a445308e899d728b3"
-  revision 1
+  url "https://github.com/scipy/scipy/releases/download/v1.0.0/scipy-1.0.0.tar.xz"
+  sha256 "06b23f2a5db5418957facc86ead86b7752147c0461f3156f88a3da87f3dc6739"
+  revision 2
   head "https://github.com/scipy/scipy.git"
 
   bottle do
-    sha256 "52dfdefbaeaaeb843ae2f36a7e743ccdb69d3eecd266d7a27ab2693c8e15be06" => :sierra
-    sha256 "6a7138aa35a3a58e6f4ba77946e3dec4a6ca6f4456cbc31b8e23a7e5ae8ad3b4" => :el_capitan
-    sha256 "5b793bffbedc74ba881866847a02cefa02dc1372ff22ce86920fe68fc44c25b2" => :yosemite
+    sha256 "236b3f2e5b6a40ce9c4b2a1840e2f685e489fc3bdc08515c56a4c2ccefb12325" => :high_sierra
+    sha256 "33502bc4a92a8a3de4354e45ea1dca97a37f948e1222f219a0a95c952f67b877" => :sierra
+    sha256 "9779e2459949b7251b96e8d443c3ebc75fdcb528c196cf914ac8eb449f1baa44" => :el_capitan
   end
 
   option "without-python", "Build without python2 support"
 
   depends_on "swig" => :build
-  depends_on :fortran
+  depends_on "gcc" # for gfortran
   depends_on "numpy"
-  depends_on :python => :recommended if MacOS.version <= :snow_leopard
-  depends_on :python3 => :recommended
+  depends_on "python" => :recommended if MacOS.version <= :snow_leopard
+  depends_on "python3" => :recommended
 
   cxxstdlib_check :skip
 
@@ -27,7 +27,7 @@ class Scipy < Formula
   fails_with :gcc
 
   def install
-    config = <<-EOS.undent
+    config = <<~EOS
       [DEFAULT]
       library_dirs = #{HOMEBREW_PREFIX}/lib
       include_dirs = #{HOMEBREW_PREFIX}/include
@@ -56,7 +56,7 @@ class Scipy < Formula
     if (build.with? "python") && !Formula["python"].installed?
       homebrew_site_packages = Language::Python.homebrew_site_packages
       user_site_packages = Language::Python.user_site_packages "python"
-      <<-EOS.undent
+      <<~EOS
         If you use system python (that comes - depending on the OS X version -
         with older versions of numpy, scipy and matplotlib), you may need to
         ensure that the brewed packages come earlier in Python's sys.path with:

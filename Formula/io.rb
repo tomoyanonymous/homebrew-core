@@ -1,26 +1,15 @@
 class Io < Formula
   desc "Small prototype-based programming language"
   homepage "http://iolanguage.com/"
-  revision 2
-
+  url "https://github.com/stevedekorte/io/archive/2017.09.06.tar.gz"
+  sha256 "9ac5cd94bbca65c989cd254be58a3a716f4e4f16480f0dc81070457aa353c217"
   head "https://github.com/stevedekorte/io.git"
 
-  stable do
-    url "https://github.com/stevedekorte/io/archive/2015.11.11.tar.gz"
-    sha256 "00d7be0b69ad04891dd5f6c77604049229b08164d0c3f5877bfab130475403d3"
-
-    # Fix build on Sierra. Already merged upstream.
-    patch do
-      url "https://github.com/stevedekorte/io/commit/db4d9c2.patch?full_index=1"
-      sha256 "6ca94e7fd84da4f7e0b48f67fd862d2f5d10f159fa5c84b6af26c723acee77c3"
-    end
-  end
-
   bottle do
-    rebuild 1
-    sha256 "3df8da0d059ae39472d998978935cb6b9d5fca2373d3b528f875775d84011246" => :sierra
-    sha256 "7f90228d769aec358a03ac59a7d11e1d263da9d71bb80cd6da8df402cb03717a" => :el_capitan
-    sha256 "ee95e6e5833a2ab0744cdb0285d87cf01d98e6badf165519d57cb255c0097af2" => :yosemite
+    sha256 "686d5d23790b53c27765d49da0a74ec96ee949353b31646a0a92ee931270a23d" => :high_sierra
+    sha256 "2d0e05344917ad3a1d322f2860030013315ceb7e8ae962cf6070d1ee8cc395d4" => :sierra
+    sha256 "3a5a0e9a1ec0ce7f4bc6bcfc5fb8c782f0b1ba0451251aaab51a796452b59e67" => :el_capitan
+    sha256 "16d31a7062e2c7ebab815bcd48b03aab9597a6c40071cb407e2bc6dec91fef0b" => :yosemite
   end
 
   option "without-addons", "Build without addons"
@@ -44,7 +33,7 @@ class Io < Formula
     depends_on "pcre"
     depends_on "yajl"
     depends_on "xz"
-    depends_on :python => :optional
+    depends_on "python" => :optional
   end
 
   def install
@@ -86,7 +75,7 @@ class Io < Formula
   end
 
   test do
-    (testpath/"test.io").write <<-EOS.undent
+    (testpath/"test.io").write <<~EOS
       "it works!" println
     EOS
 

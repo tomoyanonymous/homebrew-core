@@ -1,29 +1,26 @@
 class OpenSceneGraph < Formula
   desc "3D graphics toolkit"
   homepage "https://github.com/openscenegraph/OpenSceneGraph"
-  url "https://github.com/openscenegraph/OpenSceneGraph/archive/OpenSceneGraph-3.5.6.tar.gz"
-  sha256 "58e9436b811d0344723116cb1ada6ef305bdb6d97f42f04a700a29eda17f54b2"
-  revision 1
+  url "https://github.com/openscenegraph/OpenSceneGraph/archive/OpenSceneGraph-3.5.9.tar.gz"
+  sha256 "e18bd54d7046ea73525941244ef4f77b38b2a90bdf21d81468ac3874c41e9448"
   head "https://github.com/openscenegraph/OpenSceneGraph.git"
 
   bottle do
-    rebuild 1
-    sha256 "9a5b050af3debc7b0860349a095c02b8935bf3ef494036e22da61a97ca85d01c" => :sierra
-    sha256 "14b40a23917655700302c751e8a6d785a94c94d5311e82efa1ff403a6a5dbf56" => :el_capitan
-    sha256 "b2f7c7f7f5d36a0a966d03de9b44146a0c5e7313acaac93a5d41c2250ee4a952" => :yosemite
+    sha256 "e29e28e5812042f63f2225549191b00306ca1f428538d2150453bd69789c97aa" => :high_sierra
+    sha256 "90b2999887964f4392d2467fab2ee178e372d9b85ee969d3da428a5a116375bd" => :sierra
+    sha256 "51ae8250fb6131a510c052969e6e4834bb5b69ec40b85b184b575595453be2cd" => :el_capitan
   end
 
-  option :cxx11
   option "with-docs", "Build the documentation with Doxygen and Graphviz"
 
   deprecated_option "docs" => "with-docs"
-  deprecated_option "with-qt5" => "with-qt"
 
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
   depends_on "jpeg"
   depends_on "gtkglext"
   depends_on "freetype"
+  depends_on "sdl"
   depends_on "gdal" => :optional
   depends_on "jasper" => :optional
   depends_on "openexr" => :optional
@@ -32,7 +29,6 @@ class OpenSceneGraph < Formula
   depends_on "collada-dom" => :optional
   depends_on "gnuplot" => :optional
   depends_on "ffmpeg" => :optional
-  depends_on "qt" => :optional
 
   # patch necessary to ensure support for gtkglext-quartz
   # filed as an issue to the developers https://github.com/openscenegraph/osg/issues/34
@@ -43,16 +39,12 @@ class OpenSceneGraph < Formula
     depends_on "graphviz" => :build
   end
 
-  # jpeg 9 compatibility
-  # Upstream issue from 18 Feb 2016 "fails to build without -fpermissive"
-  # See https://github.com/openscenegraph/OpenSceneGraph/issues/58
-  patch :p0 do
-    url "https://raw.githubusercontent.com/macports/macports-ports/a54de1ab602/graphics/OpenSceneGraph/files/patch-src_osgPlugins_jpeg_ReaderWriterJPEG.cpp.diff"
-    sha256 "c62a284d1df478a73082bb0c8eae504ffcc8a9e7b00ee541cc00543d6b163c94"
-  end
-
   def install
-    ENV.cxx11 if build.cxx11?
+    # Fix "fatal error: 'os/availability.h' file not found" on 10.11 and
+    # "error: expected function body after function declarator" on 10.12
+    if MacOS.version == :sierra || MacOS.version == :el_capitan
+      ENV["SDKROOT"] = MacOS.sdk_path
+    end
 
     # Turning off FFMPEG takes this change or a dozen "-DFFMPEG_" variables
     if build.without? "ffmpeg"
@@ -72,11 +64,7 @@ class OpenSceneGraph < Formula
     end
 
     if build.with? "collada-dom"
-      args << "-DCOLLADA_INCLUDE_DIR=#{Formula["collada-dom"].opt_include}/collada-dom"
-    end
-
-    if build.with? "qt"
-      args << "-DCMAKE_PREFIX_PATH=#{Formula["qt"].opt_prefix}"
+      args << "-DCOLLADA_INCLUDE_DIR=#{Formula["collada-dom"].opt_include}/collada-dom2.4"
     end
 
     mkdir "build" do
@@ -89,7 +77,7 @@ class OpenSceneGraph < Formula
   end
 
   test do
-    (testpath/"test.cpp").write <<-EOS.undent
+    (testpath/"test.cpp").write <<~EOS
       #include <iostream>
       #include <osg/Version>
       using namespace std;

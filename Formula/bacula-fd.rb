@@ -1,13 +1,13 @@
 class BaculaFd < Formula
   desc "Network backup solution"
   homepage "https://www.bacula.org/"
-  url "https://downloads.sourceforge.net/project/bacula/bacula/9.0.3/bacula-9.0.3.tar.gz"
-  sha256 "ae8501960d43399bea13113274993637b6395d73d7d2c47f9b7a07cb4aa72251"
+  url "https://downloads.sourceforge.net/project/bacula/bacula/9.0.6/bacula-9.0.6.tar.gz"
+  sha256 "44db9d12dd4a510b0dfa6f8ad877ad4c0df04c13ef28f99c690a259314ee2e47"
 
   bottle do
-    sha256 "a558d0384f4e2f1607d84104fe52fbad9c0fdaa3f335e101203b545a74d01264" => :sierra
-    sha256 "0b55c3e0b949d5e29d0bb4b0530e8b27734f4c43233a5afea354a97b09678ce9" => :el_capitan
-    sha256 "2c72c95ac1e6d53458c0e8d5105011176c0ef901c9c4ea5f63950fac86d4042a" => :yosemite
+    sha256 "1b3e2d01ab6e9cfec13a6c67d28db18360d2a63e88d653a0efa23534c7cd5ae6" => :high_sierra
+    sha256 "0d9d8431213e08e6dedb35cda294cff991a88eb67012a9ea0de264116feb72b0" => :sierra
+    sha256 "4cdb1d6e9d2229351804ae1d5484050f56be0b63f61444341d4a1d7a16ab0337" => :el_capitan
   end
 
   depends_on "readline"
@@ -39,7 +39,7 @@ class BaculaFd < Formula
 
   plist_options :startup => true, :manual => "bacula-fd"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="0.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">

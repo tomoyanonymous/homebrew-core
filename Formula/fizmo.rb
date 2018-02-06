@@ -1,19 +1,19 @@
 class Fizmo < Formula
   desc "Z-Machine interpreter"
   homepage "https://fizmo.spellbreaker.org"
-  url "https://fizmo.spellbreaker.org/source/fizmo-0.8.2.tar.gz"
-  sha256 "369c3b58e019756229bf7e72cc5b15c049f1d6d5c65d7653267e67cef109e675"
+  url "https://fizmo.spellbreaker.org/source/fizmo-0.8.5.tar.gz"
+  sha256 "1c259a29b21c9f401c12fc24d555aca4f4ff171873be56fb44c0c9402c61beaa"
   revision 1
 
   bottle do
-    rebuild 1
-    sha256 "0a462983979882fcb8f6eb768e0d4ab9d295aab9b800f93dd46bf81ea7498257" => :sierra
-    sha256 "a91b379e3b4b3ae76b504cb3f611e0426ed48bc9bdca1a395dc639a9e1c212ee" => :el_capitan
-    sha256 "ce8b994c35133110109b7a17ddc07dbea594f61bb9ca55233173b810a7f23291" => :yosemite
+    sha256 "5bc934e9ac29637cc4a533ffbac0d3e1807d6f70797920eeb80e2e0a9c0cae20" => :high_sierra
+    sha256 "86d6479347bf687c17da9b0b8eef22d0e332701c3ef7cfee50c7487273aa3445" => :sierra
+    sha256 "2b50bdff9322ebc50f10fba89a098f9fc05157243e0f0c1dcecf5686a6988fa2" => :el_capitan
   end
 
   depends_on "pkg-config" => :build
   depends_on :x11
+  depends_on "freetype"
   depends_on "jpeg"
   depends_on "libpng"
   depends_on "libsndfile"

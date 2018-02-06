@@ -1,14 +1,14 @@
 class Sbcl < Formula
   desc "Steel Bank Common Lisp system"
   homepage "http://www.sbcl.org/"
-  url "https://downloads.sourceforge.net/project/sbcl/sbcl/1.3.20/sbcl-1.3.20-source.tar.bz2"
-  sha256 "5282318053b62ff041c14956dd5a2e2e66697482141713c6c5df375d05cd1f62"
+  url "https://downloads.sourceforge.net/project/sbcl/sbcl/1.4.4/sbcl-1.4.4-source.tar.bz2"
+  sha256 "ca1168b91b2260fbe021b2dc726fe9572d281cbca66b85e0ee7e9f8dd12adbcc"
   head "https://git.code.sf.net/p/sbcl/sbcl.git"
 
   bottle do
-    sha256 "f1ec64e5bfa3ab6342e69cd00a1ea259ce2ace27176a03a2b5a35267bcb8208b" => :sierra
-    sha256 "d20c68f5513eb6feccc8f1992dfcbc0d2e2a6ee3cd0cda5a9c996480d430b9b4" => :el_capitan
-    sha256 "10596bb5d0de787b518200ac361d5a82442be2acd2ae2675479cb274456868f7" => :yosemite
+    sha256 "d5b0d43fa03325cc0d0576bd8055d85c283e705561e68a405ddbf308a566a18d" => :high_sierra
+    sha256 "d88aeccc824b0260db5d83b25d7c5f96c0e7d995826c2467943cad165ac4a1a5" => :sierra
+    sha256 "dd33b909dd3c6d4f007e27e92d8ae230b19776c2975524710657076cdb401bc0" => :el_capitan
   end
 
   option "with-internal-xref", "Include XREF information for SBCL internals (increases core size by 5-6MB)"
@@ -70,7 +70,7 @@ class Sbcl < Formula
       bin.env_script_all_files(libexec/"bin", :SBCL_SOURCE_ROOT => pkgshare/"src")
       pkgshare.install %w[contrib src]
 
-      (lib/"sbcl/sbclrc").write <<-EOS.undent
+      (lib/"sbcl/sbclrc").write <<~EOS
         (setf (logical-pathname-translations "SYS")
           '(("SYS:SRC;**;*.*.*" #p"#{pkgshare}/src/**/*.*")
             ("SYS:CONTRIB;**;*.*.*" #p"#{pkgshare}/contrib/**/*.*")))
@@ -79,7 +79,7 @@ class Sbcl < Formula
   end
 
   test do
-    (testpath/"simple.sbcl").write <<-EOS.undent
+    (testpath/"simple.sbcl").write <<~EOS
       (write-line (write-to-string (+ 2 2)))
     EOS
     output = shell_output("#{bin}/sbcl --script #{testpath}/simple.sbcl")

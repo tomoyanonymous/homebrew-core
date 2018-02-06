@@ -1,14 +1,14 @@
 class Zstd < Formula
   desc "Zstandard is a real-time compression algorithm"
   homepage "http://zstd.net/"
-  url "https://github.com/facebook/zstd/archive/v1.3.0.tar.gz"
-  sha256 "0fdba643b438b7cbce700dcc0e7b3e3da6d829088c63757a5984930e2f70b348"
+  url "https://github.com/facebook/zstd/archive/v1.3.3.tar.gz"
+  sha256 "a77c47153ee7de02626c5b2a097005786b71688be61e9fb81806a011f90b297b"
 
   bottle do
     cellar :any
-    sha256 "1fa4655f669b59f70a3b415bbf61db3788398648756156000c4073172ec008b9" => :sierra
-    sha256 "81ce236deea3549ca5c8fd88cea058163977ca9c209c35a0c20fa905ceab2ba6" => :el_capitan
-    sha256 "35c97da893c30d9e013bdbeb2cb04a20d0262702cb32ac49390b799284beec81" => :yosemite
+    sha256 "f192acbf6c925141880e49918cf70a9f81a6805daab511f37a01d8b8f35bcf93" => :high_sierra
+    sha256 "6bb1f29f9f011a84758bc626e203255ac49613b283f96b5a01edac38d8a8baae" => :sierra
+    sha256 "0c615c0f91b014e3b627f2ac9d3653b009fa9eca9a1fdfc6f7370d89de9af6ec" => :el_capitan
   end
 
   option "without-pzstd", "Build without parallel (de-)compression tool"

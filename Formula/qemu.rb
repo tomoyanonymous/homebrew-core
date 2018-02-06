@@ -1,16 +1,14 @@
 class Qemu < Formula
   desc "x86 and PowerPC Emulator"
   homepage "https://www.qemu.org/"
-  url "https://download.qemu.org/qemu-2.9.0.tar.bz2"
-  sha256 "00bfb217b1bb03c7a6c3261b819cfccbfb5a58e3e2ceff546327d271773c6c14"
-  revision 2
-
+  url "https://download.qemu.org/qemu-2.11.0.tar.bz2"
+  sha256 "c4f034c7665a84a1c3be72c8da37f3c31ec063475699df062ab646d8b2e17fcb"
   head "https://git.qemu.org/git/qemu.git"
 
   bottle do
-    sha256 "531435eb8b3091f06805e66a196ea83de45eed6b8cb5788612bb9b11837a0aa0" => :sierra
-    sha256 "f7debbc6401a3f9213f642623fad98bdbc4cbae3873b907063e68dc38b11b9a0" => :el_capitan
-    sha256 "ead34e43272f2075bc5e59bc31ada233a13850e4b448dc799e69a15e92d04273" => :yosemite
+    sha256 "ec48d836a2d6fd75b3f9369c38f04caa8de892976db86333a7f118210a048ecb" => :high_sierra
+    sha256 "dee2e64d11b0c685719152d7a37cfdb8b3e1ce9977a74fa105f36ae18f21a925" => :sierra
+    sha256 "aad18d02017bcecc82118fad09f86fd8d286228374c51376ec0d7f10fcda93e0" => :el_capitan
   end
 
   depends_on "pkg-config" => :build
@@ -25,6 +23,7 @@ class Qemu < Formula
   depends_on "sdl2" => :optional
   depends_on "gtk+" => :optional
   depends_on "libssh2" => :optional
+  depends_on "libusb" => :optional
 
   deprecated_option "with-sdl" => "with-sdl2"
 
@@ -44,14 +43,6 @@ class Qemu < Formula
 
   def install
     ENV["LIBTOOL"] = "glibtool"
-
-    # Fixes "dyld: lazy symbol binding failed: Symbol not found: _clock_gettime"
-    if MacOS.version == "10.11" && MacOS::Xcode.installed? && MacOS::Xcode.version >= "8.0"
-      inreplace %w[hw/i386/kvm/i8254.c include/qemu/timer.h linux-user/strace.c
-                   roms/skiboot/external/pflash/progress.c
-                   roms/u-boot/arch/sandbox/cpu/os.c ui/spice-display.c
-                   util/qemu-timer-common.c], "CLOCK_MONOTONIC", "NOT_A_SYMBOL"
-    end
 
     args = %W[
       --prefix=#{prefix}

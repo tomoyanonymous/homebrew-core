@@ -3,22 +3,23 @@
 class Qt < Formula
   desc "Cross-platform application and UI framework"
   homepage "https://www.qt.io/"
-  url "https://download.qt.io/official_releases/qt/5.9/5.9.1/single/qt-everywhere-opensource-src-5.9.1.tar.xz"
-  mirror "https://www.mirrorservice.org/sites/download.qt-project.org/official_releases/qt/5.9/5.9.1/single/qt-everywhere-opensource-src-5.9.1.tar.xz"
-  sha256 "7b41a37d4fe5e120cdb7114862c0153f86c07abbec8db71500443d2ce0c89795"
-  head "https://code.qt.io/qt/qt5.git", :branch => "5.9", :shallow => false
+  url "https://download.qt.io/official_releases/qt/5.10/5.10.0/single/qt-everywhere-src-5.10.0.tar.xz"
+  mirror "https://www.mirrorservice.org/sites/download.qt-project.org/official_releases/qt/5.10/5.10.0/single/qt-everywhere-src-5.10.0.tar.xz"
+  sha256 "936d4cf5d577298f4f9fdb220e85b008ae321554a5fcd38072dc327a7296230e"
+  revision 1
+  head "https://code.qt.io/qt/qt5.git", :branch => "5.10", :shallow => false
 
   bottle do
-    sha256 "1039cfe8be8e0c9d0610a41fd0795cd7433f49d1d6bc2c675f4919bb0e8eb501" => :sierra
-    sha256 "be6aa6b237f1a179bebd1dfde9f857c75c7b5775ac841270ec3a2224b2888d1e" => :el_capitan
-    sha256 "2bc3289b6c1d961363a655f311955315f651661b92354342014a2f08d9e2e209" => :yosemite
+    sha256 "d63559b06141047f1d65a431db7aed630461db8d821ed8f925af2ba77ecb0ab4" => :high_sierra
+    sha256 "c3a892407ff379b940b28b6098719bd97a37bc706a0b25485e4d2bfed3f5264d" => :sierra
+    sha256 "ac70588d769dfd34c954f9ce9a8f9c3200b57eff84eadcbb96d918bc1bbc1d42" => :el_capitan
   end
 
   keg_only "Qt 5 has CMake issues when linked"
 
   option "with-docs", "Build documentation"
   option "with-examples", "Build examples"
-  option "with-qtwebkit", "Build with QtWebkit module"
+  option "without-proprietary-codecs", "Don't build with proprietary codecs (e.g. mp3)"
 
   # OS X 10.7 Lion is still supported in Qt 5.5, but is no longer a reference
   # configuration and thus untested in practice. Builds on OS X 10.7 have been
@@ -27,14 +28,8 @@ class Qt < Formula
 
   depends_on "pkg-config" => :build
   depends_on :xcode => :build
-  depends_on :mysql => :optional
-  depends_on :postgresql => :optional
-
-  # http://lists.qt-project.org/pipermail/development/2016-March/025358.html
-  resource "qt-webkit" do
-    url "https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebkit-opensource-src-5.9.1.tar.xz"
-    sha256 "28a560becd800a4229bfac317c2e5407cd3cc95308bc4c3ca90dba2577b052cf"
-  end
+  depends_on "mysql" => :optional
+  depends_on "postgresql" => :optional
 
   # Restore `.pc` files for framework-based build of Qt 5 on OS X. This
   # partially reverts <https://codereview.qt-project.org/#/c/140954/> merged
@@ -49,13 +44,16 @@ class Qt < Formula
     sha256 "48ff18be2f4050de7288bddbae7f47e949512ac4bcd126c2f504be2ac701158b"
   end
 
-  # Remove for >= 5.10
-  # Fix for upstream issue "macdeployqt does not work with Homebrew"
-  # See https://bugreports.qt.io/browse/QTBUG-56814
-  # Upstream commit from 23 Dec 2016 https://github.com/qt/qttools/commit/8f9b747f030bb41556831a23ec2a8e7e76fb7dc0#diff-2b6e250f93810fd9bcf9bbecf5d2be88
-  patch do
-    url "https://raw.githubusercontent.com/Homebrew/formula-patches/a627e0a/qt5/QTBUG-56814.patch"
-    sha256 "b18e4715fcef2992f051790d3784a54900508c93350c25b0f2228cb058567142"
+  # Remove for > 5.10.0
+  # Fix "error: 'loadFileURL:allowingReadAccessToURL:' is only available on
+  # macOS 10.11 or newer [-Werror,-Wunguarded-availability]"
+  # Reported 8 Dec 2017 https://bugreports.qt.io/browse/QTBUG-65075
+  # Equivalent to upstream fix from 8 Dec 2017 https://codereview.qt-project.org/#/c/213993/
+  if MacOS::Xcode.version >= "9.0"
+    patch do
+      url "https://raw.githubusercontent.com/Homebrew/formula-patches/9c97726e2b153099049326ade23fe24b52b778fe/qt/QTBUG-65075.diff"
+      sha256 "a51595868c6173ab53463107e0ee3355576002c32ab80897587c3607589cfd22"
+    end
   end
 
   def install
@@ -79,7 +77,7 @@ class Qt < Formula
 
     if build.with? "mysql"
       args << "-plugin-sql-mysql"
-      (buildpath/"brew_shim/mysql_config").write <<-EOS.undent
+      (buildpath/"brew_shim/mysql_config").write <<~EOS
         #!/bin/sh
         if [ x"$1" = x"--libs" ]; then
           mysql_config --libs | sed "s/-lssl -lcrypto//"
@@ -92,11 +90,7 @@ class Qt < Formula
     end
 
     args << "-plugin-sql-psql" if build.with? "postgresql"
-
-    if build.with? "qtwebkit"
-      (buildpath/"qtwebkit").install resource("qt-webkit")
-      inreplace ".gitmodules", /.*status = obsolete\n((\s*)project = WebKit\.pro)/, "\\1\n\\2initrepo = true"
-    end
+    args << "-proprietary-codecs" if build.with? "proprietary-codecs"
 
     system "./configure", *args
     system "make"
@@ -126,14 +120,14 @@ class Qt < Formula
     Pathname.glob("#{bin}/*.app") { |app| mv app, libexec }
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     We agreed to the Qt opensource license for you.
     If this is unacceptable you should uninstall.
     EOS
   end
 
   test do
-    (testpath/"hello.pro").write <<-EOS.undent
+    (testpath/"hello.pro").write <<~EOS
       QT       += core
       QT       -= gui
       TARGET = hello
@@ -143,7 +137,7 @@ class Qt < Formula
       SOURCES += main.cpp
     EOS
 
-    (testpath/"main.cpp").write <<-EOS.undent
+    (testpath/"main.cpp").write <<~EOS
       #include <QCoreApplication>
       #include <QDebug>
 
@@ -157,8 +151,8 @@ class Qt < Formula
 
     system bin/"qmake", testpath/"hello.pro"
     system "make"
-    assert File.exist?("hello")
-    assert File.exist?("main.o")
+    assert_predicate testpath/"hello", :exist?
+    assert_predicate testpath/"main.o", :exist?
     system "./hello"
   end
 end

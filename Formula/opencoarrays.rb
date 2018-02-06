@@ -1,37 +1,32 @@
 class Opencoarrays < Formula
   desc "Open-source coarray Fortran ABI, API, and compiler wrapper"
   homepage "http://opencoarrays.org"
-  url "https://github.com/sourceryinstitute/OpenCoarrays/releases/download/1.9.1/OpenCoarrays-1.9.1.tar.gz"
-  sha256 "068a1c91c419aeeb87158cdbdf946fc6780d2ae929c179aa1adfd91344b36e74"
-
+  url "https://github.com/sourceryinstitute/OpenCoarrays/releases/download/1.9.3/OpenCoarrays-1.9.3.tar.gz"
+  sha256 "58502575c74ca079611abab1cf184b26076cb19a478113ce04a0f2cf1a607b45"
+  revision 1
   head "https://github.com/sourceryinstitute/opencoarrays.git"
 
   bottle do
-    cellar :any_skip_relocation
-    sha256 "714231165b8ff2f8b3b1f81b50baf7b451ea7e9eacb5d28fd74c65dd42b0ca86" => :sierra
-    sha256 "0fed3f6f9dfb12490ae39a81436763b428f7a0fc4b3d1289f640699b04722324" => :el_capitan
-    sha256 "e8d6a00623b6016b1536140f1225d2791c9697c3cc054e5a12150f01fa59b2a8" => :yosemite
+    cellar :any
+    sha256 "8cb6fdf809777301249117c34513cc7c805c1b510bbf96168b81b8a24f906854" => :high_sierra
+    sha256 "33a10f9069f02fc0140288ca8879e84e31abc347275394db6a87735c9ad11613" => :sierra
+    sha256 "598e4640c510c188880db3d829834cbde0c37df5fee679e32e8e1549e84a471e" => :el_capitan
   end
 
-  option "without-test", "Skip build time tests (not recommended)"
-
-  depends_on "gcc"
-  depends_on :fortran
-  depends_on :mpi => :cc
   depends_on "cmake" => :build
+  depends_on "gcc"
+  depends_on "open-mpi"
 
   def install
     mkdir "build" do
       system "cmake", "..", *std_cmake_args
       system "make"
-      system "ctest", "--output-on-failure", "--schedule-random" if build.with? "test"
       system "make", "install"
     end
   end
 
   test do
-    ENV.fortran
-    (testpath/"tally.f90").write <<-EOS.undent
+    (testpath/"tally.f90").write <<~EOS
       program main
         use iso_c_binding, only : c_int
         use iso_fortran_env, only : error_unit

@@ -5,19 +5,19 @@ class Purescript < Formula
 
   desc "Strongly typed programming language that compiles to JavaScript"
   homepage "http://www.purescript.org"
-  url "https://github.com/purescript/purescript/archive/v0.11.6.tar.gz"
-  sha256 "8bd2e4f844666a553d93c2e55c72c6361fbc08c706157d9d975dc7c1b730304e"
-  revision 1
+  url "https://github.com/purescript/purescript/archive/v0.11.7.tar.gz"
+  sha256 "56b715acc4b92a5e389f7ec5244c9306769a515e1da2696d9c2c89e318adc9f9"
   head "https://github.com/purescript/purescript.git"
 
   bottle do
-    sha256 "bbf10500d5f5854eb88270adb100df01a42e906a8f01cde8a4b0da9231d6a679" => :sierra
-    sha256 "e56ea05f1c2756191a652ff41ea48723dac38aa96a929f5225d126f54da593d3" => :el_capitan
-    sha256 "c642ca03b506c0d38db02b713d5f50b2157e215dafc6e8beb24659e9b7f027ec" => :yosemite
+    cellar :any_skip_relocation
+    sha256 "b1e281b76d895e1791902765491a35ed2524cff90ecb99a72a190b1e0f387b77" => :high_sierra
+    sha256 "01c8ec5708e23689a7e47a2cea0a3130cdcc4cce3b621c3b4c6b3653a1481617" => :sierra
+    sha256 "ee0a11eb6bfd302a27653c074a0d237b5bdf570579394b94fe21ee0638a8e0ef" => :el_capitan
   end
 
-  depends_on "ghc@8.0" => :build
   depends_on "cabal-install" => :build
+  depends_on "ghc" => :build
 
   def install
     inreplace (buildpath/"scripts").children, /^purs /, "#{bin}/purs "
@@ -31,6 +31,7 @@ class Purescript < Formula
         system "cabal", "get", "purescript-#{version}"
         mv "purescript-#{version}/purescript.cabal", "."
       end
+
       install_cabal_package "-f release", :using => ["alex", "happy"]
     end
   end
@@ -38,13 +39,13 @@ class Purescript < Formula
   test do
     test_module_path = testpath/"Test.purs"
     test_target_path = testpath/"test-module.js"
-    test_module_path.write <<-EOS.undent
+    test_module_path.write <<~EOS
       module Test where
 
       main :: Int
       main = 1
     EOS
     system bin/"psc", test_module_path, "-o", test_target_path
-    assert File.exist?(test_target_path)
+    assert_predicate test_target_path, :exist?
   end
 end

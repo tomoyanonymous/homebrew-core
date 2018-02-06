@@ -1,16 +1,15 @@
 class Filebeat < Formula
   desc "File harvester to ship log files to Elasticsearch or Logstash"
   homepage "https://www.elastic.co/products/beats/filebeat"
-  url "https://github.com/elastic/beats/archive/v5.5.1.tar.gz"
-  sha256 "b6c85901b1feb0e184dd56d9012ccda10bf62566ddfbe3d9790c771b73db3a46"
-
+  url "https://github.com/elastic/beats/archive/v6.1.3.tar.gz"
+  sha256 "5a21ce1eca7eab2b8214b54a7f4690cd557cd05073119f861025330e1b4006a3"
   head "https://github.com/elastic/beats.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "1f93032a00185167df3d27c363fd7fd11558a56c922b1bd76e174044984af3e4" => :sierra
-    sha256 "84b48aef5745312f307bf620429fc27277c0336ca50b3006b01372ac541cce5c" => :el_capitan
-    sha256 "646d1a08e85fe724f82fc7bcf5d536dd08c8d66fa71a954ed71519effedda144" => :yosemite
+    sha256 "d17ccdecd89ad539a0ea9fbd89d311b64bf9d0cef35f5820d2785bc580832f9b" => :high_sierra
+    sha256 "2df8d028c9e8a245a797e15f3fbcee4383428f6ae1c6e1107ff6e2db062863af" => :sierra
+    sha256 "9e7cad8c5b2d492b5abb4d6071717acda839a833aa0b6bda3accc43bc8bc55aa" => :el_capitan
   end
 
   depends_on "go" => :build
@@ -23,14 +22,15 @@ class Filebeat < Formula
 
     cd gopath/"src/github.com/elastic/beats/filebeat" do
       system "make"
+      system "make", "modules"
       libexec.install "filebeat"
-
-      (etc/"filebeat").install("filebeat.yml", "filebeat.template.json", "filebeat.template-es2x.json")
+      (prefix/"module").install Dir["_meta/module.generated/*"]
+      (etc/"filebeat").install Dir["filebeat.*"]
     end
 
     prefix.install_metafiles gopath/"src/github.com/elastic/beats"
 
-    (bin/"filebeat").write <<-EOS.undent
+    (bin/"filebeat").write <<~EOS
       #!/bin/sh
       exec #{libexec}/filebeat -path.config #{etc}/filebeat -path.home #{prefix} -path.logs #{var}/log/filebeat -path.data #{var}/filebeat $@
     EOS
@@ -38,7 +38,7 @@ class Filebeat < Formula
 
   plist_options :manual => "filebeat"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN"
     "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -59,14 +59,13 @@ class Filebeat < Formula
     log_file = testpath/"test.log"
     touch log_file
 
-    (testpath/"filebeat.yml").write <<-EOS.undent
+    (testpath/"filebeat.yml").write <<~EOS
       filebeat:
         prospectors:
           -
             paths:
               - #{log_file}
             scan_frequency: 0.1s
-      filebeat.idle_timeout: 0.1s
       output:
         file:
           path: #{testpath}
@@ -81,7 +80,7 @@ class Filebeat < Formula
       log_file.append_lines "foo bar baz"
       sleep 5
 
-      assert File.exist? testpath/"filebeat"
+      assert_predicate testpath/"filebeat", :exist?
     ensure
       Process.kill("TERM", filebeat_pid)
     end

@@ -3,34 +3,44 @@ class Awscli < Formula
 
   desc "Official Amazon AWS command-line interface"
   homepage "https://aws.amazon.com/cli/"
-  url "https://github.com/aws/aws-cli/archive/1.11.131.tar.gz"
-  sha256 "e2213f41dce6c7a670a3928f4a0d3bed98ac36066904871bb85bfe23ad7b957b"
+  # awscli should only be updated every 10 releases on multiples of 10
+  url "https://github.com/aws/aws-cli/archive/1.14.30.tar.gz"
+  sha256 "46452da43bc660b3069261a7027b22643effd5b9f9b7b34cc2d0613154049856"
   head "https://github.com/aws/aws-cli.git", :branch => "develop"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "a6b571483f435c5a39d596348c35d80a063ee551db9c23ce704e88cab8ce4d3b" => :sierra
-    sha256 "b137a708ffc0c9025c5252e6fb482f091fa954c20044cbe22910ff6226d86af1" => :el_capitan
-    sha256 "a0c3a43fdcacc007b4637961687880b56330052185fbdf5927026450d1eda01b" => :yosemite
+    sha256 "8f5dad3048d3e85148021ce7737a4e980b858be9c41c39c28f6a47a8d5030d8a" => :high_sierra
+    sha256 "28fb018057fbf24a1eb699e37798331443ac71047a7abf7fe95f16114a5abc26" => :sierra
+    sha256 "f5f5aea649ec6e1fa3203f216195b7b1bc6d2e7d4d0e9a17e16b229dad02d51b" => :el_capitan
   end
 
-  # Use :python on Lion to avoid urllib3 warning
-  # https://github.com/Homebrew/homebrew/pull/37240
-  depends_on :python if MacOS.version <= :lion
+  # Some AWS APIs require TLS1.2, which system Python doesn't have before High
+  # Sierra
+  depends_on "python3"
 
   def install
-    venv = virtualenv_create(libexec)
+    venv = virtualenv_create(libexec, "python3")
     system libexec/"bin/pip", "install", "-v", "--no-binary", ":all:",
                               "--ignore-installed", buildpath
     system libexec/"bin/pip", "uninstall", "-y", "awscli"
     venv.pip_install_and_link buildpath
     pkgshare.install "awscli/examples"
 
+    rm Dir["#{bin}/{aws.cmd,aws_bash_completer,aws_zsh_completer.sh}"]
     bash_completion.install "bin/aws_bash_completer"
-    zsh_completion.install "bin/aws_zsh_completer.sh" => "_aws"
+    zsh_completion.install "bin/aws_zsh_completer.sh"
+    (zsh_completion/"_aws").write <<~EOS
+      #compdef aws
+      _aws () {
+        local e
+        e=$(dirname ${funcsourcetrace[1]%:*})/aws_zsh_completer.sh
+        if [[ -f $e ]]; then source $e; fi
+      }
+    EOS
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     The "examples" directory has been installed to:
       #{HOMEBREW_PREFIX}/share/awscli/examples
     EOS

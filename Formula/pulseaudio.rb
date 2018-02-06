@@ -1,13 +1,13 @@
 class Pulseaudio < Formula
   desc "Sound system for POSIX OSes"
   homepage "https://wiki.freedesktop.org/www/Software/PulseAudio/"
-  url "https://www.freedesktop.org/software/pulseaudio/releases/pulseaudio-10.99.1.tar.xz"
-  sha256 "c9791844569d8d0adb468c183d0d9fb6ac12b9db34a4a078a7773c8bac993f32"
+  url "https://www.freedesktop.org/software/pulseaudio/releases/pulseaudio-11.1.tar.xz"
+  sha256 "f2521c525a77166189e3cb9169f75c2ee2b82fa3fcf9476024fbc2c3a6c9cd9e"
 
   bottle do
-    sha256 "5f1dbafa53bd5cc117e08d8c1c6207fcbb42865e3e8d202742cb9dc03971c6cb" => :sierra
-    sha256 "4a84b0cfa38aa689c2e542e235a64d15cd8d5dd447eb4f7b03a6a11985e0d3dc" => :el_capitan
-    sha256 "fc358d4cfc3b4d3a0e7822d09909cbe133842aced9e8eb10c64133f52d7f9770" => :yosemite
+    sha256 "4c978ad02a720678b6f4e5255d540cb859ba9d9b6ec22dcd9251f9d64df366f4" => :high_sierra
+    sha256 "65f121b3c8a4d159a9acd803adfb3eb4b2fed82ba5b21d3867fe9dfb08941a5b" => :sierra
+    sha256 "0ba8b12b715a1259e5fade3ea45238994f0e46f00d8f687e043f47c3474f643c" => :el_capitan
   end
 
   head do
@@ -71,7 +71,7 @@ class Pulseaudio < Formula
 
   plist_options :manual => "pulseaudio"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">

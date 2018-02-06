@@ -6,6 +6,7 @@ class BoostPythonAT159 < Formula
 
   bottle do
     cellar :any
+    sha256 "ba33ce18f24b422ec0440400e8418456b6b1de04c111f46d55cfbb24acc15b72" => :high_sierra
     sha256 "72e56d744c5369bcb8de95eee92182ca9cfe8e580d596473069ca69c0b23b3d6" => :sierra
     sha256 "1adf1e1e570236fe2f67367d2ac17e83ade9d1b25e5e356bff23ce52d0117c8a" => :el_capitan
     sha256 "ad13c2d6ceaec797943327a08babffc6d284fe89ec7f60170a362fa134e1429b" => :yosemite
@@ -16,7 +17,7 @@ class BoostPythonAT159 < Formula
   option :cxx11
 
   option "without-python", "Build without python 2 support"
-  depends_on :python3 => :optional
+  depends_on "python3" => :optional
 
   if build.cxx11?
     depends_on "boost@1.59" => "c++11"
@@ -63,7 +64,7 @@ class BoostPythonAT159 < Formula
       open("user-config.jam", "w") do |file|
         # Force boost to compile with the desired compiler
         file.write "using darwin : : #{ENV.cxx} ;\n"
-        file.write <<-EOS.undent
+        file.write <<~EOS
           using python : #{version}
                        : #{python}
                        : #{py_include}
@@ -84,7 +85,7 @@ class BoostPythonAT159 < Formula
   end
 
   test do
-    (testpath/"hello.cpp").write <<-EOS.undent
+    (testpath/"hello.cpp").write <<~EOS
       #include <boost/python.hpp>
       char const* greet() {
         return "Hello, world!";

@@ -8,6 +8,7 @@ class Ffmpegthumbnailer < Formula
 
   bottle do
     cellar :any
+    sha256 "09715472732033ae65a2d26a3526bc5de60fcf44ad843349a9a57ba885845f86" => :high_sierra
     sha256 "b0085442d2ba5a93c44b51870da1e5719459712366914883303bc4de2c601e3f" => :sierra
     sha256 "84ad2c8ac398ced2d71cc0e2963e2eaf70c842ff22b4207dd4546ba3f2ff03b2" => :el_capitan
     sha256 "be4a2d019541ca0a1d61b2eec0ed98b389c17a1d990c76d882c51590f8b32e10" => :yosemite
@@ -36,8 +37,8 @@ class Ffmpegthumbnailer < Formula
     png = test_fixtures("test.png")
     system f.to_s, "-loop", "1", "-i", png.to_s, "-c:v", "libx264", "-t", "30",
                    "-pix_fmt", "yuv420p", "v.mp4"
-    assert File.exist?("v.mp4"), "Failed to generate source video!"
+    assert_predicate testpath/"v.mp4", :exist?, "Failed to generate source video!"
     system "#{bin}/ffmpegthumbnailer", "-i", "v.mp4", "-o", "out.jpg"
-    assert File.exist?("out.jpg"), "Failed to create thumbnail!"
+    assert_predicate testpath/"out.jpg", :exist?, "Failed to create thumbnail!"
   end
 end

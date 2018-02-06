@@ -3,19 +3,19 @@ class Ipython < Formula
 
   desc "Interactive computing in Python"
   homepage "https://ipython.org/"
-  url "https://files.pythonhosted.org/packages/79/63/b671fc2bf0051739e87a7478a207bbeb45cfae3c328d38ccdd063d9e0074/ipython-6.1.0.tar.gz"
-  sha256 "5c53e8ee4d4bec27879982b9f3b4aa2d6e3cfd7b26782d250fa117f85bb29814"
+  url "https://files.pythonhosted.org/packages/fa/50/974211502bd72873728d44c3013fe79875c819c8fb69f778bcfd67bc7d38/ipython-6.2.1.tar.gz"
+  sha256 "51c158a6c8b899898d1c91c6b51a34110196815cc905f9be0fa5878e19355608"
   revision 1
   head "https://github.com/ipython/ipython.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "50194a18c53d06eacfc65153bccbc1f2f5ebc3e0ca061eaf2c6ff16426053c19" => :sierra
-    sha256 "c3629a45b5b00279d748f91f27fd83ca95d6c12f9ac2c5b5e05854287f2ca0df" => :el_capitan
-    sha256 "5fdc414574ed313a8bd9007717896cd20382169b3ba1293f6eae82d73c23d639" => :yosemite
+    sha256 "b8b1f12670bb30922c6a4c77be39938622531c234c1ea7b34c55373e8254d421" => :high_sierra
+    sha256 "8c1d0ee888aaea1af268687530c1167b666c3ff6067fea4668091a739a404dcf" => :sierra
+    sha256 "e5e5cd6815eba1e364e9d2d15857b2ce027f8bb7634a139c56182e61b99de12f" => :el_capitan
   end
 
-  depends_on :python3
+  depends_on "python3"
 
   resource "appnope" do
     url "https://files.pythonhosted.org/packages/26/34/0f3a5efac31f27fabce64645f8c609de9d925fe2915304d1a40f544cff0e/appnope-0.1.0.tar.gz"
@@ -23,8 +23,8 @@ class Ipython < Formula
   end
 
   resource "decorator" do
-    url "https://files.pythonhosted.org/packages/cc/ac/5a16f1fc0506ff72fcc8fd4e858e3a1c231f224ab79bb7c4c9b2094cc570/decorator-4.0.11.tar.gz"
-    sha256 "953d6bf082b100f43229cf547f4f97f97e970f5ad645ee7601d55ff87afdfe76"
+    url "https://files.pythonhosted.org/packages/bb/e0/f6e41e9091e130bf16d4437dabbac3993908e4d6485ecbc985ef1352db94/decorator-4.1.2.tar.gz"
+    sha256 "7cb64d38cb8002971710c8899fbdfb859a23a364b7c99dab19d1f719c2ba16b5"
   end
 
   resource "ipykernel" do
@@ -38,8 +38,8 @@ class Ipython < Formula
   end
 
   resource "jedi" do
-    url "https://files.pythonhosted.org/packages/80/b9/4e9b0b999deeec8a91cb84e567380853a842e6c387c9d39b8fc9a49953fa/jedi-0.10.2.tar.gz"
-    sha256 "7abb618cac6470ebbd142e59c23daec5e6e063bfcecc8a43a037d2ab57276f4e"
+    url "https://files.pythonhosted.org/packages/08/8d/34b133dfa210b55e7efaa8b09c736a8f4383fcda0b6487fc43a1db3c7ee7/jedi-0.11.0.tar.gz"
+    sha256 "f6d5973573e76b1fd2ea75f6dcd6445d02d41ff3af5fc61b275b4e323d1dd396"
   end
 
   resource "jupyter_client" do
@@ -50,6 +50,11 @@ class Ipython < Formula
   resource "jupyter_core" do
     url "https://files.pythonhosted.org/packages/2f/39/5138f975100ce14d150938df48a83cd852a3fd8e24b1244f4113848e69e2/jupyter_core-4.3.0.tar.gz"
     sha256 "a96b129e1641425bf057c3d46f4f44adce747a7d60107e8ad771045c36514d40"
+  end
+
+  resource "parso" do
+    url "https://files.pythonhosted.org/packages/32/f4/9f1ee3fc5f7a23aee6454feeadef423ef1aed405208135e81620b4e3ba77/parso-0.1.0.tar.gz"
+    sha256 "c5279916bb417aa2bf634648ff895cf35dce371d7319744884827bfad06f8d7b"
   end
 
   resource "pexpect" do
@@ -63,8 +68,8 @@ class Ipython < Formula
   end
 
   resource "prompt_toolkit" do
-    url "https://files.pythonhosted.org/packages/55/56/8c39509b614bda53e638b7500f12577d663ac1b868aef53426fc6a26c3f5/prompt_toolkit-1.0.14.tar.gz"
-    sha256 "cc66413b1b4b17021675d9f2d15d57e640b06ddfd99bb724c73484126d22622f"
+    url "https://files.pythonhosted.org/packages/8a/ad/cf6b128866e78ad6d7f1dc5b7f99885fb813393d9860778b2984582e81b5/prompt_toolkit-1.0.15.tar.gz"
+    sha256 "858588f1983ca497f1cf4ffde01d978a3ea02b01c8a26a8bbc5cd2e66d816917"
   end
 
   resource "ptyprocess" do
@@ -78,8 +83,8 @@ class Ipython < Formula
   end
 
   resource "python-dateutil" do
-    url "https://files.pythonhosted.org/packages/51/fc/39a3fbde6864942e8bb24c93663734b74e281b984d1b8c4f95d64b0c21f6/python-dateutil-2.6.0.tar.gz"
-    sha256 "62a2f8df3d66f878373fd0072eacf4ee52194ba302e00082828e0d263b0418d2"
+    url "https://files.pythonhosted.org/packages/54/bb/f1db86504f7a49e1d9b9301531181b00a1c7325dc85a29160ee3eaa73a54/python-dateutil-2.6.1.tar.gz"
+    sha256 "891c38b2a02f5bb1be3e4793866c8df49c7d19baabf9c1bad62547e0b4866aca"
   end
 
   resource "pyzmq" do
@@ -93,13 +98,13 @@ class Ipython < Formula
   end
 
   resource "six" do
-    url "https://files.pythonhosted.org/packages/b3/b2/238e2590826bfdd113244a40d9d3eb26918bd798fc187e2360a8367068db/six-1.10.0.tar.gz"
-    sha256 "105f8d68616f8248e24bf0e9372ef04d3cc10104f1980f54d57b2ce73a5ad56a"
+    url "https://files.pythonhosted.org/packages/16/d8/bc6316cf98419719bd59c91742194c111b6f2e85abac88e496adefaf7afe/six-1.11.0.tar.gz"
+    sha256 "70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9"
   end
 
   resource "tornado" do
-    url "https://files.pythonhosted.org/packages/df/42/a180ee540e12e2ec1007ac82a42b09dd92e5461e09c98bf465e98646d187/tornado-4.5.1.tar.gz"
-    sha256 "db0904a28253cfe53e7dedc765c71596f3c53bb8a866ae50123320ec1a7b73fd"
+    url "https://files.pythonhosted.org/packages/fa/14/52e2072197dd0e63589e875ebf5984c91a027121262aa08f71a49b958359/tornado-4.5.2.tar.gz"
+    sha256 "1fb8e494cd46c674d86fac5885a3ff87b0e283937a47d74eb3c02a48c9e89ad0"
   end
 
   resource "traitlets" do
@@ -139,8 +144,10 @@ class Ipython < Formula
     end
 
     # install kernel
-    system libexec/"bin/ipython", "kernel", "install", "--prefix", share
-    inreplace share/"share/jupyter/kernels/python3/kernel.json", "]", <<-EOS.undent
+    kernel_dir = Dir.mktmpdir
+    system libexec/"bin/ipython", "kernel", "install", "--prefix", kernel_dir
+    (share/"jupyter/kernels/python3").install Dir["#{kernel_dir}/share/jupyter/kernels/python3/*"]
+    inreplace share/"jupyter/kernels/python3/kernel.json", "]", <<~EOS
       ],
       "env": {
         "PYTHONPATH": "#{ENV["PYTHONPATH"]}"
@@ -149,7 +156,8 @@ class Ipython < Formula
   end
 
   def post_install
-    (etc/"jupyter/kernels/python3").install Dir[share/"share/jupyter/kernels/python3/*"]
+    rm_rf etc/"jupyter/kernels/python3"
+    (etc/"jupyter/kernels/python3").install Dir[share/"jupyter/kernels/python3/*"]
   end
 
   test do

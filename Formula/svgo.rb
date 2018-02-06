@@ -3,14 +3,14 @@ require "language/node"
 class Svgo < Formula
   desc "Nodejs-based tool for optimizing SVG vector graphics files"
   homepage "https://github.com/svg/svgo"
-  url "https://github.com/svg/svgo/archive/v0.7.2.tar.gz"
-  sha256 "93b36477366e6b48b9bc3f9086232ae7fc16b87fa36acc1d524720ea58123fcf"
+  url "https://github.com/svg/svgo/archive/v1.0.4.tar.gz"
+  sha256 "e40a753734f45d6e1a35617c4a8c1e945f7cdb3e776b244131d80f5ba21ec0fe"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "3a6ed7e647e164bf54be07b8ec30826fb4cad3893f98526113704974cc3065a6" => :sierra
-    sha256 "cab94f5d68e5b7077d416faf40a1cfb331bf9e2fea214ba6332b962b38534f17" => :el_capitan
-    sha256 "507ad3f9c0d5ab79d5a1adb11161d2e7f5aa05f2c9a170bab72720ef8bf94759" => :yosemite
+    sha256 "0462b5807fc9189590bd276a34e9440b1729b0fbd4d41db63d05560289e0d349" => :high_sierra
+    sha256 "dc850a128d4b7a2cfefe91b23a74dc3f392e4fe1000fea1779c285cc4cda4351" => :sierra
+    sha256 "11596ad45134fbd785785990392a36d90cc33124bc060c594ebd38fad484a5a1" => :el_capitan
   end
 
   depends_on "node"
@@ -22,7 +22,7 @@ class Svgo < Formula
 
   test do
     cp test_fixtures("test.svg"), testpath
-    system bin/"svgo", "test.svg", "test.min.svg"
+    system bin/"svgo", "test.svg", "-o", "test.min.svg"
     assert_match /^<svg /, (testpath/"test.min.svg").read
   end
 end

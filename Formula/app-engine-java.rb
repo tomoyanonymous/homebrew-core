@@ -1,17 +1,22 @@
 class AppEngineJava < Formula
   desc "Google App Engine for Java"
   homepage "https://cloud.google.com/appengine/docs/java/"
-  url "https://storage.googleapis.com/appengine-sdks/featured/appengine-java-sdk-1.9.54.zip"
-  sha256 "79311d74886a555e135afb47395197ce5c69feb5e5557707dfd7bcddbad45e89"
+  url "https://storage.googleapis.com/appengine-sdks/featured/appengine-java-sdk-1.9.61.zip"
+  sha256 "b4af16664d78586ca0008e08f2fd7db8e2f58af6d0c8dd908f0b8e0f9eb1009b"
 
   bottle :unneeded
 
-  depends_on :java => "1.7+"
+  depends_on :java => "1.8"
 
   def install
     rm Dir["bin/*.cmd"]
     libexec.install Dir["*"]
-    bin.write_exec_script %w[appcfg.sh dev_appserver.sh endpoints.sh google_sql.sh].map { |fn| libexec/"bin/#{fn}" }
+
+    %w[appcfg.sh dev_appserver.sh endpoints.sh run_java.sh].each do |f|
+      bin.install libexec/"bin/#{f}"
+    end
+
+    bin.env_script_all_files(libexec/"bin", Language::Java.java_home_env("1.8"))
   end
 
   test do

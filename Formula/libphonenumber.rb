@@ -1,14 +1,14 @@
 class Libphonenumber < Formula
   desc "C++ Phone Number library by Google"
   homepage "https://github.com/googlei18n/libphonenumber"
-  url "https://github.com/googlei18n/libphonenumber/archive/v8.7.1.tar.gz"
-  sha256 "8cca5c2375a91b64178d07008f02e6fc54e2bb7b24fbedc4fc6df1769c3cee4f"
+  url "https://github.com/googlei18n/libphonenumber/archive/v8.8.10.tar.gz"
+  sha256 "c485295bacd987ddf26c0a4de68988ba0d30843c8b975e2eaa6646057c599875"
 
   bottle do
     cellar :any
-    sha256 "b1bd69a99d13c162e9bec017162220a8a54f30c55d138874c9ad04a42f8f1d69" => :sierra
-    sha256 "d9f54864769b875fae60f503f62c05cfac224f45150e34992a585ab7551f3382" => :el_capitan
-    sha256 "b8a390d5dd279812c05bd5c1c83225846cd1a70d63b1c2b6c24f09934823278e" => :yosemite
+    sha256 "1dfd83226ab0eed49b38ac52bc8465706c88a02ade98d9cb50e4458aad1e7acc" => :high_sierra
+    sha256 "5bf70fd20a6584c1f475000bffb7cba7a76d8c43ed86f7a642e5aa27c29d3dd2" => :sierra
+    sha256 "fa3e59d866162ecc13dc4ed17ac1bea37df9123543e26dacd91276751c9ed429" => :el_capitan
   end
 
   depends_on "cmake" => :build
@@ -23,7 +23,17 @@ class Libphonenumber < Formula
     sha256 "58a6f4277ca2bc8565222b3bbd58a177609e9c488e8a72649359ba51450db7d8"
   end
 
+  needs :cxx11
+
+  # Upstream PR from 2 Dec 2017 "Only use lib64 directory on Linux"
+  # See https://github.com/googlei18n/libphonenumber/issues/2044
+  patch do
+    url "https://github.com/googlei18n/libphonenumber/pull/2045.patch?full_index=1"
+    sha256 "4d47d0f92c994ca74e3bbbf020064b2d249d0b01f93bf6f5d82736eb9ed3aa43"
+  end
+
   def install
+    ENV.cxx11
     (buildpath/"gtest").install resource("gtest")
     system "cmake", "cpp", "-DGTEST_SOURCE_DIR=gtest/googletest",
                            "-DGTEST_INCLUDE_DIR=gtest/googletest/include",
@@ -32,7 +42,7 @@ class Libphonenumber < Formula
   end
 
   test do
-    (testpath/"test.cpp").write <<-EOS.undent
+    (testpath/"test.cpp").write <<~EOS
       #include <phonenumbers/phonenumberutil.h>
       #include <phonenumbers/phonenumber.pb.h>
       #include <iostream>

@@ -1,42 +1,41 @@
 class Qbs < Formula
-  desc "Build tool for developing projects across multiple platforms."
+  desc "Build tool for developing projects across multiple platforms"
   homepage "https://wiki.qt.io/Qbs"
-  url "https://download.qt.io/official_releases/qbs/1.8.1/qbs-src-1.8.1.tar.gz"
-  sha256 "3e94460ecbd1ca43974d62a0ecf691d48866049787c465944866baf52d5b16fc"
+  url "https://download.qt.io/official_releases/qbs/1.10.0/qbs-src-1.10.0.tar.gz"
+  sha256 "38afae3b697b96e07d53cfc64dd03533fddec052ecdc08d8e7779440c36c3ecd"
   head "https://code.qt.io/qt-labs/qbs.git"
 
   bottle do
     cellar :any
-    sha256 "717dc0193d30ad8e28f33b100a7753ce5a0266b69e168c6a114ff6b84ad5ec68" => :sierra
-    sha256 "2aaa459c7ad7d1e6c39d14649d4c05b766374da50e2ac6b3e1fd61b7b47b1e69" => :el_capitan
-    sha256 "6c87156f701bc16793aeb468942419a03077ad3628107d2e0ed3c144b6d04098" => :yosemite
+    sha256 "a9002e5f6311a06d5a849dbef89e00daa021be7f1a0fa56413aad6bba1b407ba" => :high_sierra
+    sha256 "878b2a80fb3f995508808f65b9486d59e39e56331d53c1277cde4c0fbc311f99" => :sierra
+    sha256 "d2a4befccd63a1ee3b7f3b7409fa679adde313f0eaa7e1fde3e0dc032576c668" => :el_capitan
   end
 
   depends_on "qt"
 
   def install
-    system "qmake", "qbs.pro", "-r", "QBS_INSTALL_PREFIX=/"
-    system "make", "install", "INSTALL_ROOT=#{prefix}"
+    system "qmake", "qbs.pro", "-r", "QBS_INSTALL_PREFIX=#{prefix}", "CONFIG+=qbs_disable_rpath"
+    system "make", "install", "INSTALL_ROOT=/"
   end
 
   test do
-    (testpath/"test.c").write <<-EOS.undent
+    (testpath/"test.c").write <<~EOS
       int main() {
         return 0;
       }
     EOS
 
-    (testpath/"test.qbp").write <<-EOS.undent
+    (testpath/"test.qbs").write <<~EOS
       import qbs
 
       CppApplication {
         name: "test"
-        files: "test.c"
+        files: ["test.c"]
         consoleApplication: true
       }
     EOS
 
-    system "#{bin}/qbs", "setup-toolchains", "--detect", "--settings-dir", testpath
-    system "#{bin}/qbs", "run", "--settings-dir", testpath, "-f", "test.qbp", "profile:clang"
+    system "#{bin}/qbs", "run", "-f", "test.qbs"
   end
 end

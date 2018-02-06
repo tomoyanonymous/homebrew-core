@@ -1,25 +1,26 @@
 class Direnv < Formula
   desc "Load/unload environment variables based on $PWD"
   homepage "https://direnv.net/"
-  url "https://github.com/direnv/direnv/archive/v2.12.2.tar.gz"
-  sha256 "108adad7859935404c9fbb66398bee768a5eb9bb95bfe4048b5e6cb03f7b790e"
-
+  url "https://github.com/direnv/direnv/archive/v2.14.0.tar.gz"
+  sha256 "917838827cb753153b91cb2d10c0d7c20cbaa85aa2dde520ee23653a74268ccd"
   head "https://github.com/direnv/direnv.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "714ceeb5b1c52ef320a6f61c169f8aa9daa92f032cd8bfa89c0fb061983241e5" => :sierra
-    sha256 "71c0270a2794beb8e2069b6614dc350a1a0e3169d60cecff74fd2967c2df82e9" => :el_capitan
-    sha256 "c6088a39b15de6e93a16202ae141651f245643572c6bd010d4dfe177853234a1" => :yosemite
+    sha256 "1dd24f6c9cb5082091f62a9a98aef11305e7a5f5d545d8368de421f0179318d4" => :high_sierra
+    sha256 "642d28694bda5a4471919a5b73709eb8da6655e188f58640b13d95da3aecb973" => :sierra
+    sha256 "257cba635f99eb52ba20be9558fe20fd67040cef64b758106a48ea241d500b72" => :el_capitan
   end
 
   depends_on "go" => :build
 
   def install
     ENV["GOPATH"] = buildpath
-    (buildpath/"src/github.com/direnv").mkpath
-    ln_s buildpath, buildpath/"src/github.com/direnv/direnv"
-    system "make", "install", "DESTDIR=#{prefix}"
+    (buildpath/"src/github.com/direnv/direnv").install buildpath.children
+    cd "src/github.com/direnv/direnv" do
+      system "make", "install", "DESTDIR=#{prefix}"
+      prefix.install_metafiles
+    end
   end
 
   test do

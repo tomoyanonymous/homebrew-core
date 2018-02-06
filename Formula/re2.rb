@@ -1,16 +1,16 @@
 class Re2 < Formula
   desc "Alternative to backtracking PCRE-style regular expression engines"
   homepage "https://github.com/google/re2"
-  url "https://github.com/google/re2/archive/2017-08-01.tar.gz"
-  version "20170801"
-  sha256 "938723dc197125392698c5fcf41acb74877866ff140b81fd50b7314bf26f1636"
+  url "https://github.com/google/re2/archive/2018-02-01.tar.gz"
+  version "20180201"
+  sha256 "c8ab833081c9766ef4e4d1e6397044ff3b20e42be109084b50d49c161f876184"
   head "https://github.com/google/re2.git"
 
   bottle do
     cellar :any
-    sha256 "a5e367b48b0e39f779af46261614851a5d64e799fbd7e98a23ea6a3a1ee1c1eb" => :sierra
-    sha256 "acfd83f1fde8c71d9eea5b5b3fe04faa00541c58f3331aa8841680749485c9c3" => :el_capitan
-    sha256 "7658df57f4ee5ab781b017ff3df629c3fad1dda84527376042299923c0b481b6" => :yosemite
+    sha256 "3aaaba4cf90743849818298a2dd831d2a64b350d9a31bcb888c17d071b30db6b" => :high_sierra
+    sha256 "d1cb01d0c5a8e53a9cd2ce8595af2b6ee9528f7f305c91e069153a020d44cc86" => :sierra
+    sha256 "06cc788ba640a13a851b20505f4dd53bf44768683f64c1465ff99092a2213bef" => :el_capitan
   end
 
   needs :cxx11
@@ -25,7 +25,7 @@ class Re2 < Formula
   end
 
   test do
-    (testpath/"test.cpp").write <<-EOS.undent
+    (testpath/"test.cpp").write <<~EOS
       #include <re2/re2.h>
       #include <assert.h>
       int main() {

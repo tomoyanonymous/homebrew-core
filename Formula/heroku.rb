@@ -3,23 +3,24 @@ require "language/node"
 class Heroku < Formula
   desc "Command-line client for the cloud PaaS"
   homepage "https://cli.heroku.com"
-  url "https://registry.npmjs.org/heroku-cli/-/heroku-cli-6.13.12.tgz"
-  sha256 "6007e4e34956ed441603d86f3005954be48331f73a2f42364ea4f1b8f46ae7cd"
+  url "https://registry.npmjs.org/heroku-cli/-/heroku-cli-6.15.22.tgz"
+  sha256 "33f6bfb07429cfeac0ad0f19d2575a31223bcf16e47002dc5ed0aa7012e2d250"
   head "https://github.com/heroku/cli.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "8ee757298228a77dc17342418f46ca2c80eb11ae7c578fbc65d6497c6bfa513f" => :sierra
-    sha256 "f6eb9fb97ad245e639e619ac0c39c023f54d1a8faae0269f782fb4c9a1afaa3b" => :el_capitan
-    sha256 "8b0f8409fa3bf56a25e891b90c6b444a745b90578cfd39ff7b670fe13872291e" => :yosemite
+    sha256 "a51da3b659a170486fcc70809a341003d915fcc1d4d0fa3173c77aa3a07889c9" => :high_sierra
+    sha256 "e5b68548d547c7c4199813121c6d34a3b384f3e1f078102b95ce42faea223e95" => :sierra
+    sha256 "37a8733acd4d08cedefecc7279f4acfde1ac3e20e443a05f57d75c40cd34909a" => :el_capitan
   end
 
   depends_on "node"
 
   def install
-    inreplace "bin/run.js", "npm update -g heroku-cli", "brew upgrade heroku"
-    inreplace "bin/run", "node \"$DIR/run.js\"",
-                         "#{Formula["node"].opt_bin}/node \"$DIR/run.js\""
+    inreplace "bin/run" do |s|
+      s.gsub! "npm update -g heroku-cli", "brew upgrade heroku"
+      s.gsub! "#!/usr/bin/env node", "#!#{Formula["node"].opt_bin}/node"
+    end
     system "npm", "install", *Language::Node.std_npm_install_args(libexec)
     bin.install_symlink Dir["#{libexec}/bin/*"]
   end

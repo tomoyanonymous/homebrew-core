@@ -1,18 +1,18 @@
 class Swiftformat < Formula
   desc "Formatting tool for reformatting Swift code"
   homepage "https://github.com/nicklockwood/SwiftFormat"
-  url "https://github.com/nicklockwood/SwiftFormat/archive/0.29.3.tar.gz"
-  sha256 "0849f570f86778291e293998bbf9b4da49ed59ec05669055e63d48538b1a9b4e"
+  url "https://github.com/nicklockwood/SwiftFormat/archive/0.33.0.tar.gz"
+  sha256 "3990dc3f3b9535be3b586aa2a42e0f3836823e8b34740ffc0625c40d995e2f56"
 
   head "https://github.com/nicklockwood/SwiftFormat.git", :shallow => false
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "5e001bf2386059f96699a38a73ae09c3b6b511b89439de419e1539b7fa4de3d5" => :sierra
-    sha256 "e110f0f6e3fdae930031ceba1419136a1459963246914dd75575acf17bea2d08" => :el_capitan
+    sha256 "3ec6a15b9924eb2b5b9aa21a2ffca6f386e4f3c819265ea47ce2d3fca98fb85d" => :high_sierra
+    sha256 "564741c912ec006bd814743f39436df1c6b6910300fbd850e36e41aecfa4d6e6" => :sierra
   end
 
-  depends_on :xcode => ["8.0", :build]
+  depends_on :xcode => ["9.0", :build]
 
   def install
     xcodebuild "-project",
@@ -24,7 +24,7 @@ class Swiftformat < Formula
   end
 
   test do
-    (testpath/"potato.swift").write <<-EOS.undent
+    (testpath/"potato.swift").write <<~EOS
       struct Potato {
         let baked: Bool
       }

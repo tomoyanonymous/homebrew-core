@@ -1,18 +1,18 @@
 class PerconaToolkit < Formula
   desc "Percona Toolkit for MySQL"
   homepage "https://www.percona.com/software/percona-toolkit/"
-  url "https://www.percona.com/downloads/percona-toolkit/3.0.4/source/tarball/percona-toolkit-3.0.4.tar.gz"
-  sha256 "fa3e34bdcb272edf95a5e9e4a14c9d111e35427eca3232a37fe7c1632ed3b43f"
+  url "https://www.percona.com/downloads/percona-toolkit/3.0.6/source/tarball/percona-toolkit-3.0.6.tar.gz"
+  sha256 "02a978dd61fe282cae42afb92ed7da585d6e5c9b6f0c1ca57272b378a004f365"
   head "lp:percona-toolkit", :using => :bzr
 
   bottle do
     cellar :any
-    sha256 "a9841215e8be6769718ba5cc9a7d64f7acb473f4a29309236bb8e2082bc1f634" => :sierra
-    sha256 "ab892ddb81ae7ef729ab6a9d877d0902aebedebfcafb254ffc66a25780de085c" => :el_capitan
-    sha256 "cd53523240673a8db3180c45907aaae5d81067fb59f3f66fe35030671a942223" => :yosemite
+    sha256 "f4d7b44859ef9add3095b14a541007747c477001b73a5ae4d8d5436aeae0877e" => :high_sierra
+    sha256 "9e3601d932eb9a012c648bed73a9d01e886f96d709e51993fe2b188aa0e6ebf2" => :sierra
+    sha256 "f5199f52b1428b8a7f1086d9e7ba8f6a1279817997dcc694557c31f9888dce52" => :el_capitan
   end
 
-  depends_on :mysql
+  depends_on "mysql"
   depends_on "openssl"
 
   resource "DBD::mysql" do

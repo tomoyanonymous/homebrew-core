@@ -1,13 +1,13 @@
 class Goffice < Formula
   desc "Gnumeric spreadsheet program"
   homepage "https://developer.gnome.org/goffice/"
-  url "https://download.gnome.org/sources/goffice/0.10/goffice-0.10.35.tar.xz"
-  sha256 "c19001afca09dc5446e06605a113d81a57124018a09c5889aeebba16cf1d5738"
+  url "https://download.gnome.org/sources/goffice/0.10/goffice-0.10.38.tar.xz"
+  sha256 "443199d7a9833fddaadfc4f9065c289e639eed480de316f37da816e396bb9764"
 
   bottle do
-    sha256 "cec7000c218b139929f572e126c5f6b20acec58e1e2059513ca9e0b2b31de622" => :sierra
-    sha256 "60abc1461b63b81854a83de1f5d511e0bae3979eb4c005701ab420430d7f60a4" => :el_capitan
-    sha256 "8d2425d629338d26aecb057b43b41732fffe32b75d82d2cf8ec1f39378c4df07" => :yosemite
+    sha256 "64dabacabd1d8cf505326e11cc930072e79363a4e2beb049110c621c636f2ed2" => :high_sierra
+    sha256 "c927adb85abc488f910c54dc7aff5ad046d393de40016a4eaddf1d55fdf01ed4" => :sierra
+    sha256 "194261c81023963a732121de2e40d52798405af2dfcec8e57a8ddbca57a457da" => :el_capitan
   end
 
   head do
@@ -41,7 +41,7 @@ class Goffice < Formula
   end
 
   test do
-    (testpath/"test.c").write <<-EOS.undent
+    (testpath/"test.c").write <<~EOS
       #include <goffice/goffice.h>
       int main()
       {

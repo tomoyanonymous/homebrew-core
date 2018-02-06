@@ -1,18 +1,14 @@
 class Yarn < Formula
   desc "JavaScript package manager"
   homepage "https://yarnpkg.com/"
-  url "https://yarnpkg.com/downloads/0.27.5/yarn-v0.27.5.tar.gz"
-  sha256 "f0f3510246ee74eb660ea06930dcded7b684eac2593aa979a7add84b72517968"
-  revision 1
-
-  devel do
-    url "https://yarnpkg.com/downloads/0.28.4/yarn-v0.28.4.tar.gz"
-    sha256 "057ef781107bb5d3e7a2a655d75054fbeb265a249a905375bc25bec10d42b31f"
-  end
+  url "https://yarnpkg.com/downloads/1.3.2/yarn-v1.3.2.tar.gz"
+  sha256 "6cfe82e530ef0837212f13e45c1565ba53f5199eec2527b85ecbcd88bf26821d"
 
   bottle :unneeded
 
   depends_on "node" => :recommended
+
+  conflicts_with "hadoop", :because => "both install `yarn` binaries"
 
   def install
     libexec.install Dir["*"]

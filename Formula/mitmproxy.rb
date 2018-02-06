@@ -5,18 +5,18 @@ class Mitmproxy < Formula
   homepage "https://mitmproxy.org"
   url "https://github.com/mitmproxy/mitmproxy/archive/v2.0.2.tar.gz"
   sha256 "42e8cbcd27b85e60a165d1a28692098181813bbd9d7731a42b2cda68824c6c9d"
+  revision 2
   head "https://github.com/mitmproxy/mitmproxy.git"
 
   bottle do
     cellar :any
-    rebuild 1
-    sha256 "b8ac9a526de8b2df9f3909ee570ef88e97d4a38a103b2ba7da839e89a91ffff1" => :sierra
-    sha256 "f069381d6a957678f9fa5ff19ab54ba915c3b08a05858db68565fe4b1349b38f" => :el_capitan
-    sha256 "a4355aa8c07ffa31b76656ec0fa97b83038a9c8d528f62b2206322e088bf56be" => :yosemite
+    sha256 "0c5bfb89a5e83fe35889bbdaa9de472e942d117d373737298376ca2cfa9887ff" => :high_sierra
+    sha256 "c520cfbd2e0c40acf9dd5a89c7b76e5403366e8c70a07d83cfa7bb3138fadd95" => :sierra
+    sha256 "ea761d922464e68c24665011fb6fa9949ea744e0eab56a438f18edef2c2be569" => :el_capitan
   end
 
-  depends_on "openssl@1.1"
-  depends_on :python3
+  depends_on "openssl"
+  depends_on "python3"
   depends_on "protobuf"
 
   resource "EditorConfig" do

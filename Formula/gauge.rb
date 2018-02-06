@@ -1,40 +1,25 @@
-require "language/go"
-
 class Gauge < Formula
   desc "Test automation tool that supports executable documentation"
   homepage "https://getgauge.io"
-  url "https://github.com/getgauge/gauge/archive/v0.9.1.tar.gz"
-  sha256 "659cd9679fa258ec142cf80ed92282c41aac44152f1193fa804bf00550e64e3a"
+  url "https://github.com/getgauge/gauge/archive/v0.9.7.tar.gz"
+  sha256 "e656d32a55505d0c862ecd808309aa36d5538702ecc97f2f9ec9437580fa3b27"
   head "https://github.com/getgauge/gauge.git"
 
   bottle do
-    sha256 "4ca860842b71c958face93d07452cae6ccc220ec50914123e7775b77e6b286f6" => :sierra
-    sha256 "0e7d6e4108eab026d9fcd9905fce65c159146bdf903f516c5499a2b52ede18d2" => :el_capitan
-    sha256 "15cfbf4804217e796de1d7508bdcd28b54130b69e5fa791ddef9eb04f243c770" => :yosemite
+    sha256 "1e82dfc7eaed111730eb75b830fdb3888617ecddde9f493b70901133c4ca0ada" => :high_sierra
+    sha256 "a5d4aa1090d8266080b3c68daddc6475113dbe1857d7185b6c03a3b28a3f7820" => :sierra
+    sha256 "89c8bab4f0fd5f3d8681c672587bff6246c2d063d7f727977a6f265c5b9370e5" => :el_capitan
   end
 
   depends_on "go" => :build
   depends_on "godep" => :build
 
-  go_resource "github.com/getgauge/gauge_screenshot" do
-    url "https://github.com/getgauge/gauge_screenshot.git",
-        :revision => "f16bcf089e263db525a255c9f9621ca0270ff1d3"
-  end
-
   def install
     ENV["GOPATH"] = buildpath
     ENV["GOROOT"] = Formula["go"].opt_libexec
-
-    # Avoid executing `go get`
-    inreplace "build/make.go", /\tgetGaugeScreenshot\(\)\n/, ""
-
     dir = buildpath/"src/github.com/getgauge/gauge"
     dir.install buildpath.children
     ln_s buildpath/"src", dir
-
-    Language::Go.stage_deps resources, buildpath/"src"
-    ln_s "gauge_screenshot", "src/github.com/getgauge/screenshot"
-
     cd dir do
       system "godep", "restore"
       system "go", "run", "build/make.go"

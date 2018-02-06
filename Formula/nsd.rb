@@ -1,13 +1,13 @@
 class Nsd < Formula
   desc "Name server daemon"
   homepage "https://www.nlnetlabs.nl/projects/nsd/"
-  url "https://www.nlnetlabs.nl/downloads/nsd/nsd-4.1.17.tar.gz"
-  sha256 "107fa506d18ed6fd0a922d1b96774afd9270ec38ec6b17cd7c46fb9433a03a6c"
+  url "https://www.nlnetlabs.nl/downloads/nsd/nsd-4.1.19.tar.gz"
+  sha256 "b0782cb9b57416888d488b6460b071cd85ecb5f99381865b3a7f93dddf9e02c5"
 
   bottle do
-    sha256 "abf50b3b34010f65790fe3506d44428d9cfadb9fbe2694b743a877f373fcaa64" => :sierra
-    sha256 "6476acc0565439cb72bf274a8c9adf1d73289e9617e5734b73c1601d2c15c27f" => :el_capitan
-    sha256 "a587267cbf3d022e9996b26b0a540873cda9510be52b0d74a94ecf0f1e8a40ea" => :yosemite
+    sha256 "6ef332c3392464989adf52f1024df7c3cc10bcb32f539bffe018d59c979c285a" => :high_sierra
+    sha256 "212b8aaf46c6a59c3d75a4125551d84792055fafca9d6981da99935865eefd85" => :sierra
+    sha256 "0d5e6414a4bd77ff48fe36530107d7150690b5e9b1666b41fcd9b4a301bfefb6" => :el_capitan
   end
 
   option "with-root-server", "Allow NSD to run as a root name server"

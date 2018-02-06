@@ -1,19 +1,13 @@
 class Nano < Formula
   desc "Free (GNU) replacement for the Pico text editor"
   homepage "https://www.nano-editor.org/"
-  url "https://www.nano-editor.org/dist/v2.8/nano-2.8.6.tar.gz"
-  sha256 "3725aa145880223b2c4d0b3fa08220e1633f2d341917f49d028e067fc12cce49"
+  url "https://www.nano-editor.org/dist/v2.9/nano-2.9.3.tar.gz"
+  sha256 "f12058ead9955cb841c1c5e3b9aec6ba93114a807580e928de0eaf6144c91074"
 
   bottle do
-    sha256 "e77f5b3c877c2c35f9875915ee83ae14467cf70d7862bd3a59bb87dc302d43d1" => :sierra
-    sha256 "3be1d0b7f071967470084cd301ce6600cd4b006e1b103d7d5c9d3295b8972621" => :el_capitan
-    sha256 "233fc92c904683c0079b78649e030b045fcd1238648be9e4cdebf2338d9f1494" => :yosemite
-  end
-
-  head do
-    url "https://git.savannah.gnu.org/git/nano.git"
-    depends_on "automake" => :build
-    depends_on "autoconf" => :build
+    sha256 "09a16f42318317a39f08350a1e07240067c5268a3ad3046a0aafc0c922d43a36" => :high_sierra
+    sha256 "2934a705b8ba1c7562009dd8386021168e37d9446332c9922340c847a0b57b74" => :sierra
+    sha256 "b9aadb66addd1b7b611a45523b87fa0b9606be044988bbb09a1c9887c84b4a0c" => :el_capitan
   end
 
   depends_on "pkg-config" => :build
@@ -21,7 +15,6 @@ class Nano < Formula
   depends_on "ncurses"
 
   def install
-    system "./autogen.sh" if build.head?
     system "./configure", "--disable-debug",
                           "--disable-dependency-tracking",
                           "--prefix=#{prefix}",

@@ -3,15 +3,15 @@ require "language/node"
 class Typescript < Formula
   desc "Language for application scale JavaScript development"
   homepage "http://typescriptlang.org/"
-  url "https://registry.npmjs.org/typescript/-/typescript-2.4.2.tgz"
-  sha256 "c39a4ab3fa03297ae4217d846a3f65512f49991526db58c488a39f8db1155937"
+  url "https://registry.npmjs.org/typescript/-/typescript-2.7.1.tgz"
+  sha256 "f9118d2b1a3955a6220c72ef82e2e314e71c8e589777cd3679d269d92590e730"
   head "https://github.com/Microsoft/TypeScript.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "d1243205111d57a5ebc820935b98e8586716c916cbb588588f49ed7f48dfb345" => :sierra
-    sha256 "c7f62ce9b1eaa62ba258f6b651a817b29ccc72ed1abfc261ae6df333ee3ef3ca" => :el_capitan
-    sha256 "cb0cc38c8f7836da536d7c232183c20a878e3685ffae22f506baf7102f6780de" => :yosemite
+    sha256 "c293e405c7008d09607a2fd275fa244fb9e4febedf3a0cf37069e7c0dfedd889" => :high_sierra
+    sha256 "97f83301e679ee80050fa3f30f8004807cb2374a30c17bf56fd00bf33875714f" => :sierra
+    sha256 "f412cd0f27873df0a1d75e3d72f01fa6cb216e4956aa761eca8e16346037d332" => :el_capitan
   end
 
   depends_on "node"
@@ -22,7 +22,7 @@ class Typescript < Formula
   end
 
   test do
-    (testpath/"test.ts").write <<-EOS.undent
+    (testpath/"test.ts").write <<~EOS
       class Test {
         greet() {
           return "Hello, world!";
@@ -33,6 +33,6 @@ class Typescript < Formula
     EOS
 
     system bin/"tsc", "test.ts"
-    assert File.exist?("test.js"), "test.js was not generated"
+    assert_predicate testpath/"test.js", :exist?, "test.js was not generated"
   end
 end

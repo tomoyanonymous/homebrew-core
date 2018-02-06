@@ -1,13 +1,13 @@
 class Libsoup < Formula
   desc "HTTP client/server library for GNOME"
   homepage "https://live.gnome.org/LibSoup"
-  url "https://download.gnome.org/sources/libsoup/2.58/libsoup-2.58.2.tar.xz"
-  sha256 "442300ca1b1bf8a3bbf2f788203287ff862542d4fc048f19a92a068a27d17b72"
+  url "https://download.gnome.org/sources/libsoup/2.60/libsoup-2.60.3.tar.xz"
+  sha256 "1b0dc762f23abe4e0d29b77370e539fd35f31d8e8e0318d6ddccff395be68a22"
 
   bottle do
-    sha256 "4787dd219a09f98951f0ee455796ae3a48fb1c9c5d97a5bb9f98e79f91a370ed" => :sierra
-    sha256 "b8db5129637a32c8a4841b42bc7ee9f5efa1da6af5364fc2e4af511d721b02d0" => :el_capitan
-    sha256 "a3d4280081b479fe9b37df7acbd3fde7adca799453bab80ef0514ac0f218fcbb" => :yosemite
+    sha256 "9324d895eeed906f4685c4a0ec4e34505c1928f3a7b0c70f25ba30588372dbbe" => :high_sierra
+    sha256 "b801fadef26e8a135850d367b7c06267d1fc871ca60f81e31b0354ed50c128d8" => :sierra
+    sha256 "611d2867125b1c7d7d4d24c8c2c7fb2300c593b2af3a0d195a50b3aacd73a81b" => :el_capitan
   end
 
   depends_on "pkg-config" => :build
@@ -38,7 +38,7 @@ class Libsoup < Formula
   end
 
   test do
-    (testpath/"test.c").write <<-EOS.undent
+    (testpath/"test.c").write <<~EOS
       #include <libsoup/soup.h>
 
       int main(int argc, char *argv[]) {

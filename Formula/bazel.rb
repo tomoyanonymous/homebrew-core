@@ -1,18 +1,17 @@
 class Bazel < Formula
   desc "Google's own build tool"
   homepage "https://bazel.build/"
-  url "https://github.com/bazelbuild/bazel/releases/download/0.5.3/bazel-0.5.3-dist.zip"
-  sha256 "76b5c5880a0b15f5b91f7d626c5bc3b76ce7e5d21456963c117ab711bf1c5333"
-  revision 1
+  url "https://github.com/bazelbuild/bazel/releases/download/0.10.0/bazel-0.10.0-dist.zip"
+  sha256 "47e0798caaac4df499bce5fe554a914abd884a855a27085a4473de1d737d9548"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "71607514310a6def0f190362c1ac1fc26f4f667b45fcacd943af49465cab2daf" => :sierra
-    sha256 "2074ba5af8294b6e008582535267ad70707ef02e679d43adb6648a32057df2c4" => :el_capitan
-    sha256 "7e6ee2064e2abb6f2fd6ec06bc361156a46ac7da61a2f45e8eefe0903c0c7639" => :yosemite
+    sha256 "4012482a30d3e35b41b65260919e15ff8c2306eecf9218107c5cbf3af1fa3c3e" => :high_sierra
+    sha256 "a79b74382cb314115847214ebd37e9fab6d2eda4a1c61548222cdbe18f1ac75e" => :sierra
+    sha256 "2f67fa0c82c6f58e432f5aff6f2b71540536a0bd88d1116f5b7573f9fe2d86be" => :el_capitan
   end
 
-  depends_on :java => "1.8+"
+  depends_on :java => "1.8"
   depends_on :macos => :yosemite
 
   def install
@@ -26,6 +25,8 @@ class Bazel < Formula
 
     bin.install "scripts/packages/bazel.sh" => "bazel"
     bin.install "output/bazel" => "bazel-real"
+    bin.env_script_all_files(libexec/"bin", Language::Java.java_home_env("1.8"))
+
     bash_completion.install "bazel-bin/scripts/bazel-complete.bash"
     zsh_completion.install "scripts/zsh_completion/_bazel"
   end
@@ -33,7 +34,7 @@ class Bazel < Formula
   test do
     touch testpath/"WORKSPACE"
 
-    (testpath/"ProjectRunner.java").write <<-EOS.undent
+    (testpath/"ProjectRunner.java").write <<~EOS
       public class ProjectRunner {
         public static void main(String args[]) {
           System.out.println("Hi!");
@@ -41,7 +42,7 @@ class Bazel < Formula
       }
     EOS
 
-    (testpath/"BUILD").write <<-EOS.undent
+    (testpath/"BUILD").write <<~EOS
       java_binary(
         name = "bazel-test",
         srcs = glob(["*.java"]),

@@ -1,14 +1,15 @@
 class Qscintilla2 < Formula
   desc "Port to Qt of the Scintilla editing component"
   homepage "https://www.riverbankcomputing.com/software/qscintilla/intro"
-  url "https://downloads.sourceforge.net/project/pyqt/QScintilla2/QScintilla-2.10.1/QScintilla_gpl-2.10.1.tar.gz"
-  sha256 "97f98a9d91f908db6ce37fecc6d241d955b388a1c487173b60726cba9a3dfa64"
+  url "https://downloads.sourceforge.net/project/pyqt/QScintilla2/QScintilla-2.10.2/QScintilla_gpl-2.10.2.tar.gz"
+  sha256 "14b31d20717eed95ea9bea4cd16e5e1b72cee7ebac647cba878e0f6db6a65ed0"
   revision 1
 
   bottle do
-    sha256 "2145a9138de0eb4dc7d1c2cb2741ad8d5e4bd43eafa27040d61b5be9c1898d28" => :sierra
-    sha256 "cb8eb0c2017e0868b5308fd8cfff8602f7bc6f3ae775fdebfa17c3f51b0b3268" => :el_capitan
-    sha256 "17974d5e54f96706a354d84ab684bede51c043834c970dfe67a673cb45840bdf" => :yosemite
+    cellar :any
+    sha256 "da1d93ad1371f8cbe0f3897a49afae8c07a41c06ae250b74c580c8be7ce83113" => :high_sierra
+    sha256 "7b45fdb79ba8c1fce4ff5745881ea4786801d2bf8d2c06d3d34823d3c0a9d9f0" => :sierra
+    sha256 "5dbae892c1f20a559477d72106cb7a6a1f20330b0b5a6054f1198795b940b4f8" => :el_capitan
   end
 
   option "with-plugin", "Build the Qt Designer plugin"
@@ -18,8 +19,8 @@ class Qscintilla2 < Formula
   depends_on "pyqt"
   depends_on "qt"
   depends_on "sip"
-  depends_on :python => :recommended
-  depends_on :python3 => :recommended
+  depends_on "python" => :recommended
+  depends_on "python3" => :recommended
 
   def install
     spec = (ENV.compiler == :clang && MacOS.version >= :mavericks) ? "macx-clang" : "macx-g++"
@@ -84,7 +85,7 @@ class Qscintilla2 < Formula
   end
 
   test do
-    (testpath/"test.py").write <<-EOS.undent
+    (testpath/"test.py").write <<~EOS
       import PyQt5.Qsci
       assert("QsciLexer" in dir(PyQt5.Qsci))
     EOS

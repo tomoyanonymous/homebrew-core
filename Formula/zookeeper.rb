@@ -2,14 +2,15 @@ class Zookeeper < Formula
   desc "Centralized server for distributed coordination of services"
   homepage "https://zookeeper.apache.org/"
   url "https://www.apache.org/dyn/closer.cgi?path=zookeeper/zookeeper-3.4.10/zookeeper-3.4.10.tar.gz"
-  mirror "http://mirror.nbtelecom.com.br/apache/zookeeper/zookeeper-3.4.10/zookeeper-3.4.10.tar.gz"
+  mirror "https://archive.apache.org/dist/zookeeper/zookeeper-3.4.10/zookeeper-3.4.10.tar.gz"
   sha256 "7f7f5414e044ac11fee2a1e0bc225469f51fb0cdf821e67df762a43098223f27"
 
   bottle do
     cellar :any
-    sha256 "a28854138a8529d7b971550566576e9758bc27a65b1d5649a574f3181b49aeee" => :sierra
-    sha256 "a3231fd05efa548a5171e6ab2328cbb503646b952bce3b8cf1c1ce4a007f833f" => :el_capitan
-    sha256 "2004ccbabfd5645e95af658684c0a919c13a41b45127be77db289453facf1670" => :yosemite
+    rebuild 1
+    sha256 "08431d9c2f04f5a735149f374975df4f2e0d8140b1cc901f505d379ef7e20fe0" => :high_sierra
+    sha256 "8c7304be183d4c28c0f5d88e22626188c76794bee004e1b330c3e79bf5ae9d53" => :sierra
+    sha256 "2d792cb3963a7caf57922635888ae4e3cf363ef5a81d23f13a11d0ee42a780cf" => :el_capitan
   end
 
   head do
@@ -26,10 +27,10 @@ class Zookeeper < Formula
 
   deprecated_option "perl" => "with-perl"
 
-  depends_on :python => :optional
+  depends_on "python" => :optional
 
   def shim_script(target)
-    <<-EOS.undent
+    <<~EOS
       #!/usr/bin/env bash
       . "#{etc}/zookeeper/defaults"
       cd "#{libexec}/bin"
@@ -38,15 +39,15 @@ class Zookeeper < Formula
   end
 
   def default_zk_env
-    <<-EOS.undent
+    <<~EOS
       [ -z "$ZOOCFGDIR" ] && export ZOOCFGDIR="#{etc}/zookeeper"
     EOS
   end
 
   def default_log4j_properties
-    <<-EOS.undent
+    <<~EOS
       log4j.rootCategory=WARN, zklog
-      log4j.appender.zklog = org.apache.log4j.FileAppender
+      log4j.appender.zklog = org.apache.log4j.RollingFileAppender
       log4j.appender.zklog.File = #{var}/log/zookeeper/zookeeper.log
       log4j.appender.zklog.Append = true
       log4j.appender.zklog.layout = org.apache.log4j.PatternLayout
@@ -94,9 +95,11 @@ class Zookeeper < Formula
 
     if build.head?
       system "ant"
-      libexec.install Dir["bin", "src/contrib", "src/java/lib", "build/*.jar"]
+      libexec.install "bin", "src/contrib", "src/java/lib"
+      libexec.install Dir["build/*.jar"]
     else
-      libexec.install Dir["bin", "contrib", "lib", "*.jar"]
+      libexec.install "bin", "contrib", "lib"
+      libexec.install Dir["*.jar"]
     end
 
     bin.mkpath
@@ -125,7 +128,7 @@ class Zookeeper < Formula
 
   plist_options :manual => "zkServer start"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">

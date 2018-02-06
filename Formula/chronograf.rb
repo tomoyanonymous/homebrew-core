@@ -1,19 +1,17 @@
 require "language/node"
 
 class Chronograf < Formula
-  desc "Open source monitoring and visualization UI for the TICK stack."
+  desc "Open source monitoring and visualization UI for the TICK stack"
   homepage "https://docs.influxdata.com/chronograf/latest/"
-  url "https://github.com/influxdata/chronograf.git",
-      :tag => "1.3.3.4",
-      :revision => "1bdfbbcc806b7957eeaf8b16507f518280e9afda"
-
+  url "https://github.com/influxdata/chronograf/archive/1.4.0.1.tar.gz"
+  sha256 "31df9f36354d07d0d935ae095b74fab003d5aced658763b8eb4bfd2a51c22bdc"
   head "https://github.com/influxdata/chronograf.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "f4e98a6eb3ae3188e0baf1cec8bd39068c69fa8d1b479ccfdccaee6be61b4919" => :sierra
-    sha256 "d7cd12d141bcb99078ff44464ed80eb61162ea38bbdd33be471c05847225a891" => :el_capitan
-    sha256 "b84bcc4e17c3eb2fe72238099ed55861b02cfc1f9cfa856ba17492d3d673658f" => :yosemite
+    sha256 "6002c9963f30a79754076dda58ef4aeb9a7d6e7ba157a5398f9474c68a1a1356" => :high_sierra
+    sha256 "fcbf8c991b12b44cecb049e2e3031a78ee695f3733ff82632b53c7d3dff2a0c6" => :sierra
+    sha256 "b94673f2fa103f1f49ba31479d3357019dbe281a3829bda5040a09097f77726d" => :el_capitan
   end
 
   depends_on "go" => :build
@@ -25,25 +23,22 @@ class Chronograf < Formula
   def install
     ENV["GOPATH"] = buildpath
     ENV.prepend_create_path "PATH", buildpath/"bin"
+    Language::Node.setup_npm_environment
     chronograf_path = buildpath/"src/github.com/influxdata/chronograf"
     chronograf_path.install buildpath.children
 
     cd chronograf_path do
       system "make", "dep"
-      cd "ui" do
-        system "npm", "install", *Language::Node.std_npm_install_args(libexec)
-        system "npm", "run", "build"
-        touch ".jssrc"
-      end
-      system "make", ".bindata"
+      system "make", ".jssrc"
       system "make", "chronograf"
       bin.install "chronograf"
+      prefix.install_metafiles
     end
   end
 
   plist_options :manual => "chronograf"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">

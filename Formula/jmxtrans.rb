@@ -1,22 +1,23 @@
 class Jmxtrans < Formula
   desc "Tool to connect to JVMs and query their attributes"
   homepage "https://github.com/jmxtrans/jmxtrans"
-  url "https://github.com/jmxtrans/jmxtrans/archive/jmxtrans-parent-266.tar.gz"
-  sha256 "5181a755b8af7f6bc94e0f7d2a40c34eca089524899154c5ff1d290ad0bd430e"
+  url "https://github.com/jmxtrans/jmxtrans/archive/jmxtrans-parent-268.tar.gz"
+  sha256 "711b90e9687b4429abce3dcc3856b3e7d2b5aa4452457bfe71a5f7768a140536"
   version_scheme 1
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "9c4b29567b2eed6109163f7150503ae2ac0e31f7e3c67bdc4bf4bcfcabf7c880" => :sierra
-    sha256 "7537ed47b0b8cfb5617a10e8d67cecadf414c36e08495c348d71d06b2a04607a" => :el_capitan
-    sha256 "627f5aa44573c5a9081b16f3ef770daf9b36c192f10a17eec4b45351c1a0a82d" => :yosemite
+    sha256 "9e98df7b2c006cc8577f48df30edf45b55b3b7bfdc57a9ab2c48b7812e062225" => :high_sierra
+    sha256 "9ff4256cc60b8fa306c6d7ff9fc30a91a97d5d84b39c58282425011b1d35f805" => :sierra
+    sha256 "58f20dce4df7b7c669c531ba5ee8697ea9a87702d3abde4bde27db527b086496" => :el_capitan
   end
 
-  depends_on :java => "1.6+"
+  depends_on :java => "1.8"
   depends_on "maven" => :build
 
   def install
-    ENV.java_cache
+    cmd = Language::Java.java_home_cmd("1.8")
+    ENV["JAVA_HOME"] = Utils.popen_read(cmd).chomp
 
     system "mvn", "package", "-DskipTests=true",
                              "-Dmaven.javadoc.skip=true",
@@ -32,7 +33,7 @@ class Jmxtrans < Formula
       doc.install Dir["doc/*"]
     end
 
-    bin.install_symlink libexec/"jmxtrans.sh" => "jmxtrans"
+    (bin/"jmxtrans").write_env_script libexec/"jmxtrans.sh", Language::Java.java_home_env("1.8")
   end
 
   test do

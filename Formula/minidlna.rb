@@ -1,15 +1,15 @@
 class Minidlna < Formula
   desc "Media server software, compliant with DLNA/UPnP-AV clients"
   homepage "https://sourceforge.net/projects/minidlna/"
-  url "https://downloads.sourceforge.net/project/minidlna/minidlna/1.2.0/minidlna-1.2.0.tar.gz"
-  sha256 "8d34436580c4c44be25976d5e46bc5b71af69bf441c4492774eac001164c4433"
-  revision 1
+  url "https://downloads.sourceforge.net/project/minidlna/minidlna/1.2.1/minidlna-1.2.1.tar.gz"
+  sha256 "67388ba23ab0c7033557a32084804f796aa2a796db7bb2b770fb76ac2a742eec"
 
   bottle do
     cellar :any
-    sha256 "ccacfa220d85b7dcb3ab69069f38524ff12541adf8f40d4d4dfd5d1b34887a61" => :sierra
-    sha256 "8a37fae711508ac4bfbe5b4cd843a0e148cb079422ac1e1b8b57f13d42992df8" => :el_capitan
-    sha256 "205e2d02a8ecf17943271d6ab9098e0f44a1370ca8b309f425a583b034d48dad" => :yosemite
+    sha256 "b3b2df008e89d3240444e24ef086b7859a1a95254d41136af7c2643a94ee26bf" => :high_sierra
+    sha256 "7fff1741b01f5d7e6a913171c70326cb4dbbb57d1cdcb5266056b91493af69ba" => :sierra
+    sha256 "36e2d23c670f5e53e8ee9ea3f8bfca58d7d827e1318cf148cd116483a48a8443" => :el_capitan
+    sha256 "66f2fddccaa8740ef90e770419a807db46e874008625694ec881e266780dba1d" => :yosemite
   end
 
   head do
@@ -36,7 +36,7 @@ class Minidlna < Formula
   end
 
   def post_install
-    (pkgshare/"minidlna.conf").write <<-EOS.undent
+    (pkgshare/"minidlna.conf").write <<~EOS
       friendly_name=Mac DLNA Server
       media_dir=#{ENV["HOME"]}/.config/minidlna/media
       db_dir=#{ENV["HOME"]}/.config/minidlna/cache
@@ -44,7 +44,8 @@ class Minidlna < Formula
     EOS
   end
 
-  def caveats; <<-EOS.undent
+  def caveats
+    <<~EOS
       Simple single-user configuration:
 
       mkdir -p ~/.config/minidlna
@@ -56,7 +57,7 @@ class Minidlna < Formula
 
   plist_options :manual => "minidlna"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">
@@ -93,7 +94,7 @@ class Minidlna < Formula
   test do
     (testpath/".config/minidlna/media").mkpath
     (testpath/".config/minidlna/cache").mkpath
-    (testpath/"minidlna.conf").write <<-EOS.undent
+    (testpath/"minidlna.conf").write <<~EOS
       friendly_name=Mac DLNA Server
       media_dir=#{testpath}/.config/minidlna/media
       db_dir=#{testpath}/.config/minidlna/cache

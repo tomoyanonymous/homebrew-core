@@ -3,18 +3,19 @@ class Pwntools < Formula
 
   desc "CTF framework used by Gallopsled in every CTF"
   homepage "https://pwntools.com/"
-  url "https://github.com/Gallopsled/pwntools/archive/3.8.0.tar.gz"
-  sha256 "2abf4cc6b77928411c515f7b221d1414ed06b321d240f958c399e7638bc4998e"
+  url "https://github.com/Gallopsled/pwntools/archive/3.11.0.tar.gz"
+  sha256 "b86f9bed835153d1ce1839d03836aa062802ac9f5495942027030407ef1b798a"
+  revision 1
 
   bottle do
     cellar :any
-    sha256 "163645180ef341af0f3ff25ef42316a76a9779822ba19aa46f6614ad1f5f1d27" => :sierra
-    sha256 "e1d12cba69d4aa657b58573cf3bc77f7981da303232ab82a4a028be6aa7f9b94" => :el_capitan
-    sha256 "7a009eb8f68cd434d230bd5494dbad9f66a5b283c4799ff43d1dd1f0ab9cf253" => :yosemite
+    sha256 "01057bf1e5efdfd55e313e75cc5d33c5e3ad7fe692dd4b79afa6ddcd7793e9c7" => :high_sierra
+    sha256 "d615dd3a1af8ebff94643de496985db4582b0ce9732f78b931232a1b884fd87c" => :sierra
+    sha256 "455b41e64f7be98cb4b0dadbac8d57dcc0d7c28dae7bb6b84decfc641b23283e" => :el_capitan
   end
 
-  depends_on :python if MacOS.version <= :snow_leopard
-  depends_on "openssl@1.1"
+  depends_on "python" if MacOS.version <= :snow_leopard
+  depends_on "openssl"
   depends_on "binutils" => :recommended
 
   conflicts_with "moreutils", :because => "Both install `errno` binaries"

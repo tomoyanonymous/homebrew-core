@@ -1,14 +1,26 @@
 class Mariadb < Formula
   desc "Drop-in replacement for MySQL"
   homepage "https://mariadb.org/"
-  url "https://ftp.osuosl.org/pub/mariadb/mariadb-10.2.7/source/mariadb-10.2.7.tar.gz"
-  sha256 "225ba1bbc48325ad38a9f433ff99da4641028f42404a29591cc370e4a676c0bc"
-  revision 1
+  url "https://downloads.mariadb.org/f/mariadb-10.2.12/source/mariadb-10.2.12.tar.gz"
+  sha256 "2ab22d7fbacfabc30fe18f71a8afb173250074502d889457e3cde2e203d341ec"
 
   bottle do
-    sha256 "f49492a887f42b9c46d9d3b4ac578bf48e0ac201531b6ee94187780c96ff820d" => :sierra
-    sha256 "cd269177a5164ca694de644416a8810ec419eb080dbe08db42aa3d42dba51bd5" => :el_capitan
-    sha256 "8a599d065a5abf35e12b463589a18bcd6e578cd96c27f492183d19c3861cf92e" => :yosemite
+    sha256 "c03353edcdc591307a78cee85e045e716be7f36d833e89fdec3d974a8cf0abb9" => :high_sierra
+    sha256 "ec4dcb42daa3bcaf4def1768f0385a343621e175908ac913e0e238b6584f4c91" => :sierra
+    sha256 "a072ff975ddcae52760fc2ede46b4f8940cf53201dadc16dc58a2a44d02edee7" => :el_capitan
+  end
+
+  devel do
+    url "https://downloads.mariadb.org/f/mariadb-10.3.4/source/mariadb-10.3.4.tar.gz"
+    sha256 "5b7146c528e53083c36141cff6a1d24cae77285acceeb84fd446956c52e5ba5b"
+
+    # compilation fix
+    # https://jira.mariadb.org/browse/MDEV-14753
+    # https://github.com/MariaDB/server/pull/524
+    patch do
+      url "https://github.com/MariaDB/server/commit/dd6686462b0fa3f4d71a65c4b26cb02b65a07fec.patch?full_index=1"
+      sha256 "c6dabcb2af28b7c2d35123bf8a7217fd99c6068d2d78f933ca60630ae4e1a5a2"
+    end
   end
 
   option "with-test", "Keep test when installing"
@@ -33,21 +45,7 @@ class Mariadb < Formula
   conflicts_with "mariadb-connector-c",
     :because => "both install plugins"
 
-  # Remove for >= 10.2.8
-  # Upstream commit from 7 Jul 2017 "Fix for MDEV-13270: Wrong output for
-  # mariadb_config on OSX"
-  # See https://jira.mariadb.org/browse/MDEV-13270
-  resource "mariadb-config-patch" do
-    url "https://github.com/MariaDB/mariadb-connector-c/commit/3f356c0.patch?full_index=1"
-    sha256 "3f01377b6b806c5e6850c380df271c5835feb80434553a63e91528b40d3ac566"
-  end
-
   def install
-    resource("mariadb-config-patch").stage do
-      system "patch", "-p1", "-i", Pathname.pwd/"3f356c0.patch", "-d",
-                      buildpath/"libmariadb"
-    end
-
     # Set basedir and ldata so that mysql_install_db can find the server
     # without needing an explicit path to be set. This can still
     # be overridden by calling --basedir= when calling.
@@ -64,6 +62,7 @@ class Mariadb < Formula
       -DINSTALL_DOCDIR=share/doc/#{name}
       -DINSTALL_INFODIR=share/info
       -DINSTALL_MYSQLSHAREDIR=share/mysql
+      -DWITH_PCRE=bundled
       -DWITH_SSL=yes
       -DDEFAULT_CHARSET=utf8
       -DDEFAULT_COLLATION=utf8_general_ci
@@ -130,7 +129,7 @@ class Mariadb < Formula
     end
 
     # Install my.cnf that binds to 127.0.0.1 by default
-    (buildpath/"my.cnf").write <<-EOS.undent
+    (buildpath/"my.cnf").write <<~EOS
       # Default Homebrew MySQL server config
       [mysqld]
       # Only allow connections from localhost
@@ -149,7 +148,7 @@ class Mariadb < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     A "/etc/my.cnf" from another install may interfere with a Homebrew-built
     server starting up correctly.
 
@@ -162,7 +161,7 @@ class Mariadb < Formula
 
   plist_options :manual => "mysql.server start"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">

@@ -5,25 +5,36 @@ class HaskellStack < Formula
 
   desc "The Haskell Tool Stack"
   homepage "https://haskellstack.org/"
-  url "https://github.com/commercialhaskell/stack/releases/download/v1.5.1/stack-1.5.1-sdist-1.tar.gz"
-  version "1.5.1"
-  sha256 "09c31818f24d3fe2c22c6b1707f5279c00b6f9432f88eaf79032ace52a73ced4"
+  url "https://github.com/commercialhaskell/stack/releases/download/v1.6.3/stack-1.6.3-sdist-1.tar.gz"
+  version "1.6.3"
+  sha256 "e3fdd37f36acec830d5692be4a5a5fcb5862112eebc4c11f6c3689ec86dba49b"
   head "https://github.com/commercialhaskell/stack.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "06ef012cd3eb0bd07cae75431b198a3cad8e5c0ebd26d01667a2046ae95c61a0" => :sierra
-    sha256 "cc998d5058af92414d81209cd9045480d0ee28eddcebd84ae048d6ff8f61cf49" => :el_capitan
-    sha256 "3d681f2af9240ef71c0e468954c5fbf05cd1b88b8a22d575b7a3371ce7639ad3" => :yosemite
+    sha256 "b72341b0d1e3a5364ccfd3cef0b0e9da1ca072be8ada87611cb7f5133f7cdc48" => :high_sierra
+    sha256 "7f157b8e95945f5bc607d1f87436ef50b92bae13d3e12419c5f8349f02233dc3" => :sierra
+    sha256 "263ca39d2d0a3b8af80212b0359c31ac7ba2829da8bbf2c20023081a38afbdeb" => :el_capitan
   end
 
   option "without-bootstrap", "Don't bootstrap a stage 2 stack"
 
-  depends_on "ghc@8.0" => :build
   depends_on "cabal-install" => :build
+  depends_on "ghc" => :build
+
+  # Remove when stack.yaml uses GHC 8.2.x
+  resource "stack_nightly_yaml" do
+    url "https://raw.githubusercontent.com/commercialhaskell/stack/v1.6.3/stack-nightly.yaml"
+    version "1.6.3"
+    sha256 "55e15c394946ce781d61d2e71a3273fed4d242a5f985a472d131d54ccf2a538c"
+  end
 
   def install
+    buildpath.install resource("stack_nightly_yaml")
+
     cabal_sandbox do
+      cabal_install "happy"
+
       if build.with? "bootstrap"
         cabal_install
 
@@ -32,7 +43,7 @@ class HaskellStack < Formula
         jobs = ENV.make_jobs
         ENV.deparallelize
 
-        system "stack", "-j#{jobs}", "setup"
+        system "stack", "-j#{jobs}", "--stack-yaml=stack-nightly.yaml", "setup"
         system "stack", "-j#{jobs}", "--local-bin-path=#{bin}", "install"
       else
         install_cabal_package

@@ -3,18 +3,19 @@ class Thefuck < Formula
 
   desc "Programatically correct mistyped console commands"
   homepage "https://github.com/nvbn/thefuck"
-  url "https://files.pythonhosted.org/packages/dd/a9/3aea08d8794e1fe4768fbc61aa7841674493e8dc097d4957fb825b4f12c8/thefuck-3.19.tar.gz"
-  sha256 "9848c966c6d8bfbc51892393b13f7548e3d3646afb1d0f13c0abb681113a56c0"
+  url "https://files.pythonhosted.org/packages/ec/20/3f136313c27ea36ba38d31818b9f0a1a4656668fc6747b3bfa04f3debc98/thefuck-3.25.tar.gz"
+  sha256 "70cbe6295d2d2d371a395619216d38eb1666e4b3c3b1a24f67d11b88e65fea78"
+  revision 1
   head "https://github.com/nvbn/thefuck.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "030b7a59600199e30f6b6c28c89e062e0ab82d029eabf8684324ddd392fe5e71" => :sierra
-    sha256 "70470bcbee983de8fd0f627923b558d6a14df5ba191520f99e05919db326df84" => :el_capitan
-    sha256 "d52acf5de25a3637ba4ce2db78efc932e5da8b5296c9fc9ebcb4577f831b40fe" => :yosemite
+    sha256 "ebcbf91843da49d8b57f711d238935f06c84547e960d96bdbb19e77461681ddf" => :high_sierra
+    sha256 "cedb475fcf1ca8865f23a1ad482effbcf55472d3d753d084eec12d3810f02ccf" => :sierra
+    sha256 "7c78686d8277a148e9d10247df47bbe5d83b4d6265ce779ae97c039350e27d01" => :el_capitan
   end
 
-  depends_on :python if MacOS.version <= :snow_leopard
+  depends_on "python3"
 
   resource "colorama" do
     url "https://files.pythonhosted.org/packages/e6/76/257b53926889e2835355d74fec73d82662100135293e17d382e2b74d1669/colorama-0.3.9.tar.gz"
@@ -26,34 +27,34 @@ class Thefuck < Formula
     sha256 "7cb64d38cb8002971710c8899fbdfb859a23a364b7c99dab19d1f719c2ba16b5"
   end
 
-  resource "pathlib2" do
-    url "https://files.pythonhosted.org/packages/a1/14/df0deb867c2733f7d857523c10942b3d6612a1b222502fdffa9439943dfb/pathlib2-2.3.0.tar.gz"
-    sha256 "d32550b75a818b289bd4c1f96b60c89957811da205afcceab75bc8b4857ea5b3"
-  end
-
   resource "psutil" do
-    url "https://files.pythonhosted.org/packages/57/93/47a2e3befaf194ccc3d05ffbcba2cdcdd22a231100ef7e4cf63f085c900b/psutil-5.2.2.tar.gz"
-    sha256 "44746540c0fab5b95401520d29eb9ffe84b3b4a235bd1d1971cbe36e1f38dd13"
+    url "https://files.pythonhosted.org/packages/fe/17/0f0bf5792b2dfe6003efc5175c76225f7d3426f88e2bf8d360cfab870cd8/psutil-5.4.1.tar.gz"
+    sha256 "42e2de159e3c987435cb3b47d6f37035db190a1499f3af714ba7af5c379b6ba2"
   end
 
-  resource "scandir" do
-    url "https://files.pythonhosted.org/packages/bd/f4/3143e0289faf0883228017dbc6387a66d0b468df646645e29e1eb89ea10e/scandir-1.5.tar.gz"
-    sha256 "c2612d1a487d80fb4701b4a91ca1b8f8a695b1ae820570815e85e8c8b23f1283"
+  resource "pyte" do
+    url "https://files.pythonhosted.org/packages/d2/1c/f65766736e40916b9a27c6cd582313e78092501b68284d44a1b014f30230/pyte-0.7.0.tar.gz"
+    sha256 "873acb47b624b9f30e9c54fab9c06a53be3b6bfa4b3d863ab30f55e93724c5aa"
   end
 
   resource "six" do
-    url "https://files.pythonhosted.org/packages/b3/b2/238e2590826bfdd113244a40d9d3eb26918bd798fc187e2360a8367068db/six-1.10.0.tar.gz"
-    sha256 "105f8d68616f8248e24bf0e9372ef04d3cc10104f1980f54d57b2ce73a5ad56a"
+    url "https://files.pythonhosted.org/packages/16/d8/bc6316cf98419719bd59c91742194c111b6f2e85abac88e496adefaf7afe/six-1.11.0.tar.gz"
+    sha256 "70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9"
+  end
+
+  resource "wcwidth" do
+    url "https://files.pythonhosted.org/packages/55/11/e4a2bb08bb450fdbd42cc709dd40de4ed2c472cf0ccb9e64af22279c5495/wcwidth-0.1.7.tar.gz"
+    sha256 "3df37372226d6e63e1b1e1eda15c594bca98a22d33a23832a90998faa96bc65e"
   end
 
   def install
     virtualenv_install_with_resources
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     Add the following to your .bash_profile, .bashrc or .zshrc:
 
-      eval "$(thefuck --alias)"
+      eval $(thefuck --alias)
 
     For other shells, check https://github.com/nvbn/thefuck/wiki/Shell-aliases
     EOS
@@ -61,6 +62,7 @@ class Thefuck < Formula
 
   test do
     ENV["THEFUCK_REQUIRE_CONFIRMATION"] = "false"
+    ENV["LC_ALL"] = "en_US.UTF-8"
 
     output = shell_output("#{bin}/thefuck --version 2>&1")
     assert_match "The Fuck #{version} using Python", output

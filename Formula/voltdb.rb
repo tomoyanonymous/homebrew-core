@@ -2,7 +2,7 @@ class Voltdb < Formula
   desc "Horizontally-scalable, in-memory SQL RDBMS"
   homepage "https://github.com/VoltDB/voltdb"
   url "https://github.com/VoltDB/voltdb/archive/voltdb-6.9.tar.gz"
-  sha256 "46e4243ba4d12599cb99852ba0b57c693a6aca943270f41f50b70ac054cf05fc"
+  sha256 "e3e1167681a151178d39293961cbb2e7e17d2c756ca6c3568b1fd49585069bb0"
   head "https://github.com/VoltDB/voltdb.git"
 
   bottle do
@@ -12,7 +12,7 @@ class Voltdb < Formula
     sha256 "6762c49081ec4e08f96b738b1772a651e77165b124a2a28fe5a37820c4213561" => :yosemite
   end
 
-  depends_on :ant => :build
+  depends_on "ant" => :build
   depends_on "cmake" => :build
 
   def install

@@ -1,18 +1,16 @@
 class Vips < Formula
   desc "Image processing library"
   homepage "https://github.com/jcupitt/libvips"
-  url "https://github.com/jcupitt/libvips/releases/download/v8.5.7/vips-8.5.7.tar.gz"
-  sha256 "a6c70794a240c64dbaa0b03902d25f1f82fd2d4d657878df901f1fc98bf77bf1"
-  revision 1
+  url "https://github.com/jcupitt/libvips/releases/download/v8.6.2/vips-8.6.2.tar.gz"
+  sha256 "9486bcda927e0f03baf07c671d19eb21d73434991907b2a4f4897000c0e412a2"
 
   bottle do
-    sha256 "3f466e57cecb3e710ff3a5b60746b454f7b9c37b2a4d4c70f5ee2874328a61ef" => :sierra
-    sha256 "c260bf9a715b5dc1f9ca03239062adbebb0ff539bc60dc8e06454ff8a5dd3140" => :el_capitan
-    sha256 "68ad59cd3cc951a7900e309fe656874fae74bf036d9b8e9dd99ced90b37c4ecf" => :yosemite
+    sha256 "66dbce7b752b81aa4149bcf469c33ed608f6fbb88cd25f7199333d1428ebfab3" => :high_sierra
+    sha256 "c79532f23ff6b3dcee183e3b9dade8fdbcc0fea4235d50016823fac428f133a9" => :sierra
+    sha256 "2887d8bad4088870f20da7e13176825a410020444b76acd5b669bd6adda6ae37" => :el_capitan
   end
 
   depends_on "pkg-config" => :build
-  depends_on "fftw"
   depends_on "fontconfig"
   depends_on "gettext"
   depends_on "giflib"
@@ -27,8 +25,9 @@ class Vips < Formula
   depends_on "little-cms2"
   depends_on "orc"
   depends_on "pango"
-  depends_on "poppler"
   depends_on "pygobject3"
+  depends_on "fftw" => :recommended
+  depends_on "poppler" => :recommended
   depends_on "graphicsmagick" => :optional
   depends_on "imagemagick" => :optional
   depends_on "jpeg-turbo" => :optional

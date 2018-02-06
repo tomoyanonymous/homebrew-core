@@ -1,14 +1,14 @@
 class JpegTurbo < Formula
   desc "JPEG image codec that aids compression and decompression"
-  homepage "http://www.libjpeg-turbo.org/"
-  url "https://downloads.sourceforge.net/project/libjpeg-turbo/1.5.1/libjpeg-turbo-1.5.1.tar.gz"
-  sha256 "41429d3d253017433f66e3d472b8c7d998491d2f41caa7306b8d9a6f2a2c666c"
+  homepage "https://www.libjpeg-turbo.org/"
+  url "https://downloads.sourceforge.net/project/libjpeg-turbo/1.5.3/libjpeg-turbo-1.5.3.tar.gz"
+  sha256 "b24890e2bb46e12e72a79f7e965f409f4e16466d00e1dd15d93d73ee6b592523"
 
   bottle do
     cellar :any
-    sha256 "ec7e1209ccd099e1ce0a68441c7ed0ef92daa0fcfc6cd7b558100548ff1b3e4a" => :sierra
-    sha256 "1e026d7d465357247205ea729eba197732f7331134c0ee90518b946cfd2824e7" => :el_capitan
-    sha256 "c308fdae60dee53418f95689b42ecf2d5517bdcf195a03f5db4f0d938c45e913" => :yosemite
+    sha256 "f40b0fe6a775f787436bace3e201c0cd9b441fe24c64093c948ddc369e94b0fd" => :high_sierra
+    sha256 "0a499d6cc6e1de389154fb0d859fe2def77a973c629125ac8c783cb872e055db" => :sierra
+    sha256 "6912770fdaefa0941c3259cbec3abf670ba8b6067239fde276686ed610599dda" => :el_capitan
   end
 
   head do

@@ -1,16 +1,15 @@
 class Librealsense < Formula
-  desc "Camera capture for Intel RealSense F200, SR300 and R200"
+  desc "Intel RealSense D400 series and SR300 capture"
   homepage "https://github.com/IntelRealSense/librealsense"
-  url "https://github.com/IntelRealSense/librealsense/archive/v1.12.1.tar.gz"
-  sha256 "62fb4afac289ad7e25c81b6be584ee275f3d4d3742468dc7d80222ee2e4671bd"
-
+  url "https://github.com/IntelRealSense/librealsense/archive/v2.9.1.tar.gz"
+  sha256 "9c1698c93de5c695f839bac935baffacf2c9b002fe807de8fbe1f31d39b8d0ac"
   head "https://github.com/IntelRealSense/librealsense.git"
 
   bottle do
     cellar :any
-    sha256 "3076d299219ddee4b4b11e68238f339fc6f1b85f2acc360e11d815b85ed6a577" => :sierra
-    sha256 "ee7fe9916adcdca8fbea9a2bfc9f90662db0fbe8ec94c61ef6342eb2ec27775d" => :el_capitan
-    sha256 "36faefdb0a151dfbd090ce80c4e0692bde78b9ee4a1cde7bdd8ab82f15f96dae" => :yosemite
+    sha256 "83f3e70454dd4816de36d468312ca8ea8fd03d4593ec3e4c7d92e2148a17daad" => :high_sierra
+    sha256 "4d5a673b4c48956d65ab02eafa8ddc5737e0d555962921407029f436b7f9c222" => :sierra
+    sha256 "3afa6255b0dbf00043e2ce26461168da8032649fd30d56dfa56c298482456048" => :el_capitan
   end
 
   option "with-examples", "Install examples"
@@ -22,24 +21,23 @@ class Librealsense < Formula
 
   def install
     args = std_cmake_args
+    args << "-DBUILD_EXAMPLES=OFF" if build.without? "examples"
 
-    args << "-DBUILD_EXAMPLES=true" if build.with? "examples"
-
-    system "cmake", ".", *args
+    system "cmake", ".", "-DBUILD_WITH_OPENMP=OFF", *args
     system "make", "install"
   end
 
   test do
-    (testpath/"test.c").write <<-EOS.undent
-      #include <librealsense/rs.h>
-      #include<stdio.h>
+    (testpath/"test.c").write <<~EOS
+      #include <librealsense2/rs.h>
+      #include <stdio.h>
       int main()
       {
-        printf(RS_API_VERSION_STR);
+        printf(RS2_API_VERSION_STR);
         return 0;
       }
     EOS
     system ENV.cc, "test.c", "-I#{include}", "-L#{lib}", "-o", "test"
-    assert_equal shell_output("./test").strip, version.to_s
+    assert_equal version.to_s, shell_output("./test").strip
   end
 end

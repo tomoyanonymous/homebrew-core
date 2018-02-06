@@ -2,15 +2,15 @@ class MinioMc < Formula
   desc "ls, cp, mkdir, diff and rsync for filesystems and object storage"
   homepage "https://github.com/minio/mc"
   url "https://github.com/minio/mc.git",
-    :tag => "RELEASE.2017-06-15T03-38-43Z",
-    :revision => "631f7fc194fe0ad8d26cb16ca264ca6665fcd151"
-  version "20170615033843"
+    :tag => "RELEASE.2018-01-18T21-18-56Z",
+    :revision => "d9663e5d96d5f32725867167de2a0403704ae537"
+  version "20180118211856"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "ca3cb52fd8f8aae955d386d07aac0371f2b50fb7a21eb4f2386da269932d5405" => :sierra
-    sha256 "e0704974e3071a859c5927a90d47cfabbc341531aaaaf466fda32abdaa4dd005" => :el_capitan
-    sha256 "2fbb282c1986ab5cdedfd475523b068891f0b03af16a310fe0db5905d96d00dc" => :yosemite
+    sha256 "139a46ea450c92a41b7f97300f50cc1cd65b7854e5ab7b597bab91e59703cee4" => :high_sierra
+    sha256 "a216b0967cd445e3483d0200dedf7d32f573359ccf00d57d9866725e4915ed4d" => :sierra
+    sha256 "b8a941b270a7f19592046e8e56fb83626d7d68471375dc5438ba0b08b1f08927" => :el_capitan
   end
 
   depends_on "go" => :build
@@ -32,7 +32,7 @@ class MinioMc < Formula
         minio_commit = `git rev-parse HEAD`.chomp
         proj = "github.com/minio/mc"
 
-        system "go", "build", "-o", buildpath/"mc", "-ldflags", <<-EOS.undent
+        system "go", "build", "-o", buildpath/"mc", "-ldflags", <<~EOS
           -X #{proj}/cmd.Version=#{minio_version}
           -X #{proj}/cmd.ReleaseTag=#{minio_release}
           -X #{proj}/cmd.CommitID=#{minio_commit}
@@ -41,10 +41,11 @@ class MinioMc < Formula
     end
 
     bin.install buildpath/"mc"
+    prefix.install_metafiles
   end
 
   test do
     system bin/"mc", "mb", testpath/"test"
-    assert File.exist?(testpath/"test")
+    assert_predicate testpath/"test", :exist?
   end
 end

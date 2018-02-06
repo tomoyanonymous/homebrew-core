@@ -1,14 +1,14 @@
 class Grpc < Formula
   desc "Next generation open source RPC library and framework"
   homepage "https://www.grpc.io/"
-  url "https://github.com/grpc/grpc/archive/v1.4.5.tar.gz"
-  sha256 "39545c6e3d5a41c6cdd42ef7ff8288bc58bacf47b791ed324268cdfa999db9df"
+  url "https://github.com/grpc/grpc/archive/v1.9.0.tar.gz"
+  sha256 "849679d38daa54aeb3643c9bc830d6b61dca06bed8c72e8dde2e25eff9ad91d5"
   head "https://github.com/grpc/grpc.git"
 
   bottle do
-    sha256 "3184cc406fed0c45de09cb96bb6bade3ba9b939bbd9977bb62a3b9f90bdc232c" => :sierra
-    sha256 "8d4f2bd752d43495d8b4e4430972a789a04bfa157a30287b9b6fc0d16f591474" => :el_capitan
-    sha256 "5705620e9c81b3689e0391c62a2a4f5cbe046c20eb8e73dd337d39b60b132b5f" => :yosemite
+    sha256 "4146bd47025f2d40545eb58ec959472f9a1f5ec30f3570f5082f18e2e21ffac3" => :high_sierra
+    sha256 "396c4aa8458456173baae26289001b4ec166f1dd64f866e237422d6d1f91df09" => :sierra
+    sha256 "b95b457c8548eb82cfa5a3ec5bd9e0487dbe3121f66abd7a7ca0e5bce1ce8331" => :el_capitan
   end
 
   depends_on "autoconf" => :build
@@ -35,7 +35,7 @@ class Grpc < Formula
   end
 
   test do
-    (testpath/"test.cpp").write <<-EOS.undent
+    (testpath/"test.cpp").write <<~EOS
       #include <grpc/grpc.h>
       int main() {
         grpc_init();

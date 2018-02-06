@@ -1,17 +1,19 @@
 class Sfk < Formula
   desc "Command-line tools collection"
   homepage "http://stahlworks.com/dev/swiss-file-knife.html"
-  url "https://downloads.sourceforge.net/project/swissfileknife/1-swissfileknife/1.8.5/sfk-1.8.5.tar.gz"
-  sha256 "294bc3f3fc4318a198da47d48ebe38652d57bb0dee2c11fa9c0025d3d8ad9dc4"
+  url "https://downloads.sourceforge.net/project/swissfileknife/1-swissfileknife/1.8.9.0/sfk-1.8.9.tar.gz"
+  sha256 "0f974f491d28bf5442d94f9ddeb983bfc69ead96842965ad55152969381fcd8e"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "488668e8facb4c96ef56bb43a9a89c8dbd02e832625be5f0bb6a50cbf087ac42" => :sierra
-    sha256 "4bb2ac089b26993d8fd7f6118cf15805945d141977152db4b696d543d526ae3f" => :el_capitan
-    sha256 "93ac8468fd3211682b1bb92bc28fcad631a22beeeb58f1ec86a2d7816b57932a" => :yosemite
+    sha256 "b2aabf3e4734a31ea5dd41eff8a71f02b2e367b6333801419491b110282f0189" => :high_sierra
+    sha256 "229f03e71a523bfae5a9e0e31a02b129cc776341dbef63272e95b2fa05bdd71e" => :sierra
+    sha256 "488fecfe38e50e08a722d4857fa4f4ce91f816930f016294a5d7a6c82d5cc452" => :el_capitan
   end
 
   def install
+    ENV.libstdcxx
+
     system "./configure", "--prefix=#{prefix}"
     system "make"
     system "make", "install"

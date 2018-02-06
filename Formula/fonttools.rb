@@ -3,20 +3,20 @@ class Fonttools < Formula
 
   desc "Library for manipulating fonts"
   homepage "https://github.com/fonttools/fonttools"
-  url "https://github.com/fonttools/fonttools/releases/download/3.14.0/fonttools-3.14.0.zip"
-  sha256 "e67fff84ad24e546042f9a00f3ed7714a216944c6c7dde6de8b70fba6f5e7f62"
+  url "https://github.com/fonttools/fonttools/releases/download/3.22.0/fonttools-3.22.0.zip"
+  sha256 "01640dfbc0ba752181b21fe74240b8a7bbf7af75581737245836ada5565bd549"
   head "https://github.com/fonttools/fonttools.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "9f78addb16010cd14d10126b86c322987e59f268f923c7398286c82205cc5512" => :sierra
-    sha256 "b0ef913b78c1cd4dada5536eb770af9fbf2d9f40412b0325e82efa0ae07f69c5" => :el_capitan
-    sha256 "813d1ef3a5a57c415377b42ee72218540757908a184b554927dfec995e62d9c1" => :yosemite
+    sha256 "fb21d03c06af0a68116f36fd77ff9700a2aab6d0b8eba98deb7af83f49be134d" => :high_sierra
+    sha256 "c0ada9d8b336cbbec39d6c97e49b63bc3866ae3f62777a3dddea17a8501a1696" => :sierra
+    sha256 "77519957e9aa318d3802fee7fb8bc07c9347d481a938cd8980ea526d982bc3a8" => :el_capitan
   end
 
   option "with-pygtk", "Build with pygtk support for pyftinspect"
 
-  depends_on :python if MacOS.version <= :snow_leopard
+  depends_on "python" if MacOS.version <= :snow_leopard
   depends_on "pygtk" => :optional
 
   def install

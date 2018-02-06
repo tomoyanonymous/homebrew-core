@@ -3,19 +3,20 @@
 class Mercurial < Formula
   desc "Scalable distributed version control system"
   homepage "https://mercurial-scm.org/"
-  url "https://mercurial-scm.org/release/mercurial-4.3.1.tar.gz"
-  sha256 "2b12f02e3a452adff4ec9cf007017bab0cadb3f37eaf12f4b25a662df73618a2"
+  url "https://mercurial-scm.org/release/mercurial-4.5.tar.gz"
+  sha256 "4d9338d9f9d88dc90b836d1227a3677e3347efaf2a118cc97d7fd1f605f1f265"
 
   bottle do
-    sha256 "69cbcf1b3a7543408b003271088a49edab6c41f811ac433bcef490a36a86b9b4" => :sierra
-    sha256 "521d3afade0e210124b856186c93a702896ced865abc2aa0c7c5ad8558bfeab4" => :el_capitan
-    sha256 "307b79206592dff11c1d1944049f8d99643c72f7b56a401bd5556afffaf74d56" => :yosemite
+    sha256 "59816916c4767f5cb4da8fbcb14d2d47eef667f717a1602197332ed8b93ef549" => :high_sierra
+    sha256 "e7efe8fbb0870e4e6376ec64f1d8d6a7ed20d7471b456d43090202829b394b35" => :sierra
+    sha256 "3fb4fe819a7c332fe2ac24740c004d904abe3dfd0a902d7a3c97ff3c5d9f15d1" => :el_capitan
   end
 
-  option "with-custom-python", "Install against the python in PATH instead of Homebrew's python"
-  depends_on :python
+  depends_on "python"
 
   def install
+    ENV.prepend_path "PATH", Formula["python"].opt_libexec/"bin"
+
     system "make", "PREFIX=#{prefix}", "install-bin"
 
     # Install chg (see https://www.mercurial-scm.org/wiki/CHg)
@@ -26,7 +27,7 @@ class Mercurial < Formula
     end
 
     # Configure a nicer default pager
-    (buildpath/"hgrc").write <<-EOS.undent
+    (buildpath/"hgrc").write <<~EOS
       [pager]
       pager = less -FRX
     EOS
@@ -46,7 +47,7 @@ class Mercurial < Formula
     return unless (opt_bin/"hg").exist?
     cacerts_configured = `#{opt_bin}/hg config web.cacerts`.strip
     return if cacerts_configured.empty?
-    <<-EOS.undent
+    <<~EOS
       Homebrew has detected that Mercurial is configured to use a certificate
       bundle file as its trust store for TLS connections instead of using the
       default OpenSSL store. If you have trouble connecting to remote

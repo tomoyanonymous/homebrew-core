@@ -1,19 +1,18 @@
 class Libtiff < Formula
   desc "TIFF library and utilities"
   homepage "http://libtiff.maptools.org/"
-  url "http://download.osgeo.org/libtiff/tiff-4.0.8.tar.gz"
-  mirror "https://fossies.org/linux/misc/tiff-4.0.8.tar.gz"
-  sha256 "59d7a5a8ccd92059913f246877db95a2918e6c04fb9d43fd74e5c3390dac2910"
-  revision 3
+  url "http://download.osgeo.org/libtiff/tiff-4.0.9.tar.gz"
+  mirror "https://fossies.org/linux/misc/tiff-4.0.9.tar.gz"
+  sha256 "6e7bdeec2c310734e734d19aae3a71ebe37a4d842e0e23dbb1b8921c0026cfcd"
+  revision 1
 
   bottle do
     cellar :any
-    sha256 "1b7b54932b67048ac0f61dcbb10bce800cfabc58d12e8833536f831797d1d6a8" => :sierra
-    sha256 "4e68fb3d016b9dcc3a6380ae2d3fd2bc465294633e64534069aadfdd4ce15266" => :el_capitan
-    sha256 "91558710328b228649af92a32efd574d113292ecc4d575a81bf32a57af17d05c" => :yosemite
+    sha256 "8141b15d231787df0eae37c7d05621337f59f90f2703fd5e8adf17c7e16a1f3e" => :high_sierra
+    sha256 "1c378d48411a8ea062a97e3e4876a7d432f03e1b98df225d33568a17bbf719e6" => :sierra
+    sha256 "d7a2088d014c409bd6ac1d80fc04cdd9bee23ec35e83534b427c2260af9bbc5c" => :el_capitan
   end
 
-  option :cxx11
   option "with-xz", "Include support for LZMA compression"
 
   depends_on "jpeg"
@@ -22,23 +21,14 @@ class Libtiff < Formula
   # All of these have been reported upstream & should
   # be fixed in the next release, but please check.
   patch do
-    url "https://mirrors.ocf.berkeley.edu/debian/pool/main/t/tiff/tiff_4.0.8-4.debian.tar.xz"
-    mirror "https://mirrorservice.org/sites/ftp.debian.org/debian/pool/main/t/tiff/tiff_4.0.8-4.debian.tar.xz"
-    sha256 "36c008179ae08d6958cd9fcd75f82c082624bf55e2c4e6ca0e1af59ea4d75d9c"
-    apply "patches/01-CVE-2015-7554.patch",
-          "patches/02-CVE.patch",
-          "patches/03-CVE.patch",
-          "patches/04-CVE-2016-10095_CVE-2017-9147.patch",
-          "patches/05-CVE-2017-9936.patch",
-          "patches/06-OOM_in_gtTileContig.patch",
-          "patches/07-CVE-2017-10688.patch",
-          "patches/08-LZW_compression_regression.patch",
-          "patches/09-CVE-2017-11335.patch"
+    url "https://mirrors.ocf.berkeley.edu/debian/pool/main/t/tiff/tiff_4.0.9-3.debian.tar.xz"
+    mirror "https://mirrorservice.org/sites/ftp.debian.org/debian/pool/main/t/tiff/tiff_4.0.9-3.debian.tar.xz"
+    sha256 "c413f5b2423b95d8b068adca695f0ddaea5219088a1d38de4800b379bc20ca73"
+    apply "patches/CVE-2017-9935.patch",
+          "patches/CVE-2017-18013.patch"
   end
 
   def install
-    ENV.cxx11 if build.cxx11?
-
     args = %W[
       --disable-dependency-tracking
       --prefix=#{prefix}
@@ -57,7 +47,7 @@ class Libtiff < Formula
   end
 
   test do
-    (testpath/"test.c").write <<-EOS.undent
+    (testpath/"test.c").write <<~EOS
       #include <tiffio.h>
 
       int main(int argc, char* argv[])

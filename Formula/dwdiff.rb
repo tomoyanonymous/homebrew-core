@@ -1,14 +1,14 @@
 class Dwdiff < Formula
   desc "Diff that operates at the word level"
-  homepage "http://os.ghalkes.nl/dwdiff.html"
-  url "http://os.ghalkes.nl/dist/dwdiff-2.1.0.tar.bz2"
-  sha256 "45308f2f07c08c75c6ebd1eae3e3dcf7f836e5af1467cefc1b4829777c07743a"
-  revision 4
+  homepage "https://os.ghalkes.nl/dwdiff.html"
+  url "https://os.ghalkes.nl/dist/dwdiff-2.1.1.tar.bz2"
+  sha256 "9745860faad6cb58744c7c45d16c0c7e222896c80d0cd7208dd36126d1a98c8b"
+  revision 2
 
   bottle do
-    sha256 "1e89cad649d9fface636f7d810d728c1a7777f02ca2706dcdf1e176e1b1af9e6" => :sierra
-    sha256 "62f0c751c4eaad4f4983bdbf216f361365b632817c25e22717fdde311da98c6e" => :el_capitan
-    sha256 "a61909de2542b39ccb1072286887d3de6da4fac9310cfd062dbbf964184f6cd2" => :yosemite
+    sha256 "15202fe0942935caa9b6fceaf70a2b82bb2434d9940e090451566a050d33d631" => :high_sierra
+    sha256 "c10ac8f4b3742b8510c6bca9f2b4aec749ad57c5d62708910e670cd06d19f2d9" => :sierra
+    sha256 "fe4cb1bf0b9a96ec2f872e192e691c96c30a93a5d5c81494abaeb099fca0a806" => :el_capitan
   end
 
   depends_on "gettext"

@@ -1,15 +1,15 @@
 class Libcdr < Formula
   desc "C++ library to parse the file format of CorelDRAW documents"
   homepage "https://wiki.documentfoundation.org/DLP/Libraries/libcdr"
-  url "https://dev-www.libreoffice.org/src/libcdr/libcdr-0.1.3.tar.xz"
-  sha256 "66e28e502abef7f6f494ce03de037d532f5e7888cfdee62c01203c8325b33f22"
+  url "https://dev-www.libreoffice.org/src/libcdr/libcdr-0.1.4.tar.xz"
+  sha256 "e7a7e8b00a3df5798110024d7061fe9d1c3330277d2e4fa9213294f966a4a66d"
   revision 2
 
   bottle do
     cellar :any
-    sha256 "4c59ebfbb12f1d71d26b03899691dc6b62dcde619c53c2f096b8efc91aab6bdc" => :sierra
-    sha256 "5984f319a2bc8b3e3fd15daffaf588a737395d5e11813af84bba2884a3ebad1a" => :el_capitan
-    sha256 "69e4eeaa9f00aa68c8afde1327adf8a7d84d53fc24a4df0cf2d5d29494ccfba1" => :yosemite
+    sha256 "a1a24122adee68bbb8fe4d2d2cda90def40230fea990a36091eb860bce3ae086" => :high_sierra
+    sha256 "4e8fdcf4cdc32e9b9d2dfe00c7ec74fc53e4a4389d13f866b697cce6a6ff05eb" => :sierra
+    sha256 "4d5b32ef2b229897a3126e55e231cb878d2ecee165a2b519fa5b298c07b562d3" => :el_capitan
   end
 
   depends_on "pkg-config" => :build
@@ -30,7 +30,7 @@ class Libcdr < Formula
   end
 
   test do
-    (testpath/"test.cpp").write <<-EOS.undent
+    (testpath/"test.cpp").write <<~EOS
       #include <libcdr/libcdr.h>
       int main() {
         libcdr::CDRDocument::isSupported(0);

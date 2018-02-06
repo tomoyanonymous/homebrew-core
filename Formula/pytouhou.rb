@@ -3,18 +3,19 @@ class Pytouhou < Formula
   homepage "https://pytouhou.linkmauve.fr/"
   url "https://hg.linkmauve.fr/touhou", :revision => "5270c34b4c00", :using => :hg
   version "634"
+  revision 1
   head "https://hg.linkmauve.fr/touhou", :using => :hg
 
   bottle do
     cellar :any
-    sha256 "fd255fcb879ea6dfcf7cd7d4c5b379b42fdf3612caa48e33ee724df9211ce0eb" => :sierra
-    sha256 "0b14b271443ce5833a8377c00cca5a697d49696cb030faf8eb868bb6543281b1" => :el_capitan
-    sha256 "89644eff0f65c4200f563324a6d0a8b9531889ff302b1020cbe9e75147e02df1" => :yosemite
+    sha256 "6c5217af2953b820eb02f0d467dcf6c5747baa2c9e6508722603deaa17a54b9a" => :high_sierra
+    sha256 "db45b6422e7e708a44a34d1cc1e291f03d6c32c2a90bb170b4368baab94810ca" => :sierra
+    sha256 "9ca75a54c2cad4ba1c9de5bd4aacb9869b8bbbb2b1fe632577e25fe4684bd2ac" => :el_capitan
   end
 
   option "with-demo", "Install demo version of Touhou 6"
 
-  depends_on :python3
+  depends_on "python3"
   depends_on "pkg-config" => :build
   depends_on "libepoxy"
   depends_on "sdl2"
@@ -63,13 +64,13 @@ class Pytouhou < Formula
   end
 
   def caveats
-    s = <<-EOS.undent
-    The default path for the game data is:
-      #{pkgshare}/game
+    s = <<~EOS
+      The default path for the game data is:
+        #{pkgshare}/game
     EOS
     if build.with? "demo"
-      s += <<-EOS.undent
-      Demo version of Touhou 6 has been installed.
+      s += <<~EOS
+        Demo version of Touhou 6 has been installed.
       EOS
     end
     s

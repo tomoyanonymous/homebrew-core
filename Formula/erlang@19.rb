@@ -2,16 +2,15 @@ class ErlangAT19 < Formula
   desc "Programming language for highly scalable real-time systems"
   homepage "https://www.erlang.org/"
   # Download tarball from GitHub; it is served faster than the official tarball.
-  url "https://github.com/erlang/otp/archive/OTP-19.3.tar.gz"
-  sha256 "fc82c5377ad9e84a37f67f2b2b50b27fe4e689440ae9e5d0f5dcfb440a9487ac"
+  url "https://github.com/erlang/otp/archive/OTP-19.3.6.4.tar.gz"
+  sha256 "640940d6fb7661ee4ec355ed68cccb52388517f4819c883b9837885f31aeaaeb"
   head "https://github.com/erlang/otp.git", :branch => "maint-19"
 
   bottle do
     cellar :any
-    rebuild 1
-    sha256 "9668fbe0c7f160f96742460c884385ffe7bdfba8a87349bcbb93de3a4a313316" => :sierra
-    sha256 "8caed1f7618c237bdaa42919118f862a2c0bdf4812eb6f6b3d9ac648d717d600" => :el_capitan
-    sha256 "3694132eb1de0ecde052bb0deb3be0515a8e3563a75b8bebaa03ca27d4be859a" => :yosemite
+    sha256 "60ac5653d3ee9e0cb3de4cdc6f805eba45f709be18db41ce498b3576a8caad1b" => :high_sierra
+    sha256 "b523406b7d7894bde4ad776defcf0d6e8d15532373f49772c934c7feb71a1532" => :sierra
+    sha256 "19d61d78e5950e48606a614c65c1b22f39aba559416cfa86baa453bdd40387df" => :el_capitan
   end
 
   keg_only :versioned_formula
@@ -41,6 +40,12 @@ class ErlangAT19 < Formula
   patch do
     url "https://raw.githubusercontent.com/Homebrew/formula-patches/1f4a770/erlang%4019/boring-ssl-high-sierra.patch"
     sha256 "5aae52e7947db400a7798e8cda6e33e30088edf816e842cb09974b92c6b5eba6"
+  end
+
+  # Pointer comparison triggers error with Xcode 9
+  patch do
+    url "https://github.com/erlang/otp/commit/a64c4d806fa54848c35632114585ad82b98712e8.diff?full_index=1"
+    sha256 "3261400f8d7f0dcff3a52821daea3391ebfa01fd859f9f2d9cc5142138e26e15"
   end
 
   resource "man" do
@@ -109,7 +114,7 @@ class ErlangAT19 < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     Man pages can be found in:
       #{opt_lib}/erlang/man
     Access them with `erl -man`, or add this directory to MANPATH.

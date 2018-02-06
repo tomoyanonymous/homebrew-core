@@ -1,14 +1,17 @@
 class DnscryptProxy < Formula
   desc "Secure communications between a client and a DNS resolver"
   homepage "https://dnscrypt.org"
-  url "https://github.com/jedisct1/dnscrypt-proxy/archive/1.9.5.tar.gz"
-  sha256 "947000568f79ab4d036b259d9cf3fe6fdf8419860d9ad18004ac767db0dbd5ac"
+  url "https://mirrors.ocf.berkeley.edu/debian/pool/main/d/dnscrypt-proxy/dnscrypt-proxy_1.9.5.orig.tar.gz"
+  mirror "https://mirrorservice.org/sites/ftp.debian.org/debian/pool/main/d/dnscrypt-proxy/dnscrypt-proxy_1.9.5.orig.tar.gz"
+  sha256 "64021fabb7d5bab0baf681796d90ecd2095fb81381e6fb317a532039025a9399"
+  revision 3
+
   head "https://github.com/jedisct1/dnscrypt-proxy.git"
 
   bottle do
-    sha256 "e054db367a116362a02c0ec3c06e449540cc81cca7db63e87cfc41040dd4b028" => :sierra
-    sha256 "971af437377420e432e932a444b0a98b3ab5d2d347ce72b42a231e240d428a5e" => :el_capitan
-    sha256 "6a4228c880a0755a4b02da9adc7fd717d2261bf086ddf0506853f8edbbf882ba" => :yosemite
+    sha256 "ae955dd397be3916768c9500f24b2230550b507654b88b45b95910f20b48b57b" => :high_sierra
+    sha256 "3e13da73a62121b7660fd4ab98014a6fea213ec681429865704db4ccd564c1bd" => :sierra
+    sha256 "29954c055e113395ea3772c6dd61ef5ef79f9547bf0a1e14e37e9fd932b479bb" => :el_capitan
   end
 
   option "without-plugins", "Disable support for plugins"
@@ -48,9 +51,9 @@ class DnscryptProxy < Formula
     pkgshare.install Dir["contrib/*"] - Dir["contrib/Makefile*"]
 
     if build.with? "minisign"
-      (bin/"dnscrypt-update-resolvers").write <<-EOS.undent
+      (bin/"dnscrypt-update-resolvers").write <<~EOS
         #!/bin/sh
-        RESOLVERS_UPDATES_BASE_URL=https://download.dnscrypt.org/dnscrypt-proxy
+        RESOLVERS_UPDATES_BASE_URL=https://raw.githubusercontent.com/dyne/dnscrypt-proxy/master
         RESOLVERS_LIST_BASE_DIR=#{pkgshare}
         RESOLVERS_LIST_PUBLIC_KEY="RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3"
 
@@ -73,11 +76,12 @@ class DnscryptProxy < Formula
   def post_install
     return if build.without? "minisign"
 
+    ENV["PATH"] = PATH.new(ENV["PATH"]).prepend(Formula["minisign"].opt_bin)
     system bin/"dnscrypt-update-resolvers"
   end
 
   def caveats
-    s = <<-EOS.undent
+    s = <<~EOS
       After starting dnscrypt-proxy, you will need to point your
       local DNS server to 127.0.0.1. You can do this by going to
       System Preferences > "Network" and clicking the "Advanced..."
@@ -100,7 +104,7 @@ class DnscryptProxy < Formula
     EOS
 
     if build.with? "minisign"
-      s += <<-EOS.undent
+      s += <<~EOS
 
         If at some point the resolver file gets outdated, it can be updated to the
         latest version by running: #{opt_bin}/dnscrypt-update-resolvers
@@ -112,7 +116,7 @@ class DnscryptProxy < Formula
 
   plist_options :startup => true
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-/Apple/DTD PLIST 1.0/EN" "http:/www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">

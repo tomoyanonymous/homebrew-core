@@ -1,14 +1,14 @@
 class NodeAT6 < Formula
   desc "Platform built on V8 to build network applications"
   homepage "https://nodejs.org/"
-  url "https://nodejs.org/dist/v6.11.2/node-v6.11.2.tar.xz"
-  sha256 "04af4992238b19124ea56f1bcfda36827613a24eb3b00fc3b50f261a415a26e4"
+  url "https://nodejs.org/dist/v6.12.3/node-v6.12.3.tar.xz"
+  sha256 "1a58672fa2178098c30306862cccdf02b8803dafe1d2e9f51c8c96749f3ddcdc"
   head "https://github.com/nodejs/node.git", :branch => "v6.x-staging"
 
   bottle do
-    sha256 "6b61acae4e54039afa8f52ab72968ccd19149a122af9fa666bea065423480275" => :sierra
-    sha256 "e2fa29968306d62c8049c38f74f647fb713e0a3a4f21dbb9f27f72b4d5ea5e86" => :el_capitan
-    sha256 "15ec88067fe022cdf1ffbf5c8e03df648847eeaf5f39436ace867a7c40cd0c0f" => :yosemite
+    sha256 "7996e1af78984a494206277ac05783a4ebe5632603288eb3b5e8e67f912d7735" => :high_sierra
+    sha256 "e405cceaa1735385c4f0edaf1f4623adce6ef36e0dba4ae5e17b9f1ac1315cf0" => :sierra
+    sha256 "33d902ee55eb5d884a5303fd46a2bb1aab94176bb7bb27c45ade91c471597726" => :el_capitan
   end
 
   keg_only :versioned_formula
@@ -19,7 +19,7 @@ class NodeAT6 < Formula
   option "without-completion", "npm bash completion will not be installed"
   option "with-full-icu", "Build with full-icu (all locales) instead of small-icu (English only)"
 
-  depends_on :python => :build if MacOS.version <= :snow_leopard
+  depends_on "python" => :build if MacOS.version <= :snow_leopard
   depends_on "pkg-config" => :build
   depends_on "openssl" => :optional
 
@@ -33,8 +33,8 @@ class NodeAT6 < Formula
 
   # Keep in sync with main node formula
   resource "npm" do
-    url "https://registry.npmjs.org/npm/-/npm-5.3.0.tgz"
-    sha256 "dd96ece7cbd6186a51ca0a5ab7e1de0113333429603ec2ccb6259e0bef2e03eb"
+    url "https://registry.npmjs.org/npm/-/npm-5.6.0.tgz"
+    sha256 "b1f0de3767136c1d7b4b0f10e6eb2fb3397e2fe11e4c9cddcd0030ad1af9eddd"
   end
 
   resource "icu4c" do
@@ -117,7 +117,7 @@ class NodeAT6 < Formula
     s = ""
 
     if build.without? "npm"
-      s += <<-EOS.undent
+      s += <<~EOS
         Homebrew has NOT installed npm. If you later install it, you should supplement
         your NODE_PATH with the npm module folder:
           #{HOMEBREW_PREFIX}/lib/node_modules
@@ -125,7 +125,7 @@ class NodeAT6 < Formula
     end
 
     if build.without? "full-icu"
-      s += <<-EOS.undent
+      s += <<~EOS
         Please note by default only English locale support is provided. If you need
         full locale support you should either rebuild with full icu:
           `brew reinstall node --with-full-icu`
@@ -155,14 +155,14 @@ class NodeAT6 < Formula
       ENV.prepend_path "PATH", opt_bin
       ENV.delete "NVM_NODEJS_ORG_MIRROR"
       assert_equal which("node"), opt_bin/"node"
-      assert (HOMEBREW_PREFIX/"bin/npm").exist?, "npm must exist"
-      assert (HOMEBREW_PREFIX/"bin/npm").executable?, "npm must be executable"
+      assert_predicate HOMEBREW_PREFIX/"bin/npm", :exist?, "npm must exist"
+      assert_predicate HOMEBREW_PREFIX/"bin/npm", :executable?, "npm must be executable"
       npm_args = ["-ddd", "--cache=#{HOMEBREW_CACHE}/npm_cache", "--build-from-source"]
       system "#{HOMEBREW_PREFIX}/bin/npm", *npm_args, "install", "npm@latest"
       system "#{HOMEBREW_PREFIX}/bin/npm", *npm_args, "install", "bignum" unless head?
-      assert (HOMEBREW_PREFIX/"bin/npx").exist?, "npx must exist"
-      assert (HOMEBREW_PREFIX/"bin/npx").executable?, "npx must be executable"
-      assert_match "< hello >", shell_output("#{HOMEBREW_PREFIX}/bin/npx --cache=#{HOMEBREW_CACHE}/npm_cache cowsay hello")
+      assert_predicate HOMEBREW_PREFIX/"bin/npx", :exist?, "npx must exist"
+      assert_predicate HOMEBREW_PREFIX/"bin/npx", :executable?, "npx must be executable"
+      assert_match "< hello >", shell_output("#{HOMEBREW_PREFIX}/bin/npx cowsay hello")
     end
   end
 end

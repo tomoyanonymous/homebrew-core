@@ -1,16 +1,15 @@
 class GetIplayer < Formula
   desc "Utility for downloading TV and radio programmes from BBC iPlayer"
   homepage "https://github.com/get-iplayer/get_iplayer"
-  url "https://github.com/get-iplayer/get_iplayer/archive/v3.01.tar.gz"
-  sha256 "0e1e16f3706efa98893e33b1602cc00bb3d8e22e269bfc5a1a078559e4c21ce6"
+  url "https://github.com/get-iplayer/get_iplayer/archive/v3.12.tar.gz"
+  sha256 "30070d2b0479abd701444169860f338668321548175d43e02bc6bc18adeee51c"
   head "https://github.com/get-iplayer/get_iplayer.git", :branch => "develop"
 
   bottle do
     cellar :any_skip_relocation
-    rebuild 1
-    sha256 "3a5f58f6f4ed788a1f22e2dc81bfabdb62628ebbfce6fc361dc16df0b2527f13" => :sierra
-    sha256 "0d1ca951d064801bbcea599de63775279e1b2c85199cf2061295d4136691d15b" => :el_capitan
-    sha256 "749c6666f36cbbe01a6413f88f2b003b4b48546797b64378f0a650976dbfab00" => :yosemite
+    sha256 "aacf3d07dd31f84012ba21b8c424d39b33d56171e04094c4f1b697b0a648d1dd" => :high_sierra
+    sha256 "86e6d68808cc02aeec7c8a86afce383d5eef523ed9ab9112145aa6a5188afcca" => :sierra
+    sha256 "e81ebb9372795b734d48cde298cc7b1530e2eba471f949397780df585f2f7508" => :el_capitan
   end
 
   depends_on "atomicparsley" => :recommended
@@ -23,13 +22,19 @@ class GetIplayer < Formula
     sha256 "11950da7636cb786efd3bfb5891da4c820975276bce43175214391e5c32b7b96"
   end
 
+  resource "IO::Socket::SSL" do
+    url "https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.052.tar.gz"
+    sha256 "e4897a9b17cb18a3c44aa683980d52cef534cdfcb8063d6877c879bfa2f26673"
+  end
+
   resource "Mojolicious" do
-    url "https://cpan.metacpan.org/authors/id/S/SR/SRI/Mojolicious-7.33.tar.gz"
-    sha256 "3bf13d60663fc5fcfb7689ba71e0b7da2d5ac818d26b39da55f469ebb3f8fb02"
+    url "https://cpan.metacpan.org/authors/id/S/SR/SRI/Mojolicious-7.60.tar.gz"
+    sha256 "31d1e8a47a7547d6bd64df6725cdf58d2c6e8eb9150dcaf6e2c2e6e368d15c7f"
   end
 
   def install
     ENV.prepend_create_path "PERL5LIB", libexec/"lib/perl5"
+    ENV["NO_NETWORK_TESTING"] = "1"
 
     resources.each do |r|
       r.stage do
@@ -51,8 +56,8 @@ class GetIplayer < Formula
   test do
     output = shell_output("\"#{bin}/get_iplayer\" --refresh --refresh-include=\"BBC None\" --quiet dontshowanymatches 2>&1")
     assert_match "get_iplayer #{pkg_version}-homebrew", output, "Unexpected version"
-    assert_match "INFO: 0 Matching Programmes", output, "Unexpected output"
-    assert_match "INFO: Using concurrent indexing", output,
+    assert_match "INFO: 0 matching programmes", output, "Unexpected output"
+    assert_match "INFO: Indexing tv programmes (concurrent)", output,
                          "Mojolicious not found"
   end
 end

@@ -1,56 +1,25 @@
-require "language/go"
-
 class Immortal < Formula
   desc "OS agnostic (*nix) cross-platform supervisor"
   homepage "https://immortal.run/"
-  url "https://github.com/immortal/immortal/archive/0.15.0.tar.gz"
-  sha256 "bf0fa8f16f8045211a43f42001ed685959a28427a970f50db79c1a9176603b7b"
+  url "https://github.com/immortal/immortal/archive/0.18.0.tar.gz"
+  sha256 "8a2328daa5fce82e333fa01e1d87ea7720a405756788cc7edee96b7bb22b26e8"
   head "https://github.com/immortal/immortal.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "a384cacb850a7edc2b2a134383244ca8e507d6878915776d4749bf5e6d6dffcf" => :sierra
-    sha256 "c4999be9914d7641793f8b9aa159fdf248571097256fd7063dea0b875b4a4ecf" => :el_capitan
-    sha256 "06a54720afbff1dc49530a7f399347121b168bd8f296c798e94e0995d768b67e" => :yosemite
+    sha256 "deebb8a1f75da45655d196fbb8d3cc557604e8c65b7ae0fcaa1ba1995861a53a" => :high_sierra
+    sha256 "a174ec2100bd0f6cd9b685e7baec1e0de0f93e949300631b69bbe05e1d26e11e" => :sierra
+    sha256 "71a52e92493c351223aee8cbc69dc21cc0d7cac516296685403c8c4da939111f" => :el_capitan
   end
 
+  depends_on "dep" => :build
   depends_on "go" => :build
-
-  go_resource "github.com/go-yaml/yaml" do
-    url "https://github.com/go-yaml/yaml.git",
-        :revision => "25c4ec802a7d637f88d584ab26798e94ad14c13b"
-  end
-
-  go_resource "github.com/nbari/violetear" do
-    url "https://github.com/nbari/violetear.git",
-        :revision => "13cb9a63c0cb68977810a7f38ced9f93178d5d62"
-  end
-
-  go_resource "github.com/immortal/logrotate" do
-    url "https://github.com/immortal/logrotate.git",
-        :revision => "859105169067e6c76e08f888fb76cf4929fe9064"
-  end
-
-  go_resource "github.com/immortal/multiwriter" do
-    url "https://github.com/immortal/multiwriter.git",
-        :revision => "2555774a03ac1d12b5bb4392858959ee50f78884"
-  end
-
-  go_resource "github.com/immortal/natcasesort" do
-    url "https://github.com/immortal/natcasesort.git",
-        :revision => "69368b73881a69041466dd2b4fc0373f8e47db15"
-  end
-
-  go_resource "github.com/immortal/xtime" do
-    url "https://github.com/immortal/xtime.git",
-        :revision => "fb1aca1146ea82769e8433f5bb22f373765e7ecc"
-  end
 
   def install
     ENV["GOPATH"] = buildpath
     (buildpath/"src/github.com/immortal/immortal").install buildpath.children
-    Language::Go.stage_deps resources, buildpath/"src"
     cd "src/github.com/immortal/immortal" do
+      system "dep", "ensure"
       ldflags = "-s -w -X main.version=#{version}"
       system "go", "build", "-ldflags", ldflags, "-o", "#{bin}/immortal", "cmd/immortal/main.go"
       system "go", "build", "-ldflags", ldflags, "-o", "#{bin}/immortalctl", "cmd/immortalctl/main.go"

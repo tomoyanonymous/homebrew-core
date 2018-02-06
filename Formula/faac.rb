@@ -1,29 +1,25 @@
 class Faac < Formula
   desc "ISO AAC audio encoder"
   homepage "http://www.audiocoding.com/faac.html"
-  url "https://downloads.sourceforge.net/project/faac/faac-src/faac-1.29/faac-1.29.tar.gz"
-  sha256 "8cc7b03ceb2722223a6457e95d4c994731d80214a03ba33d1af76ba53f4b3197"
+  url "https://downloads.sourceforge.net/project/faac/faac-src/faac-1.29/faac-1.29.9.2.tar.gz"
+  sha256 "d45f209d837c49dae6deebcdd87b8cc3b04ea290880358faecf5e7737740c771"
 
   bottle do
     cellar :any
-    sha256 "ec05352ba412fb64cda82e4a964b9a0e6e625481a3d5b13a66db8be9d39d29f6" => :sierra
-    sha256 "eb799e6822088371803fb833a44099cb1ab54ab1b775da3c858b85db963be411" => :el_capitan
-    sha256 "1d3c4c9b4848d88a29d16702ab1d3e9cca5d2e801cf99886d9b13b38510f09ef" => :yosemite
+    sha256 "73e02bf58df497bf2c35e8374c000fc8ed989c167b559b9efe2f5874687fe849" => :high_sierra
+    sha256 "9ed007e0aaeaddb47d284a81f2783c6ddcf9af86e0ed1da1a9b94aa84dfd1a34" => :sierra
+    sha256 "4dd46a72ce3a5355efa42038df34b9bfda51ae6265be89eb09f1b8957ef3653d" => :el_capitan
   end
 
-  depends_on "autoconf" => :build
-  depends_on "automake" => :build
-  depends_on "libtool" => :build
-
   def install
-    system "./bootstrap"
-    system "./configure", "--disable-debug", "--disable-dependency-tracking",
+    system "./configure", "--disable-dependency-tracking",
+                          "--disable-silent-rules",
                           "--prefix=#{prefix}"
     system "make", "install"
   end
 
   test do
     system bin/"faac", test_fixtures("test.mp3"), "-P", "-o", "test.m4a"
-    assert File.exist?("test.m4a")
+    assert_predicate testpath/"test.m4a", :exist?
   end
 end

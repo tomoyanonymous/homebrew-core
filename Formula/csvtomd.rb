@@ -5,25 +5,27 @@ class Csvtomd < Formula
   homepage "https://github.com/mplewis/csvtomd"
   url "https://files.pythonhosted.org/packages/2f/41/289bedde7fb32d817d5802eff68b99546842cb34df840665ec39b363f258/csvtomd-0.2.1.tar.gz"
   sha256 "d9fdf166c3c299ad5800b3cb1661f223b98237f38f22e9d253d45d321f70ec72"
+  revision 1
 
   bottle do
-    sha256 "1ef512bf336e6c7b28daa12940fdcdd3c04961d91b5a1545202d71211dce79b0" => :sierra
-    sha256 "3405adf42dc819b85088379ff63a55d8247895c3d9ac2d9e227b3d23e375f349" => :el_capitan
-    sha256 "fdadfc84d81fc3a934ee2d9ecf2bd0fecc35a88cc0051ffbd60437a37f652b86" => :yosemite
+    cellar :any_skip_relocation
+    sha256 "9798a11d45bc49d35e9d0cadc43f67f0fab0303381421063721f80223acc84fc" => :high_sierra
+    sha256 "93644a15d58ab235eec9ef98f2ae23890ff811756fdba8870327b3d2b474cc72" => :sierra
+    sha256 "95e1e0ae2ba1fa1205a19822b5b79b2586ba9f36bf9fed7faf30e1a4223f27c6" => :el_capitan
   end
 
-  depends_on :python3
+  depends_on "python3"
 
   def install
     virtualenv_install_with_resources
   end
 
   test do
-    (testpath/"test.csv").write <<-EOS.undent
+    (testpath/"test.csv").write <<~EOS
       column 1,column 2
       hello,world
     EOS
-    markdown = <<-EOS.undent.strip
+    markdown = <<~EOS.strip
       column 1  |  column 2
       ----------|----------
       hello     |  world

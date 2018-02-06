@@ -1,13 +1,14 @@
 class Latexila < Formula
   desc "LaTeX editor for the GNOME desktop"
   homepage "https://wiki.gnome.org/Apps/LaTeXila"
-  url "https://download.gnome.org/sources/latexila/3.24/latexila-3.24.2.tar.xz"
-  sha256 "89042a9253b3e150d56bada649d47a9879fd702fc46f73be5649b0edad3f1183"
+  url "https://download.gnome.org/sources/latexila/3.26/latexila-3.26.1.tar.xz"
+  sha256 "658eba0db71864eb6d4873516d97e05be3e63085ff55513c8f10145ffb657151"
+  revision 2
 
   bottle do
-    sha256 "1f7325b4e75c112185cf49b86f5e05ea013f40c4db3cddd8fefaa05fc965bff6" => :sierra
-    sha256 "74b9e1021f438624aa47e96c01b1cd2a59cd0184e4075542c59aa17bf7e6fb41" => :el_capitan
-    sha256 "441ecb13f217b9a689a6107a9418e758bdae973eadd28f40c988db37c826838d" => :yosemite
+    sha256 "8f985d4141c633e753a03bb948a3abf6700bddf78cbf700a2b777d365aee979a" => :high_sierra
+    sha256 "d75249308a8f78927ae3d8debc11cba7852e98193a57f2cf0c5c1e9456257131" => :sierra
+    sha256 "b922a72b22b58f2d343c609ac28efda42971c1bc6715b21e00b3c6f471c336fb" => :el_capitan
   end
 
   depends_on "pkg-config" => :build
@@ -16,13 +17,13 @@ class Latexila < Formula
   depends_on "vala" => :build
   depends_on "gtksourceview3"
   depends_on "gspell"
-  depends_on "gtef"
+  depends_on "tepl"
   depends_on "libgee"
   depends_on "gobject-introspection"
-  depends_on "gnome-icon-theme"
+  depends_on "adwaita-icon-theme"
   depends_on "gnome-themes-standard" => :optional
   depends_on "libxml2"
-  depends_on :python if MacOS.version <= :snow_leopard
+  depends_on "python" if MacOS.version <= :snow_leopard
 
   def install
     ENV.append_path "PYTHONPATH", "#{Formula["libxml2"].opt_lib}/python2.7/site-packages"

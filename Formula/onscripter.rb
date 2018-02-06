@@ -1,15 +1,15 @@
 class Onscripter < Formula
   desc "NScripter-compatible visual novel engine"
   homepage "https://onscripter.osdn.jp/"
-  url "https://onscripter.osdn.jp/onscripter-20161102.tar.gz"
-  sha256 "e9a39b1c45cc47c363eb15773a9944da7a29eff74261ccb656ff5ce4b5fdd5d8"
-  revision 2
+  url "https://onscripter.osdn.jp/onscripter-20170814.tar.gz"
+  sha256 "07010e633e490f24f4c5a57dd8c7979f519d0a10a2bfbba8e04828753f1ba97a"
+  revision 1
 
   bottle do
     cellar :any
-    sha256 "8100274df3d26f93cb028f6b28c7ecc40194cf2e4b2151111cbbc431cea94b44" => :sierra
-    sha256 "ce14e2a37a764ac33102ff7ec6a67384ea87f41097eeac792a8795e0d668e2eb" => :el_capitan
-    sha256 "769ef3374312b8b0545dfefe6a3ba40614a91d9beb558f6b5e85c83164668107" => :yosemite
+    sha256 "c7843b57d4404e6a7ac61d521bc60e9b572dff73d916c6a95c3ba2a5f5527125" => :high_sierra
+    sha256 "d32055f6e69f36da381320ffffb898b4a94e5d29e7a7ae1a00c60a4766439e8c" => :sierra
+    sha256 "dab8de0970901e7c63b32ad3d2071895c4259c5eb20a7abf8701b328d55bb8cf" => :el_capitan
   end
 
   option "with-english", "Build with single-byte character mode"

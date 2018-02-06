@@ -1,15 +1,15 @@
 class KubeAws < Formula
   desc "CoreOS Kubernetes on AWS"
   homepage "https://coreos.com/kubernetes/docs/latest/kubernetes-on-aws.html"
-  url "https://github.com/kubernetes-incubator/kube-aws/archive/v0.9.7.tar.gz"
-  sha256 "f9fa80bfc71f08590bf3e268fedd5df46015d429ca70fab8d7221284efd849db"
+  url "https://github.com/kubernetes-incubator/kube-aws/archive/v0.9.9.tar.gz"
+  sha256 "4ad421cb58913c27b9f297161eb87b0587f8420d6f0573cee052b17370c519aa"
   head "https://github.com/kubernetes-incubator/kube-aws.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "c529a7df8b72a22bd5117d37bd845e8fb36353371399e1e6a28e6b0385b011be" => :sierra
-    sha256 "0b7b0d37d1dbf64dc40ebf7b97061449c56d78c20f8bc319a9f078344027901e" => :el_capitan
-    sha256 "7ae16b11b46fd63a328fccfc81093e3d6dc7ded8a8676f88b443e3848cc07662" => :yosemite
+    sha256 "f19411b6841900a0f55134394c70478cb7760f8dc80a49afa00b6ea197363cd4" => :high_sierra
+    sha256 "6500d191e1595000eff888ee7175ba9cc2c3c16af571a7581b7e1f8c1c35e0c0" => :sierra
+    sha256 "e992403707995cb4862515ddf5ba75d527799f3db3def9c4ec6693f43fe28dc6" => :el_capitan
   end
 
   depends_on "go" => :build
@@ -39,31 +39,18 @@ class KubeAws < Formula
   end
 
   test do
-    require "yaml"
-
     system "#{bin}/kube-aws"
-    cluster = {
-      "clusterName" => "test-cluster",
-      "apiEndpoints" => [{
-        "name" => "default",
-        "dnsName" => "dns",
-        "loadBalancer" => { "createRecordSet" => false },
-      }],
-      "keyName" => "key",
-      "region" => "west",
-      "availabilityZone" => "zone",
-      "kmsKeyArn" => "arn",
-      "worker" => { "nodePools" => [{ "name" => "nodepool1" }] },
-      "addons" => { "clusterAutoscaler" => { "enabled" => false },
-                    "rescheduler" => { "enabled" => false } },
-    }
     system "#{bin}/kube-aws", "init", "--cluster-name", "test-cluster",
            "--external-dns-name", "dns", "--region", "west",
            "--availability-zone", "zone", "--key-name", "key",
-           "--kms-key-arn", "arn"
-    cluster_yaml = YAML.load_file("cluster.yaml")
-    assert_equal cluster, cluster_yaml
-
+           "--kms-key-arn", "arn", "--no-record-set"
+    cluster_yaml = (testpath/"cluster.yaml").read
+    assert_match "clusterName: test-cluster", cluster_yaml
+    assert_match "dnsName: dns", cluster_yaml
+    assert_match "region: west", cluster_yaml
+    assert_match "availabilityZone: zone", cluster_yaml
+    assert_match "keyName: key", cluster_yaml
+    assert_match "kmsKeyArn: \"arn\"", cluster_yaml
     installed_version = shell_output("#{bin}/kube-aws version 2>&1")
     assert_match "kube-aws version #{version}", installed_version
   end

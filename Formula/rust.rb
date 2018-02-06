@@ -3,25 +3,25 @@ class Rust < Formula
   homepage "https://www.rust-lang.org/"
 
   stable do
-    url "https://static.rust-lang.org/dist/rustc-1.19.0-src.tar.gz"
-    sha256 "15231f5053fb72ad82be91f5abfd6aa60cb7898c5089e4f1ac5910a731090c51"
+    url "https://static.rust-lang.org/dist/rustc-1.23.0-src.tar.gz"
+    sha256 "7464953871dcfdfa8afcc536916a686dd156a83339d8ec4d5cb4eb2fe146cb91"
 
     resource "cargo" do
       url "https://github.com/rust-lang/cargo.git",
-          :tag => "0.20.0",
-          :revision => "a60d185c878c470876e123b0e40b0ba9f3271163"
+          :tag => "0.24.0",
+          :revision => "45043115c9094d82f0f407ebc7ef7e583f438d12"
     end
 
     resource "racer" do
-      url "https://github.com/racer-rust/racer/archive/2.0.10.tar.gz"
-      sha256 "8e81da4f238117affe7631a7656b219294950ff17b2bea85794060be11b80489"
+      url "https://github.com/racer-rust/racer/archive/2.0.12.tar.gz"
+      sha256 "1fa063d90030c200d74efb25b8501bb9a5add7c2e25cbd4976adf7a73bf715cc"
     end
   end
 
   bottle do
-    sha256 "820256549befa3d777916e00e23b4d95d326c5aae9456562165f8036f99584ea" => :sierra
-    sha256 "a7e0c6f3ecff71b59d74007fcedf2f9423627ca99699a7c96eeeffaa795dc9ae" => :el_capitan
-    sha256 "1dbc83dbcdd3a3bdbcd53014a1055414d10beb92c11a872acfca0a15db4f98c6" => :yosemite
+    sha256 "be4b6c1711d42886bf77e72e1d27bfc954b271ec0de4f693119dd58c6e312068" => :high_sierra
+    sha256 "4ba3ca650dd74fcbfaa7be2dbeafe3cdf9e7b0528bedfdfe2a3148debde818c9" => :sierra
+    sha256 "b8303377de5e16bd7d4fee633ec82f359bc7fec63a2855c5596db4e3943d9e5d" => :el_capitan
   end
 
   head do
@@ -52,14 +52,33 @@ class Rust < Formula
 
   resource "cargobootstrap" do
     # From https://github.com/rust-lang/rust/blob/#{version}/src/stage0.txt
-    url "https://static.rust-lang.org/dist/2017-06-08/cargo-0.19.0-x86_64-apple-darwin.tar.gz"
-    sha256 "bd0b62b6afbfb1435ac5a72cee072f0f65b29c6c0baeb11f4f9b9b16dc241151"
+    url "https://static.rust-lang.org/dist/2017-11-22/cargo-0.23.0-x86_64-apple-darwin.tar.gz"
+    sha256 "1eac1e406efed2472cbeac6316677c1ada90acc77eb7b3fee8a9573c23b02a5f"
   end
 
   def install
+    # Remove for > 1.23.0; fix build failure on APFS
+    # See https://github.com/rust-lang/cargo/pull/4739
+    if build.stable? && MacOS.version >= :high_sierra
+      inreplace "src/stage0.txt" do |s|
+        s.gsub! "date: 2017-11-20", "date: 2017-11-23"
+        s.gsub! "rustc: 1.22.0", "rustc: 1.22.1"
+      end
+    end
+
+    # Fix build failure for compiler_builtins "error: invalid deployment target
+    # for -stdlib=libc++ (requires OS X 10.7 or later)"
+    ENV["MACOSX_DEPLOYMENT_TARGET"] = MacOS.version
+
+    # Fix build failure for cmake v0.1.24 "error: internal compiler error:
+    # src/librustc/ty/subst.rs:127: impossible case reached" on 10.11, and for
+    # libgit2-sys-0.6.12 "fatal error: 'os/availability.h' file not found
+    # #include <os/availability.h>" on 10.11 and "SecTrust.h:170:67: error:
+    # expected ';' after top level declarator" among other errors on 10.12
+    ENV["SDKROOT"] = MacOS.sdk_path
+
     args = ["--prefix=#{prefix}"]
     args << "--disable-rpath" if build.head?
-    args << "--enable-clang" if ENV.compiler == :clang
     args << "--llvm-root=#{Formula["llvm"].opt_prefix}" if build.with? "llvm"
     if build.head?
       args << "--release-channel=nightly"
@@ -110,10 +129,10 @@ class Rust < Formula
 
   test do
     system "#{bin}/rustdoc", "-h"
-    (testpath/"hello.rs").write <<-EOS.undent
-    fn main() {
-      println!("Hello World!");
-    }
+    (testpath/"hello.rs").write <<~EOS
+      fn main() {
+        println!("Hello World!");
+      }
     EOS
     system "#{bin}/rustc", "hello.rs"
     assert_equal "Hello World!\n", `./hello`

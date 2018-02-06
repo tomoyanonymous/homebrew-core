@@ -1,14 +1,14 @@
 class Getdns < Formula
   desc "Modern asynchronous DNS API"
   homepage "https://getdnsapi.net"
-  url "https://getdnsapi.net/releases/getdns-1-1-2/getdns-1.1.2.tar.gz"
-  sha256 "685fbd493601c88c90b0bf3021ba0ee863e3297bf92f01b8bf1b3c6637c86ba5"
-  revision 1
+  url "https://getdnsapi.net/releases/getdns-1-3-0/getdns-1.3.0.tar.gz"
+  mirror "https://dl.bintray.com/homebrew/mirror/getdns-1.3.0.tar.gz"
+  sha256 "920fa2e07c72fd0e5854db1820fa777108009fc5cb702f9aa5155ef58b12adb1"
 
   bottle do
-    sha256 "15e207c6fac993a047a179eecff02035046d3a7a29ea17e8fa20e9bc92281eb4" => :sierra
-    sha256 "cde110a16c40f5b1d3ce054fffdb7999d5f33b766551e8bcb83f438ddda2d4ce" => :el_capitan
-    sha256 "1796fda4fe2bb1d694a0e5c840d097414809bee9bcbc962d82958663d61ab5bf" => :yosemite
+    sha256 "7ef98cccdd128c7439cf1eaa3f8b8895f20929294e75b4befe11a22f72053229" => :high_sierra
+    sha256 "201634e1c75bf23341a40a7257938a64a9e6e60f73f95c50c58ba6c0ea169260" => :sierra
+    sha256 "ccf408be4445a351135af532b40da0e36f2daaff574eb90e2aa74effaea7b144" => :el_capitan
   end
 
   head do
@@ -43,17 +43,15 @@ class Getdns < Formula
     args << "--with-libuv" if build.with? "libuv"
     args << "--with-libev" if build.with? "libev"
 
-    # Current Makefile layout prevents simultaneous job execution
-    # https://github.com/getdnsapi/getdns/issues/166
-    ENV.deparallelize
-
     system "./configure", "--prefix=#{prefix}", *args
+    system "make"
     system "make", "install"
   end
 
   test do
-    (testpath/"test.c").write <<-EOS.undent
+    (testpath/"test.c").write <<~EOS
       #include <getdns/getdns.h>
+      #include <stdio.h>
 
       int main(int argc, char *argv[]) {
         getdns_context *context;

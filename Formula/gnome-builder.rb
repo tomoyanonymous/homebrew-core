@@ -3,12 +3,12 @@ class GnomeBuilder < Formula
   homepage "https://wiki.gnome.org/Apps/Builder"
   url "https://download.gnome.org/sources/gnome-builder/3.24/gnome-builder-3.24.2.tar.xz"
   sha256 "84843a9f4af2e1ee1ebfac44441a2affa2d409df9066e7d11bf1d232ae0c535a"
-  revision 2
+  revision 5
 
   bottle do
-    sha256 "206e17861365d087308f30450465cc8804bd4811594dcc92e6f93dd1daf5eaab" => :sierra
-    sha256 "c84a17d9b841ef0ba452292961846aa68f094d83e24e62b6b7e6d88349aa3728" => :el_capitan
-    sha256 "f6796fc278716d927a75e4c013b620aaf6f6c53ac463888aa500ad44a8eadce7" => :yosemite
+    sha256 "11cd6ef17936e5cb9f7acc11d2ba8d1b441722b2cb871389001a51e87d0ee084" => :high_sierra
+    sha256 "2aa5d57a1f79f0f834545a848b36dd3294a673b7e68a47a42983e68e1ded7663" => :sierra
+    sha256 "f711d35258d5dd969bd3dbc4213a91f86a4a21eed1b6ecb5dc19128ab0d51e44" => :el_capitan
   end
 
   depends_on "pkg-config" => :build
@@ -21,7 +21,7 @@ class GnomeBuilder < Formula
   depends_on "libpeas"
   depends_on "gtksourceview3"
   depends_on "hicolor-icon-theme"
-  depends_on "gnome-icon-theme"
+  depends_on "adwaita-icon-theme"
   depends_on "desktop-file-utils"
   depends_on "pcre"
   depends_on "json-glib"
@@ -32,7 +32,7 @@ class GnomeBuilder < Formula
   depends_on "vala" => :recommended
   depends_on "ctags" => :recommended
   depends_on "meson" => :recommended
-  depends_on :python3 => :optional
+  depends_on "python3" => :optional
   depends_on "pygobject3" if build.with? "python3"
 
   needs :cxx11

@@ -1,13 +1,13 @@
 class Gtksourceview3 < Formula
   desc "Text view with syntax, undo/redo, and text marks"
   homepage "https://projects.gnome.org/gtksourceview/"
-  url "https://download.gnome.org/sources/gtksourceview/3.24/gtksourceview-3.24.3.tar.xz"
-  sha256 "3eed05486a6420c3e2fdda0bbb19a0d905ed09ebf442302a026ab7e574204cbd"
+  url "https://download.gnome.org/sources/gtksourceview/3.24/gtksourceview-3.24.6.tar.xz"
+  sha256 "7aa6bdfebcdc73a763dddeaa42f190c40835e6f8495bb9eb8f78587e2577c188"
 
   bottle do
-    sha256 "0a63f62804178b5358578d1bc8dcacc36cf88693e2cacd43d2ac2ac8805b5806" => :sierra
-    sha256 "397efccd32ac66a828d17ea4108036357e7bfebd2f5d5b6e2044ce996c4f1f7b" => :el_capitan
-    sha256 "be512cd00182050941b6dd452e20f5f81ff48f3b47a32c89e194680c550b6908" => :yosemite
+    sha256 "426fdaf3013cd234269c7c0e561c8b2164c10f3535dd4a1d782b6c24207daa1f" => :high_sierra
+    sha256 "340708c5705e4af08456f7f131d9d89442084aee754e2f476e3efba08f720bd7" => :sierra
+    sha256 "34a063ee219a607bf9717c71b58c109ed74e6addafbd0b6eb83aeefd9cfd228a" => :el_capitan
   end
 
   depends_on "pkg-config" => :build
@@ -22,7 +22,7 @@ class Gtksourceview3 < Formula
   end
 
   test do
-    (testpath/"test.c").write <<-EOS.undent
+    (testpath/"test.c").write <<~EOS
       #include <gtksourceview/gtksourceview.h>
 
       int main(int argc, char *argv[]) {

@@ -1,38 +1,38 @@
 class Urh < Formula
   desc "Universal Radio Hacker"
   homepage "https://github.com/jopohl/urh"
-  url "https://files.pythonhosted.org/packages/2d/41/1802d69821e808404e08b7e5dd238de8a05a53e6acb54be5407d764b4b77/urh-1.7.1.tar.gz"
-  sha256 "0a8460be8df70f0dc98bf2646aa5e3fe4ac43df38c601b184f42554f3fde411a"
+  url "https://files.pythonhosted.org/packages/bf/e3/bb5a06ac8ba05e7f082aa7f5272c17bae6c3cdd0c6a9bb1e37656c940d16/urh-1.9.2.tar.gz"
+  sha256 "92029b3d9bbcecdd32546b49c4e282ca35f2158cedd85e21df14c3f79cc015be"
   head "https://github.com/jopohl/urh.git"
 
   bottle do
-    sha256 "75ad76f03b9d0d5cb104ed3c5b2f7efec5a18bc9648eac75d1deee42c804afba" => :sierra
-    sha256 "ec3c21126d99bcd28e716ec59d060e5d7c996e04f10e566c08cd971618fe25a3" => :el_capitan
-    sha256 "c1ea87639181c5edf553fec441cb9c5603dbf46a7ff12f933be69bafeb4eba49" => :yosemite
+    sha256 "5a7577d909ae2550483835f7a23fef3d9400523500b8d4f966ca116f0de1d72d" => :high_sierra
+    sha256 "f8d3f40dc514d160390d4e562f5895058976cbf3b190a713554bcf0154d4393f" => :sierra
+    sha256 "2094c271c6781b7f05027a22915c2b252a3d6d89cda4cdfcdcb514c9b151e1cc" => :el_capitan
   end
 
   option "with-hackrf", "Build with libhackrf support"
 
   depends_on "pkg-config" => :build
 
-  depends_on :python3
+  depends_on "python3"
   depends_on "pyqt"
 
   depends_on "hackrf" => :optional
 
   resource "numpy" do
-    url "https://files.pythonhosted.org/packages/c0/3a/40967d9f5675fbb097ffec170f59c2ba19fc96373e73ad47c2cae9a30aed/numpy-1.13.1.zip"
-    sha256 "c9b0283776085cb2804efff73e9955ca279ba4edafd58d3ead70b61d209c4fbb"
+    url "https://files.pythonhosted.org/packages/ee/66/7c2690141c520db08b6a6f852fa768f421b0b50683b7bbcd88ef51f33170/numpy-1.14.0.zip"
+    sha256 "3de643935b212307b420248018323a44ec51987a336d1d747c1322afc3c099fb"
   end
 
   resource "psutil" do
-    url "https://files.pythonhosted.org/packages/57/93/47a2e3befaf194ccc3d05ffbcba2cdcdd22a231100ef7e4cf63f085c900b/psutil-5.2.2.tar.gz"
-    sha256 "44746540c0fab5b95401520d29eb9ffe84b3b4a235bd1d1971cbe36e1f38dd13"
+    url "https://files.pythonhosted.org/packages/e2/e1/600326635f97fee89bf8426fef14c5c29f4849c79f68fd79f433d8c1bd96/psutil-5.4.3.tar.gz"
+    sha256 "e2467e9312c2fa191687b89ff4bc2ad8843be4af6fb4dc95a7cc5f7d7a327b18"
   end
 
   resource "pyzmq" do
-    url "https://files.pythonhosted.org/packages/af/37/8e0bf3800823bc247c36715a52e924e8f8fd5d1432f04b44b8cd7a5d7e55/pyzmq-16.0.2.tar.gz"
-    sha256 "0322543fff5ab6f87d11a8a099c4c07dd8a1719040084b6ce9162bcdf5c45c9d"
+    url "https://files.pythonhosted.org/packages/1e/f9/d0675409c11d11e549e3da000901cfaabd848da117390ee00030e14bfdb6/pyzmq-16.0.3.tar.gz"
+    sha256 "8a883824147523c0fe76d247dd58994c1c28ef07f1cc5dde595a4fd1c28f2580"
   end
 
   def install
@@ -59,7 +59,7 @@ class Urh < Formula
   test do
     xy = Language::Python.major_minor_version "python3"
     ENV.prepend_create_path "PYTHONPATH", libexec/"lib/python#{xy}/site-packages"
-    (testpath/"test.py").write <<-EOS.undent
+    (testpath/"test.py").write <<~EOS
       from urh.util.GenericCRC import GenericCRC;
       c = GenericCRC();
       expected = [1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1]

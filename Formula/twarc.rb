@@ -3,17 +3,17 @@ class Twarc < Formula
 
   desc "Command-line tool and Python library for archiving Twitter JSON"
   homepage "https://github.com/DocNow/twarc"
-  url "https://github.com/DocNow/twarc/archive/v1.1.3.tar.gz"
-  sha256 "cd822e7eb07329fe87377af7cedd74cf1bf48b4d368a85e27dab0655f2afab8a"
+  url "https://github.com/DocNow/twarc/archive/v1.3.5.tar.gz"
+  sha256 "122eebbdde18496a0522c48f8cc6eb3b4554d06dcc191a55c63467fdf8bcb1e4"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "7182eeb8b0d6372cb41c751ff721c1dbcb09feebb877d8f62e3ce999c0d49291" => :sierra
-    sha256 "98a7b1b349d5e703fcc92323429a6bff6be91aeedcef910558dae463e8283198" => :el_capitan
-    sha256 "f6d50dbf6aa58a90046151d19f70131b735adfaf5f5d6bc58bba6583b17aa109" => :yosemite
+    sha256 "f0c1a11d87f5bb563a2224d6447edc7a56cb7de3891cacebe26acfa807043b4c" => :high_sierra
+    sha256 "c7d705b12b131b4aae538fdc66d141784f14b241818061b4f747230a49822dda" => :sierra
+    sha256 "f8ec23c361355ed745a88c0a64a186e5622d71452b331dc2cde3d73e9498c3ff" => :el_capitan
   end
 
-  depends_on :python if MacOS.version <= :snow_leopard
+  depends_on "python" if MacOS.version <= :snow_leopard
 
   def install
     venv = virtualenv_create(libexec)

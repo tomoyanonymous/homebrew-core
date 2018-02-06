@@ -1,37 +1,31 @@
 class Libcouchbase < Formula
   desc "C library for Couchbase"
-  homepage "https://developer.couchbase.com/documentation/server/4.5/sdk/c/start-using-sdk.html"
-  url "https://s3.amazonaws.com/packages.couchbase.com/clients/c/libcouchbase-2.7.6.tar.gz"
-  sha256 "9b0c2a4de38963ec3314d19e50d63cc34a5990a4f6e0a81973c019d5ad83c411"
+  homepage "https://developer.couchbase.com/documentation/server/current/sdk/c/start-using-sdk.html"
+  url "https://s3.amazonaws.com/packages.couchbase.com/clients/c/libcouchbase-2.8.4.tar.gz"
+  sha256 "22dc8926893790f5d50e4de14526be4c812635e92ff3818c9116775479a1fb0a"
   head "https://github.com/couchbase/libcouchbase.git"
 
   bottle do
-    sha256 "329d5605fd071b4729468dc074610c7a6fee55c85f1c65e889c717ed1d025408" => :sierra
-    sha256 "fe5ee10dde4050b302281b725e565e93e564c91ef693940fd906faf271a1b991" => :el_capitan
-    sha256 "edb8d1de8a5772740dfdca2d0293576d27b90013715f2ff7df01fcef8b7b1539" => :yosemite
+    sha256 "20554e4bd97779a85437bd1e0c061312acde121d809d1fb5e4cf9003e0b8af96" => :high_sierra
+    sha256 "24e5419fd9d565f656d23a40b61cb02c253858bb0cbbe73de5fde1f83b6e3a98" => :sierra
+    sha256 "e976e6db9f88797aaf086c193833b0fc21a53b36dcb52b7a5d8e25ff6e0aac7a" => :el_capitan
   end
 
   option "with-libev", "Build libev plugin"
-  option "without-libevent", "Do not build libevent plugin"
 
   deprecated_option "with-libev-plugin" => "with-libev"
-  deprecated_option "without-libevent-plugin" => "without-libevent"
 
   depends_on "libev" => :optional
   depends_on "libuv" => :optional
-  depends_on "libevent" => :recommended
+  depends_on "libevent"
   depends_on "openssl"
   depends_on "cmake" => :build
 
   def install
-    args = std_cmake_args
-    args << "-DLCB_NO_TESTS=1"
+    args = std_cmake_args << "-DLCB_NO_TESTS=1" << "-DLCB_BUILD_LIBEVENT=ON"
 
-    ["libev", "libevent", "libuv"].each do |dep|
+    ["libev", "libuv"].each do |dep|
       args << "-DLCB_BUILD_#{dep.upcase}=" + (build.with?(dep) ? "ON" : "OFF")
-    end
-    if build.without?("libev") && build.without?("libuv") && build.without?("libevent")
-      args << "-DLCB_NO_PLUGINS=1"
     end
 
     mkdir "LCB-BUILD" do

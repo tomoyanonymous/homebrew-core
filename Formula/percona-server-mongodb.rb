@@ -1,16 +1,15 @@
-require "language/go"
-
 class PerconaServerMongodb < Formula
   desc "Drop-in MongoDB replacement"
   homepage "https://www.percona.com"
-  url "https://www.percona.com/downloads/percona-server-mongodb-3.4/percona-server-mongodb-3.4.6-1.7/source/tarball/percona-server-mongodb-3.4.6-1.7.tar.gz"
-  version "3.4.6-1.7"
-  sha256 "9449d0bfb88e23a4bce0e5ffb223fa5177ba726c2780d073c30256f148123c18"
+  url "https://www.percona.com/downloads/percona-server-mongodb-3.4/percona-server-mongodb-3.4.9-2.9/source/tarball/percona-server-mongodb-3.4.9-2.9.tar.gz"
+  version "3.4.9-2.9"
+  sha256 "489675e6568dfcdc842d12872e552f0cd1ea5b2db2b6fe5d6548216c494778ba"
 
   bottle do
-    sha256 "4f8584a9fc8b0402a4bada8d041770d1bee7ffb9030c3efc46c2305904945d2e" => :sierra
-    sha256 "ec4178729fc29a29dc072030e65fba5f44712e710f13d0f555012bb172281193" => :el_capitan
-    sha256 "b5d381035b34393152671018e743a4b80aca5f6ea6f00c7e86880e242929cf5d" => :yosemite
+    rebuild 1
+    sha256 "396da20f15f3e074496e159c49fb12ef0a412a891eafec0cd15edd7e2d54d5fb" => :high_sierra
+    sha256 "08266faa60f1b18830d269250c94f36cd808fc3915935159803366199ed8c97c" => :sierra
+    sha256 "7cf6b6ffd202ab5dfe1054b2128b5795706d67340b6acaa8311e23d0af8c8bd5" => :el_capitan
   end
 
   option "with-boost", "Compile using installed boost, not the version shipped with this formula"
@@ -25,13 +24,6 @@ class PerconaServerMongodb < Formula
   conflicts_with "mongodb",
     :because => "percona-server-mongodb and mongodb install the same binaries."
 
-  go_resource "github.com/mongodb/mongo-tools" do
-    url "https://github.com/mongodb/mongo-tools.git",
-        :tag => "r3.4.5",
-        :revision => "4d4d96583c40a25a4ee7e2d038d75181a300ec3c",
-        :shallow => false
-  end
-
   needs :cxx11
 
   def install
@@ -40,9 +32,13 @@ class PerconaServerMongodb < Formula
 
     # New Go tools have their own build script but the server scons "install" target is still
     # responsible for installing them.
-    Language::Go.stage_deps resources, buildpath/"src"
 
-    cd "src/github.com/mongodb/mongo-tools" do
+    cd "src/mongo/gotools" do
+      inreplace "build.sh" do |s|
+        s.gsub! "$(git describe)", version.to_s.split("-")[0]
+        s.gsub! "$(git rev-parse HEAD)", "homebrew"
+      end
+
       args = %w[]
 
       if build.with? "openssl"
@@ -56,7 +52,7 @@ class PerconaServerMongodb < Formula
       system "./build.sh", *args
     end
 
-    (buildpath/"src/mongo-tools").install Dir["src/github.com/mongodb/mongo-tools/bin/*"]
+    (buildpath/"src/mongo-tools").install Dir["src/mongo/gotools/bin/*"]
 
     args = %W[
       --prefix=#{prefix}
@@ -81,7 +77,7 @@ class PerconaServerMongodb < Formula
 
     scons "install", *args
 
-    (buildpath/"mongod.conf").write <<-EOS.undent
+    (buildpath/"mongod.conf").write <<~EOS
       systemLog:
         destination: file
         path: #{var}/log/mongodb/mongo.log
@@ -101,7 +97,7 @@ class PerconaServerMongodb < Formula
 
   plist_options :manual => "mongod --config #{HOMEBREW_PREFIX}/etc/mongod.conf"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">
@@ -141,7 +137,7 @@ class PerconaServerMongodb < Formula
 
   test do
     begin
-      (testpath/"mongodb_test.js").write <<-EOS.undent
+      (testpath/"mongodb_test.js").write <<~EOS
         printjson(db.getCollectionNames())
         // create test collection
         db.test.insertOne(

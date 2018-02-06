@@ -1,15 +1,14 @@
 class Libmspub < Formula
   desc "Interpret and import Microsoft Publisher content"
   homepage "https://wiki.documentfoundation.org/DLP/Libraries/libmspub"
-  url "https://dev-www.libreoffice.org/src/libmspub/libmspub-0.1.2.tar.xz"
-  sha256 "b0baabf82d20c08ad000e80fa02154ce2f2ffde1ee60240d6e3a917c3b35560f"
-  revision 4
+  url "https://dev-www.libreoffice.org/src/libmspub/libmspub-0.1.3.tar.xz"
+  sha256 "f0225f0ff03f6bec4847d7c2d8719a36cafc4b97a09e504b610372cc5b981c97"
 
   bottle do
     cellar :any
-    sha256 "8dc43db8ed3ea1fc7cb304412e9efd2986eabc564eeb47bd997102662ea35b51" => :sierra
-    sha256 "039cb94e097ce9532881485be1bc3ecb2851d980c97ce5f58e9001155ac8ea78" => :el_capitan
-    sha256 "4f00a8ce7da9c37d4b3393b30d0fd4aeaa6752c74d160ab32acd3b321949734b" => :yosemite
+    sha256 "bd35b73b9a1d0a740a113dfd921f62a103cd66c83018b027a1a97415509a6732" => :high_sierra
+    sha256 "1e00c58cbc9530cf5bf0a344cf2aaa16e5613c88ab4e3883668975917cc05a95" => :sierra
+    sha256 "1fec7ae574d1addc7d6f89fb6b4bd5212b88e431add06b656a204a2a41708e09" => :el_capitan
   end
 
   depends_on "pkg-config" => :build
@@ -30,14 +29,14 @@ class Libmspub < Formula
   end
 
   test do
-    (testpath/"test.cpp").write <<-EOS.undent
-    #include <librevenge-stream/librevenge-stream.h>
-    #include <libmspub/MSPUBDocument.h>
-    int main() {
-        librevenge::RVNGStringStream docStream(0, 0);
-        libmspub::MSPUBDocument::isSupported(&docStream);
-        return 0;
-    }
+    (testpath/"test.cpp").write <<~EOS
+      #include <librevenge-stream/librevenge-stream.h>
+      #include <libmspub/MSPUBDocument.h>
+      int main() {
+          librevenge::RVNGStringStream docStream(0, 0);
+          libmspub::MSPUBDocument::isSupported(&docStream);
+          return 0;
+      }
     EOS
     system ENV.cxx, "test.cpp", "-o", "test", "-lrevenge-stream-0.0",
                     "-I#{Formula["librevenge"].include}/librevenge-0.0",

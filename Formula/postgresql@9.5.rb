@@ -1,13 +1,13 @@
 class PostgresqlAT95 < Formula
   desc "Object-relational database system"
   homepage "https://www.postgresql.org/"
-  url "https://ftp.postgresql.org/pub/source/v9.5.8/postgresql-9.5.8.tar.bz2"
-  sha256 "ade57068f134f36710fa953e1ef79185abd96572f8098741413132f79ed37202"
+  url "https://ftp.postgresql.org/pub/source/v9.5.10/postgresql-9.5.10.tar.bz2"
+  sha256 "945d7ade094dded6b95495d8f1561a12ac9608276858ed30adf3c3658275f281"
 
   bottle do
-    sha256 "5bbae29545208eabd30bf2ad5775d020a253dceb650fea3776e59ebfa51d47c7" => :sierra
-    sha256 "7dc263779e9f5eeeff587ff4dc25c5f4f7dab34123ba84ba2cfda8adc4f0cc7f" => :el_capitan
-    sha256 "660673c24e15a562af37b6f48dc464638b8035a1119ca64ae66fab09df482f8f" => :yosemite
+    sha256 "6ce7010b738b8e6df7ea26e531f343b3f83018e0f6940b67c5eec8c3cac1dfcb" => :high_sierra
+    sha256 "b1583524a3796b98782849d95429c8eb3a8ae6b27ac4703c33180abbfe26ab00" => :sierra
+    sha256 "cf48e0cf276f8335bd980f798f615fa36ebd36e6a56c768a2abf0854b010dad9" => :el_capitan
   end
 
   keg_only :versioned_formula
@@ -20,8 +20,8 @@ class PostgresqlAT95 < Formula
 
   depends_on "openssl"
   depends_on "readline"
-  depends_on :python => :optional
-  depends_on :python3 => :optional
+  depends_on "python" => :optional
+  depends_on "python3" => :optional
 
   fails_with :clang do
     build 211
@@ -91,7 +91,7 @@ class PostgresqlAT95 < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     If builds of PostgreSQL 9 are failing and you have version 8.x installed,
     you may need to remove the previous version first. See:
       https://github.com/Homebrew/legacy-homebrew/issues/2510
@@ -109,7 +109,7 @@ class PostgresqlAT95 < Formula
 
   plist_options :manual => "pg_ctl -D #{HOMEBREW_PREFIX}/var/postgresql@9.5 start"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">

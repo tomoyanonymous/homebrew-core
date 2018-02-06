@@ -1,14 +1,14 @@
 class PerconaServerAT56 < Formula
   desc "Drop-in MySQL replacement"
   homepage "https://www.percona.com"
-  url "https://www.percona.com/downloads/Percona-Server-5.6/Percona-Server-5.6.36-82.1/source/tarball/percona-server-5.6.36-82.1.tar.gz"
-  version "5.6.36-82.1"
-  sha256 "bebab31321e17682bc23f0f1e95211f002ba2a24c21d9a7ce9821cbe2a1ba4ba"
+  url "https://www.percona.com/downloads/Percona-Server-5.6/Percona-Server-5.6.38-83.0/source/tarball/percona-server-5.6.38-83.0.tar.gz"
+  version "5.6.38-83.0"
+  sha256 "9152489f41e3371fe920eae7530dd587beec55c0ef909b33f47278916e963782"
 
   bottle do
-    sha256 "fbf6414d980e37cd0ebf0e96a33821c37873dddca93635a653add3f7d2c4864b" => :sierra
-    sha256 "312286b391c1dfe47711b2fa0070c7527bcf0d0c90eb6015d9a393499d7ecc17" => :el_capitan
-    sha256 "b6c9f3bffa304fa5e5f7e775f6dee52249ba6c6b58b9c4c7d9df656387935d70" => :yosemite
+    sha256 "52d5b942bc13ab35442a002a3271e639c330ee36a93cc7d3286c51634c420b04" => :high_sierra
+    sha256 "eaade341a1db48f56462ecfae076e3f9a8a09b25bdcb3ddc245171883f8a00cc" => :sierra
+    sha256 "804eaaea918159d916a9f5aa5ca318c2f75850e28e9504d32655f4c4c4f43e11" => :el_capitan
   end
 
   keg_only :versioned_formula
@@ -43,6 +43,7 @@ class PerconaServerAT56 < Formula
 
     args = std_cmake_args + %W[
       -DMYSQL_DATADIR=#{datadir}
+      -DINSTALL_PLUGINDIR=lib/plugin
       -DSYSCONFDIR=#{etc}
       -DINSTALL_MANDIR=#{man}
       -DINSTALL_DOCDIR=#{doc}
@@ -110,7 +111,7 @@ class PerconaServerAT56 < Formula
     mv "#{bin}/mysqlaccess.conf", libexec
 
     # Install my.cnf that binds to 127.0.0.1 by default
-    (buildpath/"my.cnf").write <<-EOS.undent
+    (buildpath/"my.cnf").write <<~EOS
       # Default Homebrew MySQL server config
       [mysqld]
       # Only allow connections from localhost
@@ -129,7 +130,7 @@ class PerconaServerAT56 < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     A "/etc/my.cnf" from another install may interfere with a Homebrew-built
     server starting up correctly.
 
@@ -142,7 +143,7 @@ class PerconaServerAT56 < Formula
 
   plist_options :manual => "mysql.server start"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">

@@ -1,12 +1,13 @@
 class Luabind < Formula
   desc "Library for bindings between C++ and Lua"
-  homepage "http://www.rasterbar.com/products/luabind.html"
+  homepage "https://github.com/luabind/luabind"
   url "https://downloads.sourceforge.net/project/luabind/luabind/0.9.1/luabind-0.9.1.tar.gz"
   sha256 "80de5e04918678dd8e6dac3b22a34b3247f74bf744c719bae21faaa49649aaae"
   revision 2
 
   bottle do
     cellar :any
+    sha256 "736bb4cb6a49338eecab9a179f3104e8328d7133366b921b2fece14b6fd2aa26" => :high_sierra
     sha256 "39e74593d47fd648230e177e9a8a90e1b3a888c84d6c7d38f358265d5b93ce94" => :sierra
     sha256 "914a79679264790d9ffb0726a1f303954d816da3dd23db3b8816873cf467677f" => :el_capitan
     sha256 "171123f48a6cf2431d6b143b84bf31dbb955f103195aa30597a61b7a61943982" => :yosemite
@@ -60,7 +61,7 @@ class Luabind < Formula
     (lib/"pkgconfig/luabind.pc").write pc_file
   end
 
-  def pc_file; <<-EOS.undent
+  def pc_file; <<~EOS
     prefix=#{HOMEBREW_PREFIX}
     exec_prefix=${prefix}
     libdir=${exec_prefix}/lib
@@ -75,7 +76,7 @@ class Luabind < Formula
   end
 
   test do
-    (testpath/"hello.cpp").write <<-EOS.undent
+    (testpath/"hello.cpp").write <<~EOS
       extern "C" {
       #include <lua.h>
       }

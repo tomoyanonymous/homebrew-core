@@ -1,20 +1,20 @@
 class Cgal < Formula
   desc "Computational Geometry Algorithm Library"
   homepage "https://www.cgal.org/"
-  url "https://github.com/CGAL/cgal/releases/download/releases/CGAL-4.9.1/CGAL-4.9.1.tar.xz"
-  sha256 "56557da971b5310c2678ffc5def4109266666ff3adc7babbe446797ee2b90cca"
+  url "https://github.com/CGAL/cgal/releases/download/releases/CGAL-4.11/CGAL-4.11.tar.xz"
+  sha256 "27a7762e5430f5392a1fe12a3a4abdfe667605c40224de1c6599f49d66cfbdd2"
+  revision 1
 
   bottle do
     cellar :any
-    sha256 "074e917036065d1fcb67dce5dd03e97015c12657460c391b3c20cb689e2b09a1" => :sierra
-    sha256 "9f103a1be97cbf9cc5b3086d72c735897fccb632b79df98b0f62310f41ff17ef" => :el_capitan
-    sha256 "861fcbdd2cea9fd8365e53e8ec7218f11c33b6b2fc1d0d732eeaa39c1b0343fd" => :yosemite
+    sha256 "fdf7c3c5890dfe0356d14ea2b9aca45497d5404e46c361f720a075196ebb8838" => :high_sierra
+    sha256 "ddb4bb8589310493a7eb13f4ad07d93fc642a203785e8eca48e13f791caca89a" => :sierra
+    sha256 "3142b4ac1d77db7d6fabc74d496b3f23c95498d950f97488ea91d2e0c0c5979e" => :el_capitan
   end
 
-  option :cxx11
-  option "with-qt", "Build ImageIO and Qt components of CGAL"
   option "with-eigen", "Build with Eigen3 support"
   option "with-lapack", "Build with LAPACK support"
+  option "with-qt", "Build ImageIO and Qt components of CGAL"
 
   deprecated_option "imaging" => "with-qt"
   deprecated_option "with-imaging" => "with-qt"
@@ -22,22 +22,13 @@ class Cgal < Formula
   deprecated_option "with-qt5" => "with-qt"
 
   depends_on "cmake" => :build
+  depends_on "boost"
+  depends_on "gmp"
   depends_on "mpfr"
-
   depends_on "qt" => :optional
   depends_on "eigen" => :optional
 
-  if build.cxx11?
-    depends_on "boost" => "c++11"
-    depends_on "gmp"   => "c++11"
-  else
-    depends_on "boost"
-    depends_on "gmp"
-  end
-
   def install
-    ENV.cxx11 if build.cxx11?
-
     args = std_cmake_args + %W[
       -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON
       -DCMAKE_INSTALL_NAME_DIR=#{HOMEBREW_PREFIX}/lib
@@ -67,7 +58,7 @@ class Cgal < Formula
 
   test do
     # https://doc.cgal.org/latest/Algebraic_foundations/Algebraic_foundations_2interoperable_8cpp-example.html
-    (testpath/"surprise.cpp").write <<-EOS.undent
+    (testpath/"surprise.cpp").write <<~EOS
       #include <CGAL/basic.h>
       #include <CGAL/Coercion_traits.h>
       #include <CGAL/IO/io.h>

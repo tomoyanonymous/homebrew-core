@@ -1,27 +1,19 @@
 class Mpfr < Formula
   desc "C library for multiple-precision floating-point computations"
   homepage "http://www.mpfr.org/"
-  # Upstream is down a lot, so use mirrors
-  url "https://mirrors.ocf.berkeley.edu/debian/pool/main/m/mpfr4/mpfr4_3.1.5.orig.tar.xz"
-  mirror "https://ftp.gnu.org/gnu/mpfr/mpfr-3.1.5.tar.xz"
-  sha256 "015fde82b3979fbe5f83501986d328331ba8ddf008c1ff3da3c238f49ca062bc"
+  url "https://ftp.gnu.org/gnu/mpfr/mpfr-4.0.0.tar.xz"
+  mirror "https://ftpmirror.gnu.org/mpfr/mpfr-4.0.0.tar.xz"
+  mirror "http://www.mpfr.org/mpfr-4.0.0/mpfr-4.0.0.tar.xz"
+  sha256 "fbe2cd1418b321f5c899ce4f0f0f4e73f5ecc7d02145b0e1fd096f5c3afb8a1d"
 
   bottle do
     cellar :any
-    sha256 "563898b76509b25a1c7ed09c3f541310569d7c124f1edc84638ecec75e507698" => :sierra
-    sha256 "f9ae415a51042ad963dfd8d6171556b0119a27edbe894614c0e3a2e4398515c4" => :el_capitan
-    sha256 "ca737c71556161c37563b78305aa93c6663cde07f06d94e4d7de091983327c48" => :yosemite
+    sha256 "e09cdf149a648968e92fb36f88e00746c9e63424f25738bebddb85904c27ba10" => :high_sierra
+    sha256 "ff7915ee0cc083fda9c60d1a6c57686d3c64a06cb688965057072cb8b52bce92" => :sierra
+    sha256 "01a35f06478a922f99469c2a98bf4de316a4a1271136941078483dc706a12131" => :el_capitan
   end
 
   depends_on "gmp"
-
-  fails_with :clang do
-    build 421
-    cause <<-EOS.undent
-      clang build 421 segfaults while building in superenv;
-      see https://github.com/Homebrew/homebrew/issues/15061
-    EOS
-  end
 
   def install
     system "./configure", "--disable-dependency-tracking", "--prefix=#{prefix}",
@@ -32,7 +24,7 @@ class Mpfr < Formula
   end
 
   test do
-    (testpath/"test.c").write <<-EOS.undent
+    (testpath/"test.c").write <<~EOS
       #include <mpfr.h>
       #include <math.h>
       #include <stdlib.h>

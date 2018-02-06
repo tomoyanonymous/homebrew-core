@@ -1,14 +1,14 @@
 class Widelands < Formula
-  desc "Free real-time strategy game like Settlers II."
+  desc "Free real-time strategy game like Settlers II"
   homepage "https://wl.widelands.org/"
   url "https://launchpad.net/widelands/build19/build19/+download/widelands-build19-src.tar.bz2"
   sha256 "e511f9d26828a2b71b64cdfc6674e6e847543b2da73961ab882acca36c7c01a6"
-  revision 2
+  revision 8
 
   bottle do
-    sha256 "ad6b3cf82d49fab4a99efdf1359a249f8b84c87a7dca25b1d7bf48be8513e88c" => :sierra
-    sha256 "cf2f77c71a69966d49ffd3331d139ed53f27bfd8b6328bacf189f8a5325a777d" => :el_capitan
-    sha256 "da22a38b41081036d37b1186f20f619c07e054a189631a9366e613b4e7fe463d" => :yosemite
+    sha256 "18b34abd369e071601a35ab96e9b9776998f1f572ff638f50e79e9c9b6578397" => :high_sierra
+    sha256 "2509f447f7be88a86602e239a0f711143a8438f9caccfcb1f0339c6583892869" => :sierra
+    sha256 "552ff9433e4ea9b01e7b00372ce370cc1d0b0e3f98c21333498fd4da68c77d6d" => :el_capitan
   end
 
   depends_on "cmake" => :build
@@ -37,7 +37,7 @@ class Widelands < Formula
                        *std_cmake_args
       system "make", "install"
 
-      (bin/"widelands").write <<-EOS.undent
+      (bin/"widelands").write <<~EOS
         #!/bin/sh
         exec #{prefix}/widelands "$@"
       EOS

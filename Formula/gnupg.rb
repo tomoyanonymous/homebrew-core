@@ -1,14 +1,13 @@
 class Gnupg < Formula
   desc "GNU Pretty Good Privacy (PGP) package"
-  homepage "https://www.gnupg.org/"
-  url "https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.1.23.tar.bz2"
-  mirror "https://www.mirrorservice.org/sites/ftp.gnupg.org/gcrypt/gnupg/gnupg-2.1.23.tar.bz2"
-  sha256 "a94476391595e9351f219188767a9d6ea128e83be5ed3226a7890f49aa2d0d77"
+  homepage "https://gnupg.org/"
+  url "https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.4.tar.bz2"
+  sha256 "401a3e64780fdfa6d7670de0880aa5c9d589b3db7a7098979d7606cec546f2ec"
 
   bottle do
-    sha256 "6bff30666e9c3dccdc3ac0a0111142c4f5708f29affb22ab9a08ed290cbf64fe" => :sierra
-    sha256 "8bd5a8bb212f11a3a18fc3e8d7e604977decc99e51db4af178e24c3b5da84af2" => :el_capitan
-    sha256 "1dfa6b63ccf23c1e7d7e198a6068bc75704fb338b734396f9c126a0f8abd2399" => :yosemite
+    sha256 "b1b9072b7016d6c19dfcc3df4a3b918a26cba41235fe6da811708960ce32515d" => :high_sierra
+    sha256 "e6fa3f1585fb147bbfd27a9eafd49f58c88a7362a2d2916d923d3c95a8646efd" => :sierra
+    sha256 "45057d2c28547bc6540c8d7af856861652c439ab1edd720277b81fc191bf3fe5" => :el_capitan
   end
 
   option "with-gpgsplit", "Additionally install the gpgsplit utility"
@@ -63,7 +62,7 @@ class Gnupg < Formula
     quiet_system "killall", "gpg-agent"
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     Once you run this version of gpg you may find it difficult to return to using
     a prior 1.4.x or 2.0.x. Most notably the prior versions will not automatically
     know about new secret keys created or imported by this version. We recommend
@@ -75,7 +74,7 @@ class Gnupg < Formula
   end
 
   test do
-    (testpath/"batch.gpg").write <<-EOS.undent
+    (testpath/"batch.gpg").write <<~EOS
       Key-Type: RSA
       Key-Length: 2048
       Subkey-Type: RSA

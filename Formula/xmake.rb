@@ -1,15 +1,15 @@
 class Xmake < Formula
   desc "Make-like build utility based on Lua"
   homepage "http://xmake.io"
-  url "https://github.com/tboox/xmake/archive/v2.1.5.tar.gz"
-  sha256 "21a8430f040b1e587567621978d16e4c80cce4b3db20a9c46a059e6d6301cdc8"
+  url "https://github.com/tboox/xmake/archive/v2.1.9.tar.gz"
+  sha256 "f0e1887ac0f51293ce0157a6df4eb917df24fbf0819bc5b6f50218ee0d80bc8b"
   head "https://github.com/waruqi/xmake.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "575f60f49fc49d69f5bf8b6faac4c26fdf2c61d3fd525905082d4e7e7a7b94b6" => :sierra
-    sha256 "3e8a439a4e5a1083d6dbc574e96af536e1000b6e81be2fecff9b0be194734160" => :el_capitan
-    sha256 "ad6e56db04471a0920dcbb14d6b82440a5947344f330ff137cfaaf270f52cd2b" => :yosemite
+    sha256 "904f0bff1251d3a968c334343fd204cea0022e82f1744c33efaf69967dae36d5" => :high_sierra
+    sha256 "904f0bff1251d3a968c334343fd204cea0022e82f1744c33efaf69967dae36d5" => :sierra
+    sha256 "3989ba7511527a7dd11b54ac7395c80a632045fc211d97f1e26b26eebbfbef93" => :el_capitan
   end
 
   def install
@@ -21,6 +21,7 @@ class Xmake < Formula
 
   test do
     system bin/"xmake", "create", "-P", testpath
-    assert_match "build ok!", pipe_output(bin/"xmake")
+    system bin/"xmake"
+    assert_equal "hello world!", shell_output("#{bin}/xmake run").chomp
   end
 end

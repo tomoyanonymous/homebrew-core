@@ -1,13 +1,13 @@
 class Gwyddion < Formula
   desc "Scanning Probe Microscopy visualization and analysis tool"
   homepage "http://gwyddion.net/"
-  url "http://gwyddion.net/download/2.48/gwyddion-2.48.tar.gz"
-  sha256 "45f4f1f987172845c4bc0e9de52e4e229a98e94d386625d654bafc2e1cadda10"
+  url "http://gwyddion.net/download/2.50/gwyddion-2.50.tar.gz"
+  sha256 "f3834dae31d9bf696e8d59e2aa79a373a30d5f6caa6033601d2f9d57afa154f3"
 
   bottle do
-    sha256 "5d6b2bd0c51c46ddd92c5fded33a32fb229ab464130c581612854f0430770b4d" => :sierra
-    sha256 "6ed9942afc3c7a72d926757f178b2418d072f81a05e9c6b67e345837c66dba5a" => :el_capitan
-    sha256 "148eb8e8783ae236344fea3e15e11c872db0dfb3f6d83d848f944d6e33d7c936" => :yosemite
+    sha256 "298b62b2a21506f10dc8f8ce315fcfee9fc078ffac58fde0d8b29d0e998efad0" => :high_sierra
+    sha256 "a701145954bc8f36f4bef4711286a758bb62445bf59d65bff638c6a9559e4379" => :sierra
+    sha256 "36866a752fc238aefbb298c343d1e31a3741590dab97efbce94a1c1cb83088b0" => :el_capitan
   end
 
   depends_on "pkg-config" => :build
@@ -18,14 +18,11 @@ class Gwyddion < Formula
   depends_on "libxml2"
   depends_on "minizip"
 
-  depends_on :python => :optional
+  depends_on "python" => :optional
   depends_on "pygtk" if build.with? "python"
   depends_on "gtksourceview" if build.with? "python"
 
   def install
-    # Don't explicitly link against libpython. Will be patched in the next release:
-    # <https://sourceforge.net/p/gwyddion/mailman/message/35815736/>
-    inreplace "modules/pygwy/Makefile.in", /\$\(no_undefined\) \$\(PYTHON_LDFLAGS\)/, ""
     system "./configure", "--disable-dependency-tracking",
                           "--disable-desktop-file-update",
                           "--prefix=#{prefix}",
@@ -35,7 +32,7 @@ class Gwyddion < Formula
 
   test do
     system "#{bin}/gwyddion", "--version"
-    (testpath/"test.c").write <<-EOS.undent
+    (testpath/"test.c").write <<~EOS
       #include <libgwyddion/gwyddion.h>
 
       int main(int argc, char *argv[]) {

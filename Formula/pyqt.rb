@@ -1,14 +1,13 @@
 class Pyqt < Formula
   desc "Python bindings for v5 of Qt"
   homepage "https://www.riverbankcomputing.com/software/pyqt/download5"
-  url "https://downloads.sourceforge.net/project/pyqt/PyQt5/PyQt-5.9/PyQt5_gpl-5.9.tar.gz"
-  sha256 "ab0e7999cf202cc72962c78aefe461d16497b3c1a8282ab966ad90b6cb271096"
-  revision 1
+  url "https://downloads.sourceforge.net/project/pyqt/PyQt5/PyQt-5.10/PyQt5_gpl-5.10.tar.gz"
+  sha256 "342fe6675df8ba9fabb3f3cc5d79ebc24714cd9bd1a3b5c8ab5dba7596f15f50"
 
   bottle do
-    sha256 "188c589ce78ba9d7f0f21ed9f9c8f5e24756f5a940000cd8eb154dc2e5924bfd" => :sierra
-    sha256 "6d8ebe1577d3a2305359a04825894447ec97804025ed348ae69f1f218a157bf5" => :el_capitan
-    sha256 "cf3a5cc5dcd8c5f1c04abe798be9c3c5e12c4cfe234335f79fa89647328dfa32" => :yosemite
+    sha256 "da85af4276d954cf9bb6b39832a777e8ec35b80ce59ae6ab544b64d3fc555c6e" => :high_sierra
+    sha256 "d5c9a55ccb4abb6231d2ebf582e8a63d708d4d7fab429f5cce4975f8154b4183" => :sierra
+    sha256 "34440695451655ab4c81a707acc699b985740508a5646e15dfe1b9da7c3bae4a" => :el_capitan
   end
 
   option "with-debug", "Build with debug symbols"
@@ -18,8 +17,8 @@ class Pyqt < Formula
 
   depends_on "qt"
   depends_on "sip"
-  depends_on :python => :recommended
-  depends_on :python3 => :recommended
+  depends_on "python" => :recommended
+  depends_on "python3" => :recommended
 
   def install
     if build.without?("python3") && build.without?("python")
