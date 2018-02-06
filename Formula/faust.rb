@@ -1,33 +1,40 @@
 class Faust < Formula
-  desc "Functional AUdio STream is language for signal processing and synthesis."
+  desc "Functional AUdio STream is language for signal processing and synthesis"
   homepage "http://faust.grame.fr"
+  url "https://github.com/grame-cncm/faust/releases/download/2.5.17/faust-2.5.17.tar.gz"
+  sha256 "5e9e76dc4754efbf31eb8b63ee4f3e2e5ec5f6fe20dac611af859357bf4a1893"
+  head "https://github.com/grame-cncm/faust.git", :branch => "master-dev"
 
-  url "https://github.com/grame-cncm/faust/archive/v2-1-0.tar.gz"
-  sha256 "9bd0b02020a6d9130ac3e2b11ad7cbfc03883769eb87dcb76251c80c40488494"
-  head "https://github.com/grame-cncm/faust.git", :branch => "faust2"
+  option "with-web", "will install asmjs and wasm compiler."
+  option "with-ios", "will not install ios and ios-llvm compiler."
+  option "with-universal", "create universal binary"
 
-  depends_on "pkg-config" => "build"
+  depends_on "pkg-config" => :build
   depends_on "llvm"
   depends_on "openssl"
   depends_on "libmicrohttpd"
   depends_on "libsndfile"
+  if build.with? "web"
+    depends_on "emscripten" => :build
+  end
 
   def install
-    unless build.head?
-      inreplace "compiler/Makefile.unix", "else ifeq ($(LLVM_VERSION),$(filter $(LLVM_VERSION), 4.0.0))
-    LLVM_VERSION = LLVM_40
-    CLANGLIBS=$(CLANGLIBSLIST)
-    CXXFLAGS += -std=gnu++11", "else ifeq ($(LLVM_VERSION),$(filter $(LLVM_VERSION), 4.0.0 4.0.1))
-    LLVM_VERSION = LLVM_40
-    CLANGLIBS=$(CLANGLIBSLIST)
-    CXXFLAGS += -std=gnu++11
-
-else ifeq ($(LLVM_VERSION),$(filter $(LLVM_VERSION), 5.0.0))
-    LLVM_VERSION = LLVM_50
-    CLANGLIBS=$(CLANGLIBSLIST)
-    CXXFLAGS += -std=gnu++11"
+    if build.with? "universal"
+      system "make", "universal"
+      system "make", "sound2faust"
+      system "make", "httpd"
+      system "make", "dynamic"
+    else
+      system "make", "world"
     end
-    system "make world"
+    if build.with? "web"
+      system "make", "asmjs"
+      system "make", "wasm"
+    end
+    if build.with? "ios"
+      system "make", "ios"
+      system "make", "ios-llvm"
+    end
     system "make", "install", "PREFIX=#{prefix}"
     if build.with? "test"
       cp_r "tests", prefix
